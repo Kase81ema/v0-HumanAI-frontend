@@ -13,8 +13,8 @@ import { BoardOperativa } from "@/components/board-operativa"
 import { ProgettoTimeline } from "@/components/progetto-timeline"
 import { PianoEditoriale } from "@/components/piano-editoriale"
 import { TeamAgenti } from "@/components/team-agenti"
-import { Orientamento } from "@/components/orientamento"
 import { Workspace } from "@/components/workspace"
+import { UserProfile } from "@/components/user-profile"
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("home")
@@ -52,10 +52,10 @@ export default function Home() {
           <PianoEditoriale />
         ) : activeItem === "agents" ? (
           <TeamAgenti />
-        ) : activeItem === "orientation" ? (
-          <Orientamento />
         ) : activeItem === "workspace" ? (
           <Workspace />
+        ) : activeItem === "profile" ? (
+          <UserProfile />
         ) : (
           <div className="flex h-full items-center justify-center">
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>

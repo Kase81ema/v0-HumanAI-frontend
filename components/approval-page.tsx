@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { ChevronRight, ChevronDown, Check, Image, Clock, X, ArrowUpDown } from "lucide-react"
+import { FloatingAgentAvatar } from "./floating-agent-avatar"
 
 interface ApprovalItem {
   id: string
@@ -9,6 +10,7 @@ interface ApprovalItem {
   type: "post" | "newsletter" | "email" | "process"
   channel: string
   agent: string
+  agentInitials: string
   scheduledDate: string
   daysWaiting?: number
   content?: string
@@ -27,6 +29,7 @@ const approvalItems: ApprovalItem[] = [
     type: "post",
     channel: "LinkedIn pers.",
     agent: "Copywriter",
+    agentInitials: "CW",
     scheduledDate: "oggi",
     daysWaiting: 4,
     hasImage: true,
@@ -55,6 +58,7 @@ E: "Cosa so fare che nessuna macchina puo replicare?"
     type: "process",
     channel: "Processo",
     agent: "Operator",
+    agentInitials: "OP",
     scheduledDate: "urgente",
     daysWaiting: 5,
     content: `BRIEF AZIONE: Promozione Workshop AI & Leadership
@@ -86,6 +90,7 @@ Approvi l'attivazione del processo di promozione urgente?`,
     type: "newsletter",
     channel: "Beehiiv",
     agent: "Copywriter",
+    agentInitials: "CW",
     scheduledDate: "domani 8:00",
     content: `Ciao,
 
@@ -111,6 +116,7 @@ Emanuele`,
     type: "email",
     channel: "Email",
     agent: "Funnel",
+    agentInitials: "FN",
     scheduledDate: "oggi 14:00",
     content: `Gentile Claudia,
 
@@ -138,6 +144,7 @@ Emanuele Casero`,
     type: "post",
     channel: "LinkedIn pers.",
     agent: "Copywriter",
+    agentInitials: "CW",
     scheduledDate: "Mar 8/4",
     content: `The question I hear most from leaders isn't about technology.
 
@@ -511,12 +518,18 @@ export function ApprovalPage() {
                   >
                     {item.channel}
                   </span>
-                  <span 
-                    className="text-[11px] px-2 py-0.5 rounded"
-                    style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
-                  >
-                    {item.agent}
-                  </span>
+<span 
+                                    className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded"
+                                    style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                                  >
+                                    <span
+                                      className="flex h-[14px] w-[14px] items-center justify-center rounded-full text-[7px] font-bold text-white"
+                                      style={{ backgroundColor: "#2563EB" }}
+                                    >
+                                      {item.agentInitials}
+                                    </span>
+                                    {item.agent}
+                                  </span>
                   <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
                     {item.scheduledDate}
                   </span>
@@ -700,6 +713,9 @@ export function ApprovalPage() {
           </>
         )}
       </div>
+
+      {/* Floating Agent Avatar */}
+      <FloatingAgentAvatar initials="CW" agentName="Copywriter" />
     </div>
   )
 }

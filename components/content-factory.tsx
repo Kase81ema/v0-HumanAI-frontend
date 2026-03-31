@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Plus, Image, RefreshCw, ClipboardCheck, MessageSquare, Share2, Check, X, Calendar, Loader2, Bold, Italic, Link2, List, Copy, History, MoreHorizontal, GripVertical } from "lucide-react"
+import { FloatingAgentAvatar } from "./floating-agent-avatar"
 
 type ContentStatus = "approved" | "draft" | "generating" | "idea" | "scheduled"
 type ContentType = "post" | "newsletter" | "article" | "email" | "idea"
@@ -19,6 +20,7 @@ interface ContentItem {
   imageName?: string
   comments?: number
   versions?: number
+  generatedBy?: { initials: string; name: string }
 }
 
 const contents: ContentItem[] = [
@@ -34,6 +36,7 @@ const contents: ContentItem[] = [
     imageName: "brand-ai-coaching-01.jpg - 1200x628",
     comments: 2,
     versions: 3,
+    generatedBy: { initials: "CW", name: "Copywriter" },
     content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non e mai tecnica. E sempre umana: "Come cambiera il mio lavoro?"
 
 E una domanda che merita rispetto, non una risposta preconfezionata.
@@ -58,6 +61,7 @@ E: "Cosa so fare che nessuna macchina puo replicare?"
     hasImage: false,
     comments: 1,
     versions: 2,
+    generatedBy: { initials: "CW", name: "Copywriter" },
     content: `Ciao,
 
 questa settimana voglio parlarti di fallimenti. Non dei tuoi — dei miei. O meglio, di quelli dell'intelligenza artificiale che uso ogni giorno.
@@ -84,6 +88,7 @@ Emanuele`
     date: "Mar 8/4",
     hasImage: false,
     versions: 1,
+    generatedBy: { initials: "CW", name: "Copywriter" },
     content: `Leadership isn't about having all the answers anymore.
 
 It's about asking the right questions — to your team, to your data, and yes, to your AI.
@@ -120,6 +125,7 @@ What's your experience? How is AI changing the way you lead?
     channel: "Email",
     date: "8/4",
     hasImage: false,
+    generatedBy: { initials: "FN", name: "Funnel" },
     content: `Oggetto: [Workshop 15/4] Ultime 18 disponibilita
 
 Ciao {{nome}},
@@ -346,15 +352,26 @@ export function ContentFactory() {
                       {item.title}
                     </p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span 
-                        className="px-2 py-0.5 rounded text-[10px] font-medium"
-                        style={{ 
-                          backgroundColor: statusColors[item.status].bg,
-                          color: statusColors[item.status].text
-                        }}
-                      >
-                        {statusColors[item.status].label}
-                      </span>
+<span 
+                                        className="px-2 py-0.5 rounded text-[10px] font-medium"
+                                        style={{ 
+                                          backgroundColor: statusColors[item.status].bg,
+                                          color: statusColors[item.status].text
+                                        }}
+                                      >
+                                        {statusColors[item.status].label}
+                                      </span>
+                                      {item.generatedBy && (
+                                        <span className="flex items-center gap-1 text-[10px]" style={{ color: "#9CA3AF" }}>
+                                          <span
+                                            className="flex h-[14px] w-[14px] items-center justify-center rounded-full text-[7px] font-bold text-white"
+                                            style={{ backgroundColor: "#2563EB" }}
+                                          >
+                                            {item.generatedBy.initials}
+                                          </span>
+                                          {item.generatedBy.name}
+                                        </span>
+                                      )}
                       <span 
                         className="px-2 py-0.5 rounded text-[10px] font-medium"
                         style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
@@ -938,6 +955,9 @@ export function ContentFactory() {
           </div>
         </div>
       )}
+
+      {/* Floating Agent Avatar */}
+      <FloatingAgentAvatar initials="CW" agentName="Copywriter" />
     </div>
   )
 }

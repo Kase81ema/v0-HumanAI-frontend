@@ -1,6 +1,17 @@
 "use client"
 
 import { ArrowRight, ChevronDown } from "lucide-react"
+import { FloatingAgentAvatar } from "./floating-agent-avatar"
+
+// Active agents for mini-avatars display
+const activeAgents = [
+  { initials: "CW", name: "Copywriter" },
+  { initials: "PL", name: "Planner" },
+  { initials: "ST", name: "Strategist" },
+  { initials: "FN", name: "Funnel" },
+  { initials: "SA", name: "Sales" },
+  { initials: "EV", name: "Evento" },
+]
 
 // Alert data
 const alerts = [
@@ -340,12 +351,30 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Section 4 - Agent Work with destination indicators */}
         <div>
-          <h2
-            className="mb-4 text-[12px] font-semibold uppercase tracking-wider"
-            style={{ color: "#7C8CA2" }}
-          >
-            Lavoro degli agenti — clicca per aprire
-          </h2>
+          <div className="mb-4">
+            <h2
+              className="text-[12px] font-semibold uppercase tracking-wider"
+              style={{ color: "#7C8CA2" }}
+            >
+              Il tuo team AI ha lavorato stanotte
+            </h2>
+            {/* Mini avatars row */}
+            <div className="mt-2 flex items-center gap-1">
+              {activeAgents.map((agent) => (
+                <div
+                  key={agent.initials}
+                  className="flex h-[24px] w-[24px] items-center justify-center rounded-full text-[9px] font-bold text-white"
+                  style={{ backgroundColor: "#2563EB" }}
+                  title={agent.name}
+                >
+                  {agent.initials}
+                </div>
+              ))}
+              <span className="ml-2 text-[11px]" style={{ color: "#7C8CA2" }}>
+                6 agenti attivi
+              </span>
+            </div>
+          </div>
           <div className="flex flex-col gap-2">
             {agentWork.map((work) => (
               <button
@@ -645,6 +674,9 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
           </div>
         </div>
       </div>
+
+      {/* Floating Agent Avatar */}
+      <FloatingAgentAvatar initials="ST" agentName="Strategist" />
     </div>
   )
 }

@@ -48,7 +48,6 @@ const navSections: NavSection[] = [
     items: [
       { emoji: "🏢", label: "Workspace", id: "workspace" },
       { emoji: "🤖", label: "Team Agenti", id: "agents" },
-      { emoji: "🎯", label: "Orientamento", id: "orientation" },
       { emoji: "⚙️", label: "Impostazioni", id: "settings" },
     ],
   },
@@ -212,18 +211,32 @@ export function SidebarNav({ activeItem, onNavigate }: SidebarNavProps) {
           ))}
         </nav>
 
-        {/* Footer */}
-        <div
-          className="flex items-center gap-3 px-[14px] py-[14px]"
-          style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
+        {/* Footer - User Profile */}
+        <button
+          onClick={() => onNavigate("profile")}
+          className="flex w-full items-center gap-3 px-[14px] py-[14px] transition-colors"
+          style={{ 
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+            backgroundColor: activeItem === "profile" ? "#2563EB" : "transparent"
+          }}
+          onMouseEnter={(e) => {
+            if (activeItem !== "profile") {
+              e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.07)"
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (activeItem !== "profile") {
+              e.currentTarget.style.backgroundColor = "transparent"
+            }
+          }}
         >
           <div
             className="flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-bold text-white"
-            style={{ backgroundColor: "#2563EB" }}
+            style={{ backgroundColor: activeItem === "profile" ? "rgba(255, 255, 255, 0.25)" : "#2563EB" }}
           >
             EC
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col text-left">
             <span
               className="text-[13px] font-medium"
               style={{ color: "rgba(255, 255, 255, 0.85)" }}
@@ -237,7 +250,7 @@ export function SidebarNav({ activeItem, onNavigate }: SidebarNavProps) {
               HumanAImpact
             </span>
           </div>
-        </div>
+        </button>
       </aside>
 
       <QuickCaptureModal
