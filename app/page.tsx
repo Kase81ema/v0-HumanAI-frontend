@@ -4,6 +4,7 @@ import { useState } from "react"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { HomeBriefing } from "@/components/home-briefing"
 import { CommandCenter } from "@/components/command-center"
+import { ContentFactory } from "@/components/content-factory"
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("home")
@@ -23,6 +24,8 @@ export default function Home() {
           <HomeBriefing onNavigate={handleNavigate} />
         ) : activeItem === "command" ? (
           <CommandCenter />
+        ) : activeItem === "content" ? (
+          <ContentFactory />
         ) : (
           <div className="flex h-full items-center justify-center">
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
