@@ -29,7 +29,7 @@ const navSections: NavSection[] = [
   {
     title: "CONTENUTI",
     items: [
-      { emoji: "✏️", label: "Content Factory", id: "content-factory" },
+      { emoji: "✏️", label: "Content Factory", id: "content" },
       { emoji: "📅", label: "Piano editoriale", id: "editorial" },
       { emoji: "✓", label: "Approvazione", badge: 3, id: "approval" },
     ],
