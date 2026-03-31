@@ -5,6 +5,7 @@ import { SidebarNav } from "@/components/sidebar-nav"
 import { HomeBriefing } from "@/components/home-briefing"
 import { CommandCenter } from "@/components/command-center"
 import { ContentFactory } from "@/components/content-factory"
+import { ApprovalPage } from "@/components/approval-page"
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("home")
@@ -26,6 +27,8 @@ export default function Home() {
           <CommandCenter />
         ) : activeItem === "content" ? (
           <ContentFactory />
+        ) : activeItem === "approval" ? (
+          <ApprovalPage />
         ) : (
           <div className="flex h-full items-center justify-center">
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
