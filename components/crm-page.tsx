@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Phone, Mail, Calendar, ChevronRight, ChevronDown, ExternalLink, Play, Pause, SkipForward, Edit2, Plus, Upload, MoreHorizontal, Check, Users, Download, X } from "lucide-react"
+import { Search, Phone, Mail, Calendar, ChevronRight, ChevronDown, ExternalLink, Play, Pause, SkipForward, Edit2, Plus, Upload, MoreHorizontal, Check, Users, Download, X, MessageCircle, Paperclip, Sparkles, AtSign } from "lucide-react"
 
 interface Contact {
   id: string
@@ -15,6 +15,7 @@ interface Contact {
   action: string
   email: string
   phone: string
+  whatsapp?: string
   tags: string[]
   brief: string
   dealValue?: number
@@ -34,6 +35,7 @@ const contacts: Contact[] = [
     action: "Negoziazione",
     email: "s.muller@swissailab.ch",
     phone: "+41 79 123 4567",
+    whatsapp: "+41791234567",
     tags: ["AI", "enterprise", "workshop-partecipante", "newsletter", "leadership"],
     brief: "Sara è Head of AI presso SwissAI Lab a Zurigo. Ha partecipato al Webinar AI per PMI dove ha mostrato forte interesse per il coaching di team leadership AI. Budget confermato per Q2. Decisore diretto.",
     dealValue: 12000,
@@ -51,6 +53,7 @@ const contacts: Contact[] = [
     action: "Discovery call",
     email: "m.rossi@technoswiss.ch",
     phone: "+41 79 234 5678",
+    whatsapp: "+41792345678",
     tags: ["HR", "AI", "leadership", "enterprise"],
     brief: "Mario guida le risorse umane in TechnoSwiss AG. Interessato a integrare AI nei processi HR e nella formazione manageriale. Ha chiesto demo del coaching AI leadership.",
   },
@@ -66,6 +69,7 @@ const contacts: Contact[] = [
     action: "Follow-up",
     email: "c.bernasconi@bancalugano.ch",
     phone: "+41 79 345 6789",
+    whatsapp: "+41793456789",
     tags: ["banking", "L&D", "workshop"],
     brief: "Claudia gestisce la formazione in Banca Lugano. Cerca soluzioni innovative per upskilling su AI. Budget da definire per H2.",
   },
@@ -158,6 +162,7 @@ const timelineData = [
   { icon: "mail", text: "Email FN2 Step 3 aperta (100% open rate)", time: "3g fa", link: null },
   { icon: "calendar", text: "Ha partecipato al Webinar AI per PMI", time: "1 sett fa", link: null },
   { icon: "mail", text: "Email FN2 Step 2 aperta e cliccata (link: workshop)", time: "2 sett fa", link: null },
+  { icon: "whatsapp", text: "Messaggio WhatsApp inviato: conferma call", time: "2 sett fa", link: null },
   { icon: "news", text: "Iscritta alla newsletter", time: "1 mese fa", link: null },
   { icon: "user", text: "Contatto creato da LinkedIn (Scout Agent)", time: "2 mesi fa", link: null },
 ]
@@ -166,6 +171,15 @@ const activeEvents = [
   { id: "e1", name: "Workshop AI & Leadership", date: "15 aprile" },
   { id: "e2", name: "Webinar AI per PMI", date: "22 aprile" },
   { id: "e3", name: "Meetup AI Lugano #4", date: "8 maggio" },
+]
+
+const emailTemplates = [
+  { id: "invite", name: "Invito evento", description: "Invito personalizzato con nome evento e data" },
+  { id: "followup", name: "Follow-up post-evento", description: "Ringraziamento e prossimi passi" },
+  { id: "proposal", name: "Proposta commerciale", description: "Template per offerte e preventivi" },
+  { id: "welcome", name: "Benvenuto newsletter", description: "Email di benvenuto per nuovi iscritti" },
+  { id: "reactivate", name: "Riattivazione contatto", description: "Per contatti inattivi da tempo" },
+  { id: "announcement", name: "Annuncio prodotto/corso", description: "Lancio di nuove offerte" },
 ]
 
 export function CrmPage() {
@@ -181,6 +195,10 @@ export function CrmPage() {
   const [showAddInteractionModal, setShowAddInteractionModal] = useState(false)
   const [showAddToEventDropdown, setShowAddToEventDropdown] = useState(false)
   const [showBatchActions, setShowBatchActions] = useState(false)
+  const [showEmailComposer, setShowEmailComposer] = useState(false)
+  const [emailSubject, setEmailSubject] = useState("")
+  const [emailBody, setEmailBody] = useState("")
+  const [showTemplateDropdown, setShowTemplateDropdown] = useState(false)
 
   const stages = ["Tutti", "Prospect", "Qualificato", "Opportunità", "Cliente"]
   const tabs = [
@@ -229,6 +247,247 @@ export function CrmPage() {
       setSelectedContacts(filteredContacts.map(c => c.id))
     }
   }
+
+  const openWhatsApp = (whatsappNumber: string) => {
+    window.open(`https://wa.me/${whatsappNumber.replace(/\s/g, '')}`, '_blank')
+  }
+
+  const openEmailComposerForSelected = () => {
+    setShowEmailComposer(true)
+  }
+
+  const selectedContactsData = contacts.filter(c => selectedContacts.includes(c.id))
+
+  // Email Composer Modal
+  const EmailComposerModal = () => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="w-[680px] max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-xl">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+          <div>
+            <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
+              Nuova email
+            </h2>
+            <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
+              {selectedContacts.length} destinatari selezionati
+            </p>
+          </div>
+          <button onClick={() => setShowEmailComposer(false)}>
+            <X className="h-5 w-5" style={{ color: "#7C8CA2" }} />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 space-y-4">
+          {/* From */}
+          <div className="flex items-center gap-3">
+            <label className="w-16 text-[13px] font-medium" style={{ color: "#7C8CA2" }}>Da:</label>
+            <select
+              className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ borderColor: "#E5E7EB" }}
+            >
+              <option>emanuele@human-aimpact.ch</option>
+              <option>info@human-aimpact.ch</option>
+            </select>
+          </div>
+
+          {/* To */}
+          <div className="flex items-start gap-3">
+            <label className="w-16 pt-2 text-[13px] font-medium" style={{ color: "#7C8CA2" }}>A:</label>
+            <div className="flex-1">
+              <div 
+                className="flex flex-wrap gap-2 rounded-lg border p-2"
+                style={{ borderColor: "#E5E7EB", minHeight: "42px" }}
+              >
+                <span
+                  className="flex items-center gap-1 rounded-full px-3 py-1 text-[12px]"
+                  style={{ backgroundColor: "#EFF6FF", color: "#2563EB" }}
+                >
+                  {selectedContacts.length} contatti
+                  <button className="hover:text-blue-800">
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
+                </span>
+              </div>
+              {/* Recipients preview */}
+              <div className="mt-2 max-h-24 overflow-y-auto">
+                {selectedContactsData.slice(0, 3).map(c => (
+                  <div key={c.id} className="flex items-center gap-2 py-1 text-[12px]" style={{ color: "#7C8CA2" }}>
+                    <span className="font-medium" style={{ color: "#1B2B4B" }}>{c.name}</span>
+                    <span>&lt;{c.email}&gt;</span>
+                  </div>
+                ))}
+                {selectedContactsData.length > 3 && (
+                  <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                    + altri {selectedContactsData.length - 3} destinatari
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Subject */}
+          <div className="flex items-center gap-3">
+            <label className="w-16 text-[13px] font-medium" style={{ color: "#7C8CA2" }}>Oggetto:</label>
+            <div className="flex flex-1 gap-2">
+              <input
+                type="text"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder="Oggetto dell'email..."
+                className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ borderColor: "#E5E7EB" }}
+              />
+              <button
+                className="flex items-center gap-1 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-blue-50"
+                style={{ borderColor: "#E5E7EB", color: "#2563EB" }}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                Suggerisci
+              </button>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {/* Formatting toolbar */}
+                <button className="rounded px-2 py-1 text-[12px] font-bold transition-colors hover:bg-gray-100" style={{ color: "#7C8CA2" }}>B</button>
+                <button className="rounded px-2 py-1 text-[12px] italic transition-colors hover:bg-gray-100" style={{ color: "#7C8CA2" }}>I</button>
+                <button className="rounded px-2 py-1 text-[12px] transition-colors hover:bg-gray-100" style={{ color: "#7C8CA2" }}>Link</button>
+                <button className="rounded px-2 py-1 text-[12px] transition-colors hover:bg-gray-100" style={{ color: "#7C8CA2" }}>Lista</button>
+                <div className="mx-2 h-4 w-px" style={{ backgroundColor: "#E5E7EB" }} />
+                {/* Personalization */}
+                <div className="relative">
+                  <button
+                    className="flex items-center gap-1 rounded px-2 py-1 text-[12px] transition-colors hover:bg-blue-50"
+                    style={{ color: "#2563EB" }}
+                  >
+                    <AtSign className="h-3.5 w-3.5" />
+                    Variabile
+                  </button>
+                </div>
+              </div>
+              <div className="relative">
+                <button
+                  onClick={() => setShowTemplateDropdown(!showTemplateDropdown)}
+                  className="flex items-center gap-1 rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                >
+                  Template
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+                {showTemplateDropdown && (
+                  <div
+                    className="absolute right-0 top-full z-10 mt-1 w-72 rounded-lg border bg-white py-1 shadow-lg"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    {emailTemplates.map(template => (
+                      <button
+                        key={template.id}
+                        className="w-full px-4 py-2 text-left transition-colors hover:bg-gray-50"
+                        onClick={() => {
+                          setEmailSubject(template.name)
+                          setShowTemplateDropdown(false)
+                        }}
+                      >
+                        <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                          {template.name}
+                        </p>
+                        <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                          {template.description}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <textarea
+              value={emailBody}
+              onChange={(e) => setEmailBody(e.target.value)}
+              placeholder="Scrivi il contenuto dell'email...
+
+Usa {nome}, {azienda}, {evento} per personalizzare."
+              className="w-full rounded-lg border px-4 py-3 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ borderColor: "#E5E7EB", minHeight: "200px" }}
+            />
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-blue-50"
+                style={{ borderColor: "#2563EB", color: "#2563EB" }}
+              >
+                <Sparkles className="h-4 w-4" />
+                Genera con Copywriter
+              </button>
+              <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                Variabili disponibili: {"{nome}"}, {"{azienda}"}, {"{evento}"}
+              </p>
+            </div>
+          </div>
+
+          {/* Attachments */}
+          <div className="flex items-center gap-3 rounded-lg border-2 border-dashed p-3" style={{ borderColor: "#E5E7EB" }}>
+            <Paperclip className="h-4 w-4" style={{ color: "#7C8CA2" }} />
+            <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
+              Trascina file o clicca per allegare
+            </span>
+          </div>
+
+          {/* Signature */}
+          <div className="rounded-lg p-3" style={{ backgroundColor: "#F9FAFB" }}>
+            <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+              — Firma precompilata —
+            </p>
+            <p className="mt-1 text-[13px]" style={{ color: "#1B2B4B" }}>
+              Emanuele Casero<br />
+              Founder, HumanAImpact<br />
+              emanuele@human-aimpact.ch
+            </p>
+          </div>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="flex items-center justify-between border-t p-4" style={{ borderColor: "#E5E7EB" }}>
+          <button
+            className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+          >
+            Anteprima
+          </button>
+          <div className="flex gap-2">
+            <button
+              className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+            >
+              Salva bozza
+            </button>
+            <button
+              className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            >
+              Salva come template
+            </button>
+            <button
+              className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-amber-50"
+              style={{ borderColor: "#F59E0B", color: "#D97706" }}
+            >
+              <Calendar className="h-4 w-4" />
+              Programma
+            </button>
+            <button
+              className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
+              style={{ backgroundColor: "#2563EB" }}
+            >
+              <Mail className="h-4 w-4" />
+              Invia ora
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 
   if (view === "profile" && selectedContact) {
     return (
@@ -305,6 +564,17 @@ export function CrmPage() {
                 <Mail className="h-4 w-4" />
                 Email
               </button>
+              {/* NEW: WhatsApp Button */}
+              {selectedContact.whatsapp && (
+                <button
+                  onClick={() => openWhatsApp(selectedContact.whatsapp!)}
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white transition-colors hover:opacity-90"
+                  style={{ backgroundColor: "#25D366" }}
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
+                </button>
+              )}
               <button
                 className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
                 style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
@@ -405,7 +675,7 @@ export function CrmPage() {
                       Entrambi interessati a AI+HR
                     </button>
                   </div>
-                  {/* NEW: Add to Event */}
+                  {/* Add to Event */}
                   <div className="relative rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
                     <div className="mb-2 text-[20px]">&#127919;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
@@ -435,7 +705,7 @@ export function CrmPage() {
                     )}
                   </div>
                 </div>
-                {/* NEW: Quick Actions Row */}
+                {/* Quick Actions Row */}
                 <div className="mt-4 flex gap-2">
                   <button
                     className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-blue-50"
@@ -457,7 +727,7 @@ export function CrmPage() {
 
           {activeTab === "cronologia" && (
             <div>
-              {/* NEW: Add Manual Interaction Button */}
+              {/* Add Manual Interaction Button */}
               <button
                 onClick={() => setShowAddInteractionModal(true)}
                 className="mb-4 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-blue-50"
@@ -486,6 +756,7 @@ export function CrmPage() {
                       <option>Tipo: Call</option>
                       <option>Tipo: Meeting</option>
                       <option>Tipo: Email</option>
+                      <option>Tipo: WhatsApp</option>
                       <option>Tipo: Nota</option>
                     </select>
                     <input
@@ -523,11 +794,15 @@ export function CrmPage() {
                   <div key={index} className="relative mb-6 pb-2">
                     <div
                       className="absolute -left-4 flex h-6 w-6 items-center justify-center rounded-full text-[12px]"
-                      style={{ backgroundColor: "#EFF6FF", color: "#2563EB" }}
+                      style={{ 
+                        backgroundColor: item.icon === "whatsapp" ? "#D1FAE5" : "#EFF6FF", 
+                        color: item.icon === "whatsapp" ? "#059669" : "#2563EB" 
+                      }}
                     >
                       {item.icon === "phone" && <Phone className="h-3 w-3" />}
                       {item.icon === "mail" && <Mail className="h-3 w-3" />}
                       {item.icon === "calendar" && <Calendar className="h-3 w-3" />}
+                      {item.icon === "whatsapp" && <MessageCircle className="h-3 w-3" />}
                       {item.icon === "news" && "&#128240;"}
                       {item.icon === "user" && "&#128100;"}
                     </div>
@@ -783,6 +1058,9 @@ export function CrmPage() {
 
   return (
     <div className="h-full overflow-y-auto p-6">
+      {/* Email Composer Modal */}
+      {showEmailComposer && <EmailComposerModal />}
+
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -794,7 +1072,7 @@ export function CrmPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          {/* NEW: Import Button */}
+          {/* Import Button */}
           <button
             onClick={() => setShowImportModal(true)}
             className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
@@ -838,7 +1116,7 @@ export function CrmPage() {
               </p>
             </div>
             <p className="mb-4 text-[12px]" style={{ color: "#7C8CA2" }}>
-              Colonne supportate: Nome, Email, Azienda, Ruolo, Telefono, Tag
+              Colonne supportate: Nome, Email, Azienda, Ruolo, Telefono, WhatsApp, Tag
             </p>
             <div className="flex justify-end gap-2">
               <button
@@ -882,9 +1160,11 @@ export function CrmPage() {
               Invita a evento
             </button>
             <button
-              className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              onClick={openEmailComposerForSelected}
+              className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium text-white"
+              style={{ backgroundColor: "#2563EB" }}
             >
+              <Mail className="h-3.5 w-3.5" />
               Invia email
             </button>
             <button
@@ -911,9 +1191,9 @@ export function CrmPage() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "#9CA3AF" }} />
           <input
             type="text"
-            placeholder="Cerca contatti..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cerca per nome o azienda..."
             className="w-full rounded-lg border py-2.5 pl-10 pr-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
             style={{ borderColor: "#E5E7EB" }}
           />
@@ -933,33 +1213,24 @@ export function CrmPage() {
             </button>
           ))}
         </div>
-        {/* NEW: Export List Button */}
-        <button
-          className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-          style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
-        >
-          <Download className="h-4 w-4" />
-          Esporta lista
-        </button>
       </div>
 
       {/* Contacts Table */}
-      <div className="rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
+      <div className="rounded-lg border" style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}>
         {/* Table Header */}
         <div
           className="grid items-center gap-4 border-b px-4 py-3"
-          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 160px 100px 100px 120px 100px" }}
+          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 140px 100px 60px 120px" }}
         >
-          {/* NEW: Select All Checkbox */}
           <button
             onClick={selectAllContacts}
             className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
             style={{
-              borderColor: selectedContacts.length === filteredContacts.length ? "#2563EB" : "#E5E7EB",
-              backgroundColor: selectedContacts.length === filteredContacts.length ? "#2563EB" : "transparent",
+              borderColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "#2563EB" : "#E5E7EB",
+              backgroundColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "#2563EB" : "transparent",
             }}
           >
-            {selectedContacts.length === filteredContacts.length && (
+            {selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 && (
               <Check className="h-3 w-3 text-white" />
             )}
           </button>
@@ -967,7 +1238,7 @@ export function CrmPage() {
             Contatto
           </span>
           <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-            Azienda
+            Ultimo contatto
           </span>
           <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Stage
@@ -976,28 +1247,25 @@ export function CrmPage() {
             Score
           </span>
           <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-            Ultimo contatto
-          </span>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Azione
           </span>
         </div>
 
-        {/* Contacts Rows */}
-        {filteredContacts.map((contact) => (
+        {/* Table Rows */}
+        {filteredContacts.map((contact, index) => (
           <div
             key={contact.id}
             className="relative grid items-center gap-4 border-b px-4 py-3 transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 160px 100px 100px 120px 100px" }}
+            style={{
+              borderColor: index === filteredContacts.length - 1 ? "transparent" : "#E5E7EB",
+              gridTemplateColumns: "32px 1fr 140px 100px 60px 120px",
+            }}
             onMouseEnter={() => setHoveredContact(contact.id)}
             onMouseLeave={() => setHoveredContact(null)}
           >
-            {/* NEW: Row Checkbox */}
+            {/* Selection Checkbox */}
             <button
-              onClick={(e) => {
-                e.stopPropagation()
-                toggleContactSelection(contact.id)
-              }}
+              onClick={() => toggleContactSelection(contact.id)}
               className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
               style={{
                 borderColor: selectedContacts.includes(contact.id) ? "#2563EB" : "#E5E7EB",
@@ -1008,9 +1276,10 @@ export function CrmPage() {
                 <Check className="h-3 w-3 text-white" />
               )}
             </button>
+
             <div className="flex items-center gap-3">
               <div
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-bold text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-white"
                 style={{ backgroundColor: "#93C5FD" }}
               >
                 {contact.initials}
@@ -1024,13 +1293,15 @@ export function CrmPage() {
                   {contact.name}
                 </button>
                 <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                  {contact.role}
+                  {contact.role} · {contact.company}
                 </p>
               </div>
             </div>
-            <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
-              {contact.company}
+
+            <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
+              {contact.lastContact}
             </span>
+
             <span
               className="w-fit rounded-full px-2.5 py-1 text-[11px] font-medium"
               style={{
@@ -1040,71 +1311,73 @@ export function CrmPage() {
             >
               {contact.stage}
             </span>
+
             <span
               className="text-[14px] font-bold"
-              style={{ color: contact.score >= 15 ? "#059669" : contact.score >= 8 ? "#F59E0B" : "#6B7280" }}
+              style={{
+                color: contact.score >= 15 ? "#059669" : contact.score >= 10 ? "#F59E0B" : "#7C8CA2",
+              }}
             >
               {contact.score}
             </span>
-            <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
-              {contact.lastContact}
-            </span>
-            <span className="text-[13px]" style={{ color: "#2563EB" }}>
+
+            <span className="text-[12px]" style={{ color: "#2563EB" }}>
               {contact.action}
             </span>
 
             {/* Hover Card */}
             {hoveredContact === contact.id && (
               <div
-                className="absolute left-[50%] top-full z-10 w-[320px] -translate-x-1/2 rounded-lg border bg-white p-4 shadow-lg"
+                className="absolute left-0 top-full z-20 w-80 rounded-lg border bg-white p-4 shadow-lg"
                 style={{ borderColor: "#E5E7EB" }}
               >
-                <div className="mb-3 flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white"
-                      style={{ backgroundColor: "#2563EB" }}
-                    >
-                      {contact.initials}
-                    </div>
-                    <div>
-                      <p className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
-                        {contact.name}
-                      </p>
-                      <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                        {contact.role} · {contact.company}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className="rounded-full px-2 py-0.5 text-[11px] font-bold"
-                    style={{ backgroundColor: "#F0FDF4", color: "#059669" }}
+                <div className="mb-3 flex items-center gap-3">
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-full text-[14px] font-bold text-white"
+                    style={{ backgroundColor: "#2563EB" }}
                   >
-                    {contact.score}
-                  </span>
+                    {contact.initials}
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
+                      {contact.name}
+                    </p>
+                    <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                      {contact.role}
+                    </p>
+                  </div>
                 </div>
-                <p className="mb-3 line-clamp-3 text-[12px] leading-relaxed" style={{ color: "#4B5563" }}>
-                  {contact.brief}
+                <p className="mb-3 text-[12px] leading-relaxed" style={{ color: "#7C8CA2" }}>
+                  {contact.brief.substring(0, 120)}...
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => openProfile(contact)}
-                    className="flex-1 rounded-lg py-1.5 text-center text-[12px] font-medium text-white"
+                    className="flex-1 rounded-lg px-3 py-1.5 text-[12px] font-medium text-white"
                     style={{ backgroundColor: "#2563EB" }}
                   >
-                    Apri profilo
+                    Vedi profilo
                   </button>
+                  {contact.whatsapp && (
+                    <button
+                      onClick={() => openWhatsApp(contact.whatsapp!)}
+                      className="flex items-center justify-center rounded-lg px-3 py-1.5 text-[12px] font-medium text-white"
+                      style={{ backgroundColor: "#25D366" }}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </button>
+                  )}
                   <button
-                    className="rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                    className="flex items-center justify-center rounded-lg border px-3 py-1.5"
                     style={{ borderColor: "#E5E7EB" }}
                   >
-                    <Phone className="h-3.5 w-3.5" />
+                    <Phone className="h-4 w-4" style={{ color: "#7C8CA2" }} />
                   </button>
                   <button
-                    className="rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                    className="flex items-center justify-center rounded-lg border px-3 py-1.5"
                     style={{ borderColor: "#E5E7EB" }}
                   >
-                    <Mail className="h-3.5 w-3.5" />
+                    <Mail className="h-4 w-4" style={{ color: "#7C8CA2" }} />
                   </button>
                 </div>
               </div>
@@ -1113,14 +1386,21 @@ export function CrmPage() {
         ))}
       </div>
 
-      {/* NEW: Merge Duplicates Link */}
+      {/* Footer Actions */}
       <div className="mt-4 flex items-center justify-between">
-        <button className="text-[13px] hover:underline" style={{ color: "#7C8CA2" }}>
+        <button
+          className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-gray-50"
+          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+        >
+          <Download className="h-4 w-4" />
+          Esporta lista
+        </button>
+        <button
+          className="text-[12px] hover:underline"
+          style={{ color: "#7C8CA2" }}
+        >
           Unisci duplicati
         </button>
-        <p className="text-[12px]" style={{ color: "#9CA3AF" }}>
-          Mostrando {filteredContacts.length} di {contacts.length} contatti
-        </p>
       </div>
     </div>
   )
