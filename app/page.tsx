@@ -14,6 +14,7 @@ import { ProgettoTimeline } from "@/components/progetto-timeline"
 import { PianoEditoriale } from "@/components/piano-editoriale"
 import { TeamAgenti } from "@/components/team-agenti"
 import { Orientamento } from "@/components/orientamento"
+import { Workspace } from "@/components/workspace"
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("home")
@@ -53,6 +54,8 @@ export default function Home() {
           <TeamAgenti />
         ) : activeItem === "orientation" ? (
           <Orientamento />
+        ) : activeItem === "workspace" ? (
+          <Workspace />
         ) : (
           <div className="flex h-full items-center justify-center">
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>

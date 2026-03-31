@@ -46,6 +46,7 @@ const navSections: NavSection[] = [
     title: "SISTEMA",
     collapsible: true,
     items: [
+      { emoji: "🏢", label: "Workspace", id: "workspace" },
       { emoji: "🤖", label: "Team Agenti", id: "agents" },
       { emoji: "🎯", label: "Orientamento", id: "orientation" },
       { emoji: "⚙️", label: "Impostazioni", id: "settings" },
