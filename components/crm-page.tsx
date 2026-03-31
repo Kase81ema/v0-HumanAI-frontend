@@ -199,8 +199,17 @@ export function CrmPage() {
   const [emailSubject, setEmailSubject] = useState("")
   const [emailBody, setEmailBody] = useState("")
   const [showTemplateDropdown, setShowTemplateDropdown] = useState(false)
+  const [activeSmartFilter, setActiveSmartFilter] = useState<string | null>(null)
 
   const stages = ["Tutti", "Prospect", "Qualificato", "Opportunità", "Cliente"]
+  
+  const smartFilters = [
+    { id: "hot-leads", label: "Lead caldi senza follow-up", emoji: "🔥" },
+    { id: "event-participants", label: "Partecipanti ultimo evento", emoji: "📆" },
+    { id: "newsletter-active", label: "Newsletter attivi", emoji: "📰" },
+    { id: "with-deal", label: "Con deal attivo", emoji: "💰" },
+    { id: "inactive-30", label: "Inattivi 30+ giorni", emoji: "😴" },
+  ]
   const tabs = [
     { id: "panoramica", label: "Panoramica" },
     { id: "cronologia", label: "Cronologia" },
@@ -215,7 +224,22 @@ export function CrmPage() {
       c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.company.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesStage = stageFilter === "Tutti" || c.stage === stageFilter
-    return matchesSearch && matchesStage
+    
+    // Smart filter logic
+    let matchesSmartFilter = true
+    if (activeSmartFilter === "hot-leads") {
+      matchesSmartFilter = c.score >= 15 && c.lastContact.includes("giorni")
+    } else if (activeSmartFilter === "event-participants") {
+      matchesSmartFilter = c.tags.includes("workshop-partecipante") || c.tags.includes("workshop")
+    } else if (activeSmartFilter === "newsletter-active") {
+      matchesSmartFilter = c.tags.includes("newsletter")
+    } else if (activeSmartFilter === "with-deal") {
+      matchesSmartFilter = !!c.dealValue
+    } else if (activeSmartFilter === "inactive-30") {
+      matchesSmartFilter = c.lastContact.includes("30") || parseInt(c.lastContact) >= 20
+    }
+    
+    return matchesSearch && matchesStage && matchesSmartFilter
   })
 
   const stageCounts = {
@@ -1215,12 +1239,39 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
         </div>
       </div>
 
+      {/* Smart Filters Row */}
+      <div className="mb-4 flex flex-wrap gap-2">
+        {smartFilters.map((filter) => (
+          <button
+            key={filter.id}
+            onClick={() => setActiveSmartFilter(activeSmartFilter === filter.id ? null : filter.id)}
+            className="rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors"
+            style={{
+              backgroundColor: activeSmartFilter === filter.id ? "#EFF6FF" : "#F9FAFB",
+              color: activeSmartFilter === filter.id ? "#2563EB" : "#6B7280",
+              border: activeSmartFilter === filter.id ? "1px solid #2563EB" : "1px solid #E5E7EB",
+            }}
+          >
+            {filter.emoji} {filter.label}
+          </button>
+        ))}
+        {activeSmartFilter && (
+          <button
+            onClick={() => setActiveSmartFilter(null)}
+            className="text-[12px] hover:underline"
+            style={{ color: "#7C8CA2" }}
+          >
+            Rimuovi filtro
+          </button>
+        )}
+      </div>
+
       {/* Contacts Table */}
       <div className="rounded-lg border" style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}>
         {/* Table Header */}
         <div
-          className="grid items-center gap-4 border-b px-4 py-3"
-          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 140px 100px 60px 120px" }}
+          className="grid items-center gap-3 border-b px-4 py-3"
+          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px minmax(180px, 1fr) minmax(140px, 160px) minmax(100px, 120px) 100px 80px 50px 90px" }}
         >
           <button
             onClick={selectAllContacts}
@@ -1234,19 +1285,25 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               <Check className="h-3 w-3 text-white" />
             )}
           </button>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Contatto
           </span>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Email
+          </span>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Tag
+          </span>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Ultimo contatto
           </span>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Stage
           </span>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Score
           </span>
-          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
             Azione
           </span>
         </div>
@@ -1255,10 +1312,10 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
         {filteredContacts.map((contact, index) => (
           <div
             key={contact.id}
-            className="relative grid items-center gap-4 border-b px-4 py-3 transition-colors hover:bg-gray-50"
+            className="relative grid items-center gap-3 border-b px-4 py-3 transition-colors hover:bg-gray-50"
             style={{
               borderColor: index === filteredContacts.length - 1 ? "transparent" : "#E5E7EB",
-              gridTemplateColumns: "32px 1fr 140px 100px 60px 120px",
+              gridTemplateColumns: "32px minmax(180px, 1fr) minmax(140px, 160px) minmax(100px, 120px) 100px 80px 50px 90px",
             }}
             onMouseEnter={() => setHoveredContact(contact.id)}
             onMouseLeave={() => setHoveredContact(null)}
@@ -1277,33 +1334,66 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               )}
             </button>
 
-            <div className="flex items-center gap-3">
+            {/* Contact Name & Company */}
+            <div className="flex items-center gap-3 min-w-0">
               <div
-                className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-white"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
                 style={{ backgroundColor: "#93C5FD" }}
               >
                 {contact.initials}
               </div>
-              <div>
+              <div className="min-w-0">
                 <button
                   onClick={() => openProfile(contact)}
-                  className="text-[14px] font-medium hover:underline"
+                  className="text-[13px] font-medium hover:underline truncate block"
                   style={{ color: "#1B2B4B" }}
                 >
                   {contact.name}
                 </button>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                  {contact.role} · {contact.company}
+                <p className="text-[11px] truncate" style={{ color: "#7C8CA2" }}>
+                  {contact.company}
                 </p>
               </div>
             </div>
 
-            <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
+            {/* Email */}
+            <span 
+              className="text-[12px] truncate" 
+              style={{ color: "#9CA3AF" }}
+              title={contact.email}
+            >
+              {contact.email}
+            </span>
+
+            {/* Tags */}
+            <div className="flex items-center gap-1 overflow-hidden">
+              {contact.tags.slice(0, 2).map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full px-2 py-0.5 text-[10px] font-medium truncate"
+                  style={{ 
+                    backgroundColor: tag === "newsletter" ? "#ECFDF5" : tag === "AI" ? "#EFF6FF" : "#F3F4F6",
+                    color: tag === "newsletter" ? "#059669" : tag === "AI" ? "#2563EB" : "#6B7280"
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+              {contact.tags.length > 2 && (
+                <span className="text-[10px] font-medium" style={{ color: "#9CA3AF" }}>
+                  +{contact.tags.length - 2}
+                </span>
+              )}
+            </div>
+
+            {/* Last Contact */}
+            <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
               {contact.lastContact}
             </span>
 
+            {/* Stage */}
             <span
-              className="w-fit rounded-full px-2.5 py-1 text-[11px] font-medium"
+              className="w-fit rounded-full px-2 py-0.5 text-[10px] font-medium"
               style={{
                 backgroundColor: stageColors[contact.stage].bg,
                 color: stageColors[contact.stage].text,
@@ -1312,8 +1402,9 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               {contact.stage}
             </span>
 
+            {/* Score */}
             <span
-              className="text-[14px] font-bold"
+              className="text-[13px] font-bold"
               style={{
                 color: contact.score >= 15 ? "#059669" : contact.score >= 10 ? "#F59E0B" : "#7C8CA2",
               }}
@@ -1321,7 +1412,8 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               {contact.score}
             </span>
 
-            <span className="text-[12px]" style={{ color: "#2563EB" }}>
+            {/* Action */}
+            <span className="text-[11px]" style={{ color: "#2563EB" }}>
               {contact.action}
             </span>
 

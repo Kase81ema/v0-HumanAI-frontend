@@ -48,6 +48,23 @@ Target principale: coach in formazione, coach certificati che vogliono aggiornar
     languages: ["Italiano", "English"],
     location: "Lugano, Ticino, Svizzera",
     foundedYear: "2024",
+    currency: "CHF",
+    positioning: `Ariadne Coaching School è una scuola di formazione per coach che integra l'intelligenza artificiale.
+
+**Cosa facciamo:**
+- Formiamo coach professionisti a usare l'AI come strumento di supporto
+- Offriamo certificazioni ICF con moduli specifici su AI
+- Organizziamo workshop e webinar su AI applicata al coaching
+
+**Cosa NON facciamo (lo fanno i nostri partner):**
+- Non sviluppiamo software o tool AI
+- Non offriamo consulenza IT o implementazione tecnologica
+- Non facciamo formazione tecnica su programmazione
+
+**Come ci posizioniamo:**
+L'AI è uno strumento al servizio della relazione umana, non un sostituto. Il coach resta al centro, l'AI amplifica le sue capacità di ascolto e analisi.`,
+    wordsToUseAlways: ["relazione umana", "trasformazione", "consapevolezza", "potenziale", "ascolto attivo"],
+    expressionsToAvoid: ["disruptive", "game-changer", "scalare", "leverage", "intelligenza artificiale come sostituto"],
   },
   brand: {
     logoUploaded: true,
@@ -102,6 +119,10 @@ Target principale: coach in formazione, coach certificati che vogliono aggiornar
 export function Workspace() {
   const [activeSection, setActiveSection] = useState("identity")
   const [expandedSections, setExpandedSections] = useState<string[]>(["identity"])
+  const [wordsToUse, setWordsToUse] = useState(projectData.identity.wordsToUseAlways)
+  const [expressionsToAvoid, setExpressionsToAvoid] = useState(projectData.identity.expressionsToAvoid)
+  const [newWordToUse, setNewWordToUse] = useState("")
+  const [newExpressionToAvoid, setNewExpressionToAvoid] = useState("")
 
   // Calculate completion percentage
   const completionItems = [
@@ -366,7 +387,7 @@ export function Workspace() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
                       Sede
@@ -388,6 +409,140 @@ export function Workspace() {
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
                       style={{ borderColor: "#E5E7EB" }}
                     />
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                      Valuta
+                    </label>
+                    <select
+                      defaultValue={projectData.identity.currency}
+                      className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                    >
+                      <option value="CHF">CHF - Franco svizzero</option>
+                      <option value="EUR">EUR - Euro</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Come ci presentiamo */}
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                    Come ci presentiamo
+                  </label>
+                  <textarea
+                    rows={10}
+                    defaultValue={projectData.identity.positioning}
+                    placeholder="Descrivi chi siete, cosa fate, cosa NON fate (es: lo fanno i partner), e come vi posizionate. Questo testo guida tutti gli agenti nella produzione di contenuti."
+                    className="w-full rounded-lg border px-3 py-2 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ borderColor: "#E5E7EB" }}
+                  />
+                  <p className="mt-1 text-[11px]" style={{ color: "#7C8CA2" }}>
+                    Questo testo viene iniettato in ogni agente che produce contenuti. Includi cosa fate, cosa NON fate, e come vi posizionate.
+                  </p>
+                </div>
+
+                {/* Words to use always */}
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                    Parole da usare sempre
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {wordsToUse.map((word, index) => (
+                      <span
+                        key={index}
+                        className="flex items-center gap-1 rounded-full px-3 py-1 text-[12px]"
+                        style={{ backgroundColor: "#D1FAE5", color: "#059669" }}
+                      >
+                        {word}
+                        <button
+                          onClick={() => setWordsToUse(wordsToUse.filter((_, i) => i !== index))}
+                          className="ml-1 hover:text-red-600"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newWordToUse}
+                      onChange={(e) => setNewWordToUse(e.target.value)}
+                      placeholder="Aggiungi parola..."
+                      className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && newWordToUse.trim()) {
+                          setWordsToUse([...wordsToUse, newWordToUse.trim()])
+                          setNewWordToUse("")
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={() => {
+                        if (newWordToUse.trim()) {
+                          setWordsToUse([...wordsToUse, newWordToUse.trim()])
+                          setNewWordToUse("")
+                        }
+                      }}
+                      className="rounded-lg px-3 py-2 text-[13px] font-medium text-white"
+                      style={{ backgroundColor: "#059669" }}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Expressions to avoid */}
+                <div>
+                  <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                    Espressioni da evitare
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {expressionsToAvoid.map((expr, index) => (
+                      <span
+                        key={index}
+                        className="flex items-center gap-1 rounded-full px-3 py-1 text-[12px]"
+                        style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
+                      >
+                        {expr}
+                        <button
+                          onClick={() => setExpressionsToAvoid(expressionsToAvoid.filter((_, i) => i !== index))}
+                          className="ml-1 hover:text-red-800"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newExpressionToAvoid}
+                      onChange={(e) => setNewExpressionToAvoid(e.target.value)}
+                      placeholder="Aggiungi espressione..."
+                      className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && newExpressionToAvoid.trim()) {
+                          setExpressionsToAvoid([...expressionsToAvoid, newExpressionToAvoid.trim()])
+                          setNewExpressionToAvoid("")
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={() => {
+                        if (newExpressionToAvoid.trim()) {
+                          setExpressionsToAvoid([...expressionsToAvoid, newExpressionToAvoid.trim()])
+                          setNewExpressionToAvoid("")
+                        }
+                      }}
+                      className="rounded-lg px-3 py-2 text-[13px] font-medium text-white"
+                      style={{ backgroundColor: "#DC2626" }}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               </div>
