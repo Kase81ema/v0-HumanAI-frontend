@@ -6,6 +6,9 @@ import { HomeBriefing } from "@/components/home-briefing"
 import { CommandCenter } from "@/components/command-center"
 import { ContentFactory } from "@/components/content-factory"
 import { ApprovalPage } from "@/components/approval-page"
+import { CrmPage } from "@/components/crm-page"
+import { EventsPage } from "@/components/events-page"
+import { PipelinePage } from "@/components/pipeline-page"
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("home")
@@ -29,6 +32,12 @@ export default function Home() {
           <ContentFactory />
         ) : activeItem === "approval" ? (
           <ApprovalPage />
+        ) : activeItem === "crm" ? (
+          <CrmPage />
+        ) : activeItem === "events" ? (
+          <EventsPage />
+        ) : activeItem === "pipeline" ? (
+          <PipelinePage />
         ) : (
           <div className="flex h-full items-center justify-center">
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
