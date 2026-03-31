@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Phone, Mail, Calendar, ChevronRight, ChevronDown, ExternalLink, Play, Pause, SkipForward, Edit2, Plus } from "lucide-react"
+import { Search, Phone, Mail, Calendar, ChevronRight, ChevronDown, ExternalLink, Play, Pause, SkipForward, Edit2, Plus, Upload, MoreHorizontal, Check, Users, Download, X } from "lucide-react"
 
 interface Contact {
   id: string
@@ -162,6 +162,12 @@ const timelineData = [
   { icon: "user", text: "Contatto creato da LinkedIn (Scout Agent)", time: "2 mesi fa", link: null },
 ]
 
+const activeEvents = [
+  { id: "e1", name: "Workshop AI & Leadership", date: "15 aprile" },
+  { id: "e2", name: "Webinar AI per PMI", date: "22 aprile" },
+  { id: "e3", name: "Meetup AI Lugano #4", date: "8 maggio" },
+]
+
 export function CrmPage() {
   const [view, setView] = useState<"list" | "profile">("list")
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
@@ -170,6 +176,11 @@ export function CrmPage() {
   const [stageFilter, setStageFilter] = useState("Tutti")
   const [hoveredContact, setHoveredContact] = useState<string | null>(null)
   const [contextOpen, setContextOpen] = useState(true)
+  const [selectedContacts, setSelectedContacts] = useState<string[]>([])
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showAddInteractionModal, setShowAddInteractionModal] = useState(false)
+  const [showAddToEventDropdown, setShowAddToEventDropdown] = useState(false)
+  const [showBatchActions, setShowBatchActions] = useState(false)
 
   const stages = ["Tutti", "Prospect", "Qualificato", "Opportunità", "Cliente"]
   const tabs = [
@@ -201,6 +212,22 @@ export function CrmPage() {
     setSelectedContact(contact)
     setView("profile")
     setActiveTab("panoramica")
+  }
+
+  const toggleContactSelection = (contactId: string) => {
+    setSelectedContacts(prev => 
+      prev.includes(contactId) 
+        ? prev.filter(id => id !== contactId)
+        : [...prev, contactId]
+    )
+  }
+
+  const selectAllContacts = () => {
+    if (selectedContacts.length === filteredContacts.length) {
+      setSelectedContacts([])
+    } else {
+      setSelectedContacts(filteredContacts.map(c => c.id))
+    }
   }
 
   if (view === "profile" && selectedContact) {
@@ -285,6 +312,12 @@ export function CrmPage() {
                 <Calendar className="h-4 w-4" />
                 Calendly
               </button>
+              <button
+                className="flex items-center justify-center rounded-lg border px-2 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>
@@ -344,7 +377,7 @@ export function CrmPage() {
                 <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
                   Azioni suggerite
                 </h3>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
                     <div className="mb-2 text-[20px]">&#128188;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
@@ -372,44 +405,151 @@ export function CrmPage() {
                       Entrambi interessati a AI+HR
                     </button>
                   </div>
+                  {/* NEW: Add to Event */}
+                  <div className="relative rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
+                    <div className="mb-2 text-[20px]">&#127919;</div>
+                    <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                      Aggiungi a evento
+                    </p>
+                    <button 
+                      onClick={() => setShowAddToEventDropdown(!showAddToEventDropdown)}
+                      className="flex items-center gap-1 text-[12px] hover:underline" 
+                      style={{ color: "#2563EB" }}
+                    >
+                      Seleziona evento
+                      <ChevronDown className="h-3 w-3" />
+                    </button>
+                    {showAddToEventDropdown && (
+                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-lg border bg-white shadow-lg" style={{ borderColor: "#E5E7EB" }}>
+                        {activeEvents.map(event => (
+                          <button
+                            key={event.id}
+                            className="w-full px-3 py-2 text-left text-[12px] transition-colors hover:bg-gray-50"
+                            style={{ color: "#1B2B4B" }}
+                            onClick={() => setShowAddToEventDropdown(false)}
+                          >
+                            {event.name} ({event.date})
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* NEW: Quick Actions Row */}
+                <div className="mt-4 flex gap-2">
+                  <button
+                    className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-blue-50"
+                    style={{ borderColor: "#2563EB", color: "#2563EB" }}
+                  >
+                    <Plus className="h-4 w-4" />
+                    Crea deal
+                  </button>
+                  <button
+                    className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                  >
+                    Archivia contatto
+                  </button>
                 </div>
               </div>
             </div>
           )}
 
           {activeTab === "cronologia" && (
-            <div className="relative pl-6">
-              <div className="absolute bottom-0 left-2 top-0 w-px" style={{ backgroundColor: "#E5E7EB" }} />
-              {timelineData.map((item, index) => (
-                <div key={index} className="relative mb-6 pb-2">
-                  <div
-                    className="absolute -left-4 flex h-6 w-6 items-center justify-center rounded-full text-[12px]"
-                    style={{ backgroundColor: "#EFF6FF", color: "#2563EB" }}
-                  >
-                    {item.icon === "phone" && <Phone className="h-3 w-3" />}
-                    {item.icon === "mail" && <Mail className="h-3 w-3" />}
-                    {item.icon === "calendar" && <Calendar className="h-3 w-3" />}
-                    {item.icon === "news" && "&#128240;"}
-                    {item.icon === "user" && "&#128100;"}
+            <div>
+              {/* NEW: Add Manual Interaction Button */}
+              <button
+                onClick={() => setShowAddInteractionModal(true)}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-blue-50"
+                style={{ borderColor: "#2563EB", color: "#2563EB" }}
+              >
+                <Plus className="h-4 w-4" />
+                Aggiungi interazione manuale
+              </button>
+
+              {/* Add Interaction Modal */}
+              {showAddInteractionModal && (
+                <div className="mb-4 rounded-lg border p-4" style={{ borderColor: "#2563EB", backgroundColor: "#EFF6FF" }}>
+                  <div className="mb-3 flex items-center justify-between">
+                    <h4 className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
+                      Nuova interazione
+                    </h4>
+                    <button onClick={() => setShowAddInteractionModal(false)}>
+                      <X className="h-4 w-4" style={{ color: "#7C8CA2" }} />
+                    </button>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-[14px]" style={{ color: "#1B2B4B" }}>
-                      {item.text}
-                    </p>
-                    <div className="mt-1 flex items-center gap-3">
-                      <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                        {item.time}
-                      </span>
-                      {item.link && (
-                        <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                          {item.link}
-                          <ExternalLink className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
+                  <div className="mb-3 flex gap-2">
+                    <select
+                      className="rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                    >
+                      <option>Tipo: Call</option>
+                      <option>Tipo: Meeting</option>
+                      <option>Tipo: Email</option>
+                      <option>Tipo: Nota</option>
+                    </select>
+                    <input
+                      type="date"
+                      className="rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Descrizione dell'interazione..."
+                    className="mb-3 w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      className="rounded-lg px-4 py-2 text-[13px] font-medium text-white"
+                      style={{ backgroundColor: "#2563EB" }}
+                    >
+                      Salva
+                    </button>
+                    <button
+                      onClick={() => setShowAddInteractionModal(false)}
+                      className="rounded-lg border px-4 py-2 text-[13px] font-medium"
+                      style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                    >
+                      Annulla
+                    </button>
                   </div>
                 </div>
-              ))}
+              )}
+
+              <div className="relative pl-6">
+                <div className="absolute bottom-0 left-2 top-0 w-px" style={{ backgroundColor: "#E5E7EB" }} />
+                {timelineData.map((item, index) => (
+                  <div key={index} className="relative mb-6 pb-2">
+                    <div
+                      className="absolute -left-4 flex h-6 w-6 items-center justify-center rounded-full text-[12px]"
+                      style={{ backgroundColor: "#EFF6FF", color: "#2563EB" }}
+                    >
+                      {item.icon === "phone" && <Phone className="h-3 w-3" />}
+                      {item.icon === "mail" && <Mail className="h-3 w-3" />}
+                      {item.icon === "calendar" && <Calendar className="h-3 w-3" />}
+                      {item.icon === "news" && "&#128240;"}
+                      {item.icon === "user" && "&#128100;"}
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-[14px]" style={{ color: "#1B2B4B" }}>
+                        {item.text}
+                      </p>
+                      <div className="mt-1 flex items-center gap-3">
+                        <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                          {item.time}
+                        </span>
+                        {item.link && (
+                          <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
+                            {item.link}
+                            <ExternalLink className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -454,6 +594,18 @@ export function CrmPage() {
                 </div>
               )}
 
+              {!selectedContact.dealValue && (
+                <button
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <Plus className="h-5 w-5" style={{ color: "#2563EB" }} />
+                  <span className="text-[14px] font-medium" style={{ color: "#2563EB" }}>
+                    Crea nuovo deal
+                  </span>
+                </button>
+              )}
+
               <div>
                 <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
                   Prodotti suggeriti
@@ -479,32 +631,37 @@ export function CrmPage() {
           )}
 
           {activeTab === "sequenze" && (
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
                 <div className="mb-3 flex items-center justify-between">
-                  <div>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="rounded-full px-2.5 py-1 text-[11px] font-medium"
+                      style={{ backgroundColor: "#D1FAE5", color: "#059669" }}
+                    >
+                      Attiva
+                    </span>
                     <h3 className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
-                      FN2 — Nurturing avanzato
+                      FN2 — Conversione Lead Qualificati
                     </h3>
-                    <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Sequenza attiva</p>
                   </div>
                   <div className="flex gap-2">
                     <button
-                      className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[12px] transition-colors hover:bg-gray-50"
+                      className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <Pause className="h-3 w-3" />
                       Pausa
                     </button>
                     <button
-                      className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[12px] transition-colors hover:bg-gray-50"
+                      className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <SkipForward className="h-3 w-3" />
-                      Salta
+                      Salta step
                     </button>
                     <button
-                      className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[12px] transition-colors hover:bg-gray-50"
+                      className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <Edit2 className="h-3 w-3" />
@@ -512,84 +669,108 @@ export function CrmPage() {
                     </button>
                   </div>
                 </div>
-                <div className="mb-3">
-                  <div className="mb-1 flex items-center justify-between text-[12px]">
-                    <span style={{ color: "#7C8CA2" }}>Step 3 di 5</span>
-                    <span style={{ color: "#2563EB" }}>60%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full" style={{ backgroundColor: "#E5E7EB" }}>
+                <div className="mb-2 flex items-center gap-2">
+                  <div className="h-2 flex-1 rounded-full" style={{ backgroundColor: "#E5E7EB" }}>
                     <div className="h-2 rounded-full" style={{ width: "60%", backgroundColor: "#2563EB" }} />
                   </div>
+                  <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                    Step 3/5
+                  </span>
                 </div>
                 <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
-                  Prossima email: <span style={{ color: "#1B2B4B" }}>Step 4 — Case study coaching AI</span> prevista tra 3 giorni
+                  Prossimo step: Follow-up personale — tra 2 giorni
                 </p>
               </div>
 
-              <div>
-                <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-                  Storico sequenze
-                </h3>
-                <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}>
-                  <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
-                    FN1 Nurturing base — completata 1 mese fa
-                  </p>
-                </div>
-              </div>
+              <button
+                className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"
+                style={{ borderColor: "#E5E7EB" }}
+              >
+                <Plus className="h-4 w-4" style={{ color: "#2563EB" }} />
+                <span className="text-[13px]" style={{ color: "#2563EB" }}>
+                  Aggiungi a nuova sequenza
+                </span>
+              </button>
             </div>
           )}
 
           {activeTab === "connessioni" && (
             <div className="space-y-4">
               <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Presentata da</p>
-                <button className="text-[14px] font-medium hover:underline" style={{ color: "#2563EB" }}>
-                  Thomas Weber (Credit Suisse)
-                </button>
+                <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Presentato da
+                </h3>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-white"
+                    style={{ backgroundColor: "#93C5FD" }}
+                  >
+                    TW
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-medium" style={{ color: "#1B2B4B" }}>
+                      Thomas Weber
+                    </p>
+                    <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                      VP HR · Credit Suisse
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Stessa azienda</p>
-                <p className="text-[14px]" style={{ color: "#1B2B4B" }}>Nessun altro contatto SwissAI Lab nel CRM</p>
-              </div>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Potenziale connessione</p>
-                <button className="text-[14px] font-medium hover:underline" style={{ color: "#2563EB" }}>
-                  Mario Rossi (TechnoSwiss)
-                </button>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Stesso interesse: AI + HR leadership</p>
-              </div>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>Partner collegato</p>
-                <p className="text-[14px]" style={{ color: "#1B2B4B" }}>Nessuno</p>
+
+              <div>
+                <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Contatti correlati (stessa azienda/settore)
+                </h3>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-gray-50" style={{ borderColor: "#E5E7EB" }}>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                        style={{ backgroundColor: "#93C5FD" }}
+                      >
+                        MR
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                          Mario Rossi
+                        </p>
+                        <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                          HR Director · TechnoSwiss AG
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-[11px]" style={{ color: "#2563EB" }}>
+                      Stesso settore: AI+HR
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === "note" && (
             <div className="space-y-4">
-              <div>
-                <textarea
-                  className="w-full rounded-lg border p-3 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{ borderColor: "#E5E7EB", minHeight: "120px" }}
-                  placeholder="Aggiungi una nota..."
-                />
-                <button
-                  className="mt-2 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
-                  style={{ backgroundColor: "#2563EB" }}
-                >
-                  Salva nota
-                </button>
-              </div>
-              <div>
-                <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-                  Storico note
-                </h3>
+              <textarea
+                className="w-full rounded-lg border px-4 py-3 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ borderColor: "#E5E7EB", minHeight: "120px" }}
+                placeholder="Aggiungi una nota..."
+              />
+              <button
+                className="rounded-lg px-4 py-2 text-[13px] font-medium text-white"
+                style={{ backgroundColor: "#2563EB" }}
+              >
+                Salva nota
+              </button>
+
+              <div className="mt-6 space-y-3">
                 <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
                   <p className="text-[14px]" style={{ color: "#1B2B4B" }}>
-                    Call molto positiva. Budget confermato, decisore diretto. Procedere con proposta formale.
+                    Molto interessata al coaching team. Ha menzionato che il CEO è favorevole.
+                    Budget già allocato per Q2.
                   </p>
                   <p className="mt-2 text-[12px]" style={{ color: "#7C8CA2" }}>
-                    Emanuele Casero — 1g fa
+                    1 giorno fa · Emanuele Casero
                   </p>
                 </div>
               </div>
@@ -609,21 +790,19 @@ export function CrmPage() {
             Contatti & CRM
           </h1>
           <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
-            {contacts.length} contatti · {contacts.filter((c) => c.stage === "Opportunità").length} lead caldi · {contacts.filter((c) => c.dealValue).length} deal attivi
+            {contacts.length} contatti · {contacts.filter((c) => c.stage === "Opportunità").length} opportunità attive
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "#7C8CA2" }} />
-            <input
-              type="text"
-              placeholder="Cerca per nome, azienda, tag..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-[280px] rounded-lg border py-2 pl-9 pr-4 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB" }}
-            />
-          </div>
+        <div className="flex gap-2">
+          {/* NEW: Import Button */}
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+          >
+            <Upload className="h-4 w-4" />
+            Importa
+          </button>
           <button
             className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
             style={{ backgroundColor: "#2563EB" }}
@@ -634,52 +813,201 @@ export function CrmPage() {
         </div>
       </div>
 
-      {/* Stage Filters */}
-      <div className="mb-4 flex gap-2">
-        {stages.map((stage) => (
-          <button
-            key={stage}
-            onClick={() => setStageFilter(stage)}
-            className="rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors"
-            style={{
-              backgroundColor: stageFilter === stage ? "#2563EB" : "#F3F4F6",
-              color: stageFilter === stage ? "white" : "#6B7280",
-            }}
-          >
-            {stage} ({stageCounts[stage as keyof typeof stageCounts]})
-          </button>
-        ))}
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-[480px] rounded-xl bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
+                Importa contatti
+              </h2>
+              <button onClick={() => setShowImportModal(false)}>
+                <X className="h-5 w-5" style={{ color: "#7C8CA2" }} />
+              </button>
+            </div>
+            <div
+              className="mb-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8"
+              style={{ borderColor: "#E5E7EB" }}
+            >
+              <Upload className="mb-2 h-8 w-8" style={{ color: "#7C8CA2" }} />
+              <p className="mb-1 text-[14px] font-medium" style={{ color: "#1B2B4B" }}>
+                Trascina il file CSV qui
+              </p>
+              <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                oppure clicca per selezionare
+              </p>
+            </div>
+            <p className="mb-4 text-[12px]" style={{ color: "#7C8CA2" }}>
+              Colonne supportate: Nome, Email, Azienda, Ruolo, Telefono, Tag
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="rounded-lg border px-4 py-2 text-[13px] font-medium"
+                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+              >
+                Annulla
+              </button>
+              <button
+                className="rounded-lg px-4 py-2 text-[13px] font-medium text-white"
+                style={{ backgroundColor: "#2563EB" }}
+              >
+                Importa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Batch Actions Bar */}
+      {selectedContacts.length > 0 && (
+        <div
+          className="mb-4 flex items-center justify-between rounded-lg px-4 py-3"
+          style={{ backgroundColor: "#EFF6FF", border: "1px solid #BFDBFE" }}
+        >
+          <span className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+            {selectedContacts.length} contatti selezionati
+          </span>
+          <div className="flex gap-2">
+            <button
+              className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            >
+              Tagga
+            </button>
+            <button
+              className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            >
+              Invita a evento
+            </button>
+            <button
+              className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            >
+              Invia email
+            </button>
+            <button
+              className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            >
+              <Download className="h-3.5 w-3.5" />
+              Esporta
+            </button>
+            <button
+              onClick={() => setSelectedContacts([])}
+              className="rounded-lg px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-red-50"
+              style={{ color: "#EF4444" }}
+            >
+              Deseleziona
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Search and Filters */}
+      <div className="mb-4 flex items-center gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "#9CA3AF" }} />
+          <input
+            type="text"
+            placeholder="Cerca contatti..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-lg border py-2.5 pl-10 pr-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{ borderColor: "#E5E7EB" }}
+          />
+        </div>
+        <div className="flex gap-1">
+          {stages.map((stage) => (
+            <button
+              key={stage}
+              onClick={() => setStageFilter(stage)}
+              className="rounded-lg px-3 py-2 text-[13px] font-medium transition-colors"
+              style={{
+                backgroundColor: stageFilter === stage ? "#EFF6FF" : "transparent",
+                color: stageFilter === stage ? "#2563EB" : "#7C8CA2",
+              }}
+            >
+              {stage} ({stageCounts[stage as keyof typeof stageCounts]})
+            </button>
+          ))}
+        </div>
+        {/* NEW: Export List Button */}
+        <button
+          className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+          style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+        >
+          <Download className="h-4 w-4" />
+          Esporta lista
+        </button>
       </div>
 
       {/* Contacts Table */}
-      <div className="rounded-lg border" style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}>
+      <div className="rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
         {/* Table Header */}
         <div
-          className="grid items-center gap-4 border-b px-4 py-3 text-[12px] font-semibold uppercase tracking-wide"
-          style={{ gridTemplateColumns: "2fr 1.5fr 1fr 1fr 0.5fr 1fr", borderColor: "#E5E7EB", color: "#7C8CA2" }}
+          className="grid items-center gap-4 border-b px-4 py-3"
+          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 160px 100px 100px 120px 100px" }}
         >
-          <span>Contatto</span>
-          <span>Azienda / Ruolo</span>
-          <span>Ultimo contatto</span>
-          <span>Stage</span>
-          <span>Score</span>
-          <span>Azione</span>
+          {/* NEW: Select All Checkbox */}
+          <button
+            onClick={selectAllContacts}
+            className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
+            style={{
+              borderColor: selectedContacts.length === filteredContacts.length ? "#2563EB" : "#E5E7EB",
+              backgroundColor: selectedContacts.length === filteredContacts.length ? "#2563EB" : "transparent",
+            }}
+          >
+            {selectedContacts.length === filteredContacts.length && (
+              <Check className="h-3 w-3 text-white" />
+            )}
+          </button>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Contatto
+          </span>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Azienda
+          </span>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Stage
+          </span>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Score
+          </span>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Ultimo contatto
+          </span>
+          <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+            Azione
+          </span>
         </div>
 
-        {/* Table Rows */}
+        {/* Contacts Rows */}
         {filteredContacts.map((contact) => (
           <div
             key={contact.id}
-            className="relative grid cursor-pointer items-center gap-4 border-b px-4 py-3 transition-colors"
-            style={{
-              gridTemplateColumns: "2fr 1.5fr 1fr 1fr 0.5fr 1fr",
-              borderColor: "#E5E7EB",
-              backgroundColor: hoveredContact === contact.id ? "#F0F9FF" : "transparent",
-            }}
+            className="relative grid items-center gap-4 border-b px-4 py-3 transition-colors hover:bg-gray-50"
+            style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 160px 100px 100px 120px 100px" }}
             onMouseEnter={() => setHoveredContact(contact.id)}
             onMouseLeave={() => setHoveredContact(null)}
           >
-            {/* Contact */}
+            {/* NEW: Row Checkbox */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                toggleContactSelection(contact.id)
+              }}
+              className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
+              style={{
+                borderColor: selectedContacts.includes(contact.id) ? "#2563EB" : "#E5E7EB",
+                backgroundColor: selectedContacts.includes(contact.id) ? "#2563EB" : "transparent",
+              }}
+            >
+              {selectedContacts.includes(contact.id) && (
+                <Check className="h-3 w-3 text-white" />
+              )}
+            </button>
             <div className="flex items-center gap-3">
               <div
                 className="flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-bold text-white"
@@ -687,103 +1015,112 @@ export function CrmPage() {
               >
                 {contact.initials}
               </div>
-              <button
-                onClick={() => openProfile(contact)}
-                className="text-[14px] font-bold hover:underline"
-                style={{ color: "#1B2B4B" }}
-              >
-                {contact.name}
-              </button>
+              <div>
+                <button
+                  onClick={() => openProfile(contact)}
+                  className="text-[14px] font-medium hover:underline"
+                  style={{ color: "#1B2B4B" }}
+                >
+                  {contact.name}
+                </button>
+                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                  {contact.role}
+                </p>
+              </div>
             </div>
-
-            {/* Company / Role */}
-            <div className="text-[12px]" style={{ color: "#7C8CA2" }}>
-              {contact.company} · {contact.role}
-            </div>
-
-            {/* Last Contact */}
-            <div className="text-[12px]" style={{ color: "#7C8CA2" }}>
-              {contact.lastContact}
-            </div>
-
-            {/* Stage */}
-            <div>
-              <span
-                className="rounded-full px-2.5 py-1 text-[11px] font-medium"
-                style={{
-                  backgroundColor: stageColors[contact.stage].bg,
-                  color: stageColors[contact.stage].text,
-                }}
-              >
-                {contact.stage}
-              </span>
-            </div>
-
-            {/* Score */}
-            <div className="text-[14px] font-bold" style={{ color: "#1B2B4B" }}>
+            <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
+              {contact.company}
+            </span>
+            <span
+              className="w-fit rounded-full px-2.5 py-1 text-[11px] font-medium"
+              style={{
+                backgroundColor: stageColors[contact.stage].bg,
+                color: stageColors[contact.stage].text,
+              }}
+            >
+              {contact.stage}
+            </span>
+            <span
+              className="text-[14px] font-bold"
+              style={{ color: contact.score >= 15 ? "#059669" : contact.score >= 8 ? "#F59E0B" : "#6B7280" }}
+            >
               {contact.score}
-            </div>
-
-            {/* Action */}
-            <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
+            </span>
+            <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
+              {contact.lastContact}
+            </span>
+            <span className="text-[13px]" style={{ color: "#2563EB" }}>
               {contact.action}
-              <ChevronRight className="h-3 w-3" />
-            </button>
+            </span>
 
             {/* Hover Card */}
             {hoveredContact === contact.id && (
               <div
-                className="absolute left-[calc(100%-280px)] top-full z-50 w-[250px] rounded-lg border bg-white p-4 shadow-lg"
+                className="absolute left-[50%] top-full z-10 w-[320px] -translate-x-1/2 rounded-lg border bg-white p-4 shadow-lg"
                 style={{ borderColor: "#E5E7EB" }}
               >
-                <div className="mb-3 flex items-center gap-3">
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white"
+                <div className="mb-3 flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white"
+                      style={{ backgroundColor: "#2563EB" }}
+                    >
+                      {contact.initials}
+                    </div>
+                    <div>
+                      <p className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
+                        {contact.name}
+                      </p>
+                      <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                        {contact.role} · {contact.company}
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className="rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={{ backgroundColor: "#F0FDF4", color: "#059669" }}
+                  >
+                    {contact.score}
+                  </span>
+                </div>
+                <p className="mb-3 line-clamp-3 text-[12px] leading-relaxed" style={{ color: "#4B5563" }}>
+                  {contact.brief}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => openProfile(contact)}
+                    className="flex-1 rounded-lg py-1.5 text-center text-[12px] font-medium text-white"
                     style={{ backgroundColor: "#2563EB" }}
                   >
-                    {contact.initials}
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-bold" style={{ color: "#1B2B4B" }}>
-                      {contact.name}
-                    </p>
-                    <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                      {contact.company}
-                    </p>
-                  </div>
+                    Apri profilo
+                  </button>
+                  <button
+                    className="rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    <Phone className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    className="rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-                <div className="mb-3 grid grid-cols-2 gap-2 text-[12px]">
-                  <div>
-                    <span style={{ color: "#7C8CA2" }}>Stage: </span>
-                    <span style={{ color: "#1B2B4B" }}>{contact.stage}</span>
-                  </div>
-                  <div>
-                    <span style={{ color: "#7C8CA2" }}>Score: </span>
-                    <span style={{ color: "#1B2B4B" }}>{contact.score}</span>
-                  </div>
-                  <div className="col-span-2">
-                    <span style={{ color: "#7C8CA2" }}>Ultimo: </span>
-                    <span style={{ color: "#1B2B4B" }}>{contact.lastContact}</span>
-                  </div>
-                  {contact.dealValue && (
-                    <div className="col-span-2">
-                      <span style={{ color: "#7C8CA2" }}>Deal: </span>
-                      <span style={{ color: "#059669" }}>CHF {contact.dealValue.toLocaleString("it-CH")}</span>
-                    </div>
-                  )}
-                </div>
-                <button
-                  onClick={() => openProfile(contact)}
-                  className="flex w-full items-center justify-center gap-1 text-[12px] hover:underline"
-                  style={{ color: "#2563EB" }}
-                >
-                  Apri profilo completo
-                  <ChevronRight className="h-3 w-3" />
-                </button>
               </div>
             )}
           </div>
         ))}
+      </div>
+
+      {/* NEW: Merge Duplicates Link */}
+      <div className="mt-4 flex items-center justify-between">
+        <button className="text-[13px] hover:underline" style={{ color: "#7C8CA2" }}>
+          Unisci duplicati
+        </button>
+        <p className="text-[12px]" style={{ color: "#9CA3AF" }}>
+          Mostrando {filteredContacts.length} di {contacts.length} contatti
+        </p>
       </div>
     </div>
   )

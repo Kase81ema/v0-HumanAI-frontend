@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Plus, ChevronDown, ChevronUp, ExternalLink, Download, Send, Edit2, Upload, Users } from "lucide-react"
+import { Plus, ChevronDown, ChevronUp, ExternalLink, Download, Send, Edit2, Upload, Users, MoreHorizontal, Copy, Archive, FileText, Check, X } from "lucide-react"
 
 interface EventAttendee {
   id: string
@@ -11,6 +11,7 @@ interface EventAttendee {
   date: string
   source: "LinkedIn" | "Email" | "Form"
   status: "Confermato" | "In attesa"
+  checkedIn?: boolean
 }
 
 interface Event {
@@ -24,6 +25,7 @@ interface Event {
   capacity: number
   location: string
   attendees: EventAttendee[]
+  registrationLink?: string
 }
 
 const events: Event[] = [
@@ -37,14 +39,15 @@ const events: Event[] = [
     registered: 7,
     capacity: 25,
     location: "Centro Congressi Lugano",
+    registrationLink: "https://humanai.ch/events/workshop-ai-leadership",
     attendees: [
-      { id: "a1", initials: "SM", name: "Sara Müller", company: "SwissAI Lab", date: "12 mar", source: "LinkedIn", status: "Confermato" },
-      { id: "a2", initials: "MB", name: "Marco Bianchi", company: "ETH", date: "15 mar", source: "Email", status: "Confermato" },
-      { id: "a3", initials: "AK", name: "Anna Keller", company: "UBS", date: "18 mar", source: "Form", status: "Confermato" },
-      { id: "a4", initials: "LP", name: "Luca Ponti", company: "Freelance", date: "20 mar", source: "LinkedIn", status: "Confermato" },
-      { id: "a5", initials: "GF", name: "Giulia Ferrari", company: "SUPSI", date: "22 mar", source: "Email", status: "In attesa" },
-      { id: "a6", initials: "RC", name: "Roberto Chen", company: "InnovaTicino", date: "25 mar", source: "Form", status: "Confermato" },
-      { id: "a7", initials: "ML", name: "Maria Lopez", company: "Deloitte", date: "28 mar", source: "LinkedIn", status: "Confermato" },
+      { id: "a1", initials: "SM", name: "Sara Müller", company: "SwissAI Lab", date: "12 mar", source: "LinkedIn", status: "Confermato", checkedIn: false },
+      { id: "a2", initials: "MB", name: "Marco Bianchi", company: "ETH", date: "15 mar", source: "Email", status: "Confermato", checkedIn: false },
+      { id: "a3", initials: "AK", name: "Anna Keller", company: "UBS", date: "18 mar", source: "Form", status: "Confermato", checkedIn: false },
+      { id: "a4", initials: "LP", name: "Luca Ponti", company: "Freelance", date: "20 mar", source: "LinkedIn", status: "Confermato", checkedIn: false },
+      { id: "a5", initials: "GF", name: "Giulia Ferrari", company: "SUPSI", date: "22 mar", source: "Email", status: "In attesa", checkedIn: false },
+      { id: "a6", initials: "RC", name: "Roberto Chen", company: "InnovaTicino", date: "25 mar", source: "Form", status: "Confermato", checkedIn: false },
+      { id: "a7", initials: "ML", name: "Maria Lopez", company: "Deloitte", date: "28 mar", source: "LinkedIn", status: "Confermato", checkedIn: false },
     ],
   },
   {
@@ -57,6 +60,7 @@ const events: Event[] = [
     registered: 32,
     capacity: 50,
     location: "Online (Zoom)",
+    registrationLink: "https://humanai.ch/events/webinar-ai-pmi",
     attendees: [],
   },
   {
@@ -69,6 +73,7 @@ const events: Event[] = [
     registered: 0,
     capacity: 30,
     location: "Spazio Coworking Lugano",
+    registrationLink: "https://humanai.ch/events/meetup-ai-4",
     attendees: [],
   },
 ]
@@ -90,6 +95,10 @@ export function EventsPage() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [listFilter, setListFilter] = useState("prossimi")
   const [showRegisterForm, setShowRegisterForm] = useState(false)
+  const [showEventMenu, setShowEventMenu] = useState(false)
+  const [attendees, setAttendees] = useState<EventAttendee[]>(events[0].attendees)
+  const [selectedAttendees, setSelectedAttendees] = useState<string[]>([])
+  const [linkCopied, setLinkCopied] = useState(false)
 
   const tabs = [
     { id: "dashboard", label: "Dashboard" },
@@ -100,6 +109,34 @@ export function EventsPage() {
   ]
 
   const isCritical = selectedEvent.fillRate < 40 && parseInt(selectedEvent.countdown.replace("D-", "")) < 20
+
+  const toggleCheckIn = (attendeeId: string) => {
+    setAttendees(prev => prev.map(a => 
+      a.id === attendeeId ? { ...a, checkedIn: !a.checkedIn } : a
+    ))
+  }
+
+  const markAllPresent = () => {
+    setAttendees(prev => prev.map(a => ({ ...a, checkedIn: true })))
+  }
+
+  const toggleAttendeeSelection = (attendeeId: string) => {
+    setSelectedAttendees(prev => 
+      prev.includes(attendeeId) 
+        ? prev.filter(id => id !== attendeeId)
+        : [...prev, attendeeId]
+    )
+  }
+
+  const copyRegistrationLink = () => {
+    if (selectedEvent.registrationLink) {
+      navigator.clipboard.writeText(selectedEvent.registrationLink)
+      setLinkCopied(true)
+      setTimeout(() => setLinkCopied(false), 2000)
+    }
+  }
+
+  const checkedInCount = attendees.filter(a => a.checkedIn).length
 
   return (
     <div className="flex h-full">
@@ -151,6 +188,7 @@ export function EventsPage() {
                 key={event.id}
                 onClick={() => {
                   setSelectedEvent(event)
+                  setAttendees(event.attendees)
                   setActiveTab("dashboard")
                 }}
                 className="mb-2 w-full rounded-lg p-3 text-left transition-colors"
@@ -228,24 +266,76 @@ export function EventsPage() {
               {selectedEvent.date} · {selectedEvent.location}
             </p>
           </div>
-          <div className="text-right">
-            <div
-              className="text-[48px] font-bold leading-none"
-              style={{ color: isCritical ? "#EF4444" : selectedEvent.fillRate < 70 ? "#F59E0B" : "#10B981" }}
-            >
-              {selectedEvent.fillRate}%
-            </div>
-            <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
-              {selectedEvent.registered}/{selectedEvent.capacity} iscritti
-            </p>
-            <div className="mt-2 h-3 w-40 rounded-full" style={{ backgroundColor: "#E5E7EB" }}>
+          <div className="flex items-start gap-4">
+            <div className="text-right">
               <div
-                className="h-3 rounded-full"
-                style={{
-                  width: `${selectedEvent.fillRate}%`,
-                  backgroundColor: isCritical ? "#EF4444" : selectedEvent.fillRate < 70 ? "#F59E0B" : "#10B981",
-                }}
-              />
+                className="text-[48px] font-bold leading-none"
+                style={{ color: isCritical ? "#EF4444" : selectedEvent.fillRate < 70 ? "#F59E0B" : "#10B981" }}
+              >
+                {selectedEvent.fillRate}%
+              </div>
+              <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
+                {selectedEvent.registered}/{selectedEvent.capacity} iscritti
+              </p>
+              <div className="mt-2 h-3 w-40 rounded-full" style={{ backgroundColor: "#E5E7EB" }}>
+                <div
+                  className="h-3 rounded-full"
+                  style={{
+                    width: `${selectedEvent.fillRate}%`,
+                    backgroundColor: isCritical ? "#EF4444" : selectedEvent.fillRate < 70 ? "#F59E0B" : "#10B981",
+                  }}
+                />
+              </div>
+            </div>
+            {/* NEW: Event Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowEventMenu(!showEventMenu)}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB" }}
+              >
+                <MoreHorizontal className="h-5 w-5" style={{ color: "#7C8CA2" }} />
+              </button>
+              {showEventMenu && (
+                <div
+                  className="absolute right-0 top-full z-10 mt-1 w-56 rounded-lg border bg-white py-1 shadow-lg"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <button
+                    className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                    style={{ color: "#1B2B4B" }}
+                    onClick={() => setShowEventMenu(false)}
+                  >
+                    <Copy className="h-4 w-4" />
+                    Duplica evento
+                  </button>
+                  <button
+                    className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                    style={{ color: "#1B2B4B" }}
+                    onClick={() => setShowEventMenu(false)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Crea template da evento
+                  </button>
+                  <button
+                    className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                    style={{ color: "#1B2B4B" }}
+                    onClick={() => setShowEventMenu(false)}
+                  >
+                    <Download className="h-4 w-4" />
+                    Esporta report
+                  </button>
+                  <div className="my-1 border-t" style={{ borderColor: "#E5E7EB" }} />
+                  <button
+                    className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                    style={{ color: "#EF4444" }}
+                    onClick={() => setShowEventMenu(false)}
+                  >
+                    <Archive className="h-4 w-4" />
+                    Archivia evento
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -300,6 +390,17 @@ export function EventsPage() {
         {/* Tab Content */}
         {activeTab === "dashboard" && (
           <div className="space-y-6">
+            {/* Share Report Button */}
+            <div className="flex justify-end">
+              <button
+                className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              >
+                <ExternalLink className="h-4 w-4" />
+                Condividi report
+              </button>
+            </div>
+
             {/* Chart Placeholder */}
             <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB" }}>
               <h3 className="mb-4 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
@@ -358,30 +459,73 @@ export function EventsPage() {
         {activeTab === "iscritti" && (
           <div className="space-y-4">
             {/* Actions */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowRegisterForm(true)}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white"
-                style={{ backgroundColor: "#2563EB" }}
-              >
-                <Plus className="h-4 w-4" />
-                Registra partecipante
-              </button>
-              <button
-                className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
-              >
-                <Download className="h-4 w-4" />
-                Esporta CSV
-              </button>
-              <button
-                className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
-              >
-                <Send className="h-4 w-4" />
-                Invia reminder
-              </button>
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowRegisterForm(true)}
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[13px] font-medium text-white"
+                  style={{ backgroundColor: "#2563EB" }}
+                >
+                  <Plus className="h-4 w-4" />
+                  Registra partecipante
+                </button>
+                <button
+                  className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                >
+                  <Download className="h-4 w-4" />
+                  Esporta CSV
+                </button>
+                <button
+                  className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                >
+                  <Send className="h-4 w-4" />
+                  Invia reminder
+                </button>
+              </div>
+              {/* Check-in Actions */}
+              <div className="flex items-center gap-3">
+                <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                  Check-in: {checkedInCount}/{attendees.length}
+                </span>
+                <button
+                  onClick={markAllPresent}
+                  className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-green-50"
+                  style={{ borderColor: "#10B981", color: "#10B981" }}
+                >
+                  <Check className="h-3.5 w-3.5" />
+                  Segna tutti presenti
+                </button>
+              </div>
             </div>
+
+            {/* Batch Actions for Selected Attendees */}
+            {selectedAttendees.length > 0 && (
+              <div
+                className="flex items-center justify-between rounded-lg px-4 py-3"
+                style={{ backgroundColor: "#EFF6FF", border: "1px solid #BFDBFE" }}
+              >
+                <span className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                  {selectedAttendees.length} iscritti selezionati
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    className="rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  >
+                    Invia email
+                  </button>
+                  <button
+                    onClick={() => setSelectedAttendees([])}
+                    className="rounded-lg px-3 py-1.5 text-[12px] font-medium"
+                    style={{ color: "#EF4444" }}
+                  >
+                    Deseleziona
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Register Form Modal */}
             {showRegisterForm && (
@@ -421,12 +565,52 @@ export function EventsPage() {
 
             {/* Attendees List */}
             <div className="rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
-              {selectedEvent.attendees.map((attendee, index) => (
+              {/* Table Header */}
+              <div
+                className="grid items-center gap-4 border-b px-4 py-3"
+                style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 120px 100px 100px 80px" }}
+              >
+                <span></span>
+                <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Partecipante
+                </span>
+                <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Data iscrizione
+                </span>
+                <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Fonte
+                </span>
+                <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+                  Stato
+                </span>
+                <span className="text-[12px] font-semibold uppercase tracking-wide text-center" style={{ color: "#7C8CA2" }}>
+                  Check-in
+                </span>
+              </div>
+
+              {attendees.map((attendee, index) => (
                 <div
                   key={attendee.id}
-                  className="flex items-center justify-between border-b px-4 py-3 transition-colors hover:bg-gray-50"
-                  style={{ borderColor: index === selectedEvent.attendees.length - 1 ? "transparent" : "#E5E7EB" }}
+                  className="grid items-center gap-4 border-b px-4 py-3 transition-colors hover:bg-gray-50"
+                  style={{ 
+                    borderColor: index === attendees.length - 1 ? "transparent" : "#E5E7EB",
+                    gridTemplateColumns: "32px 1fr 120px 100px 100px 80px"
+                  }}
                 >
+                  {/* Selection Checkbox */}
+                  <button
+                    onClick={() => toggleAttendeeSelection(attendee.id)}
+                    className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
+                    style={{
+                      borderColor: selectedAttendees.includes(attendee.id) ? "#2563EB" : "#E5E7EB",
+                      backgroundColor: selectedAttendees.includes(attendee.id) ? "#2563EB" : "transparent",
+                    }}
+                  >
+                    {selectedAttendees.includes(attendee.id) && (
+                      <Check className="h-3 w-3 text-white" />
+                    )}
+                  </button>
+
                   <div className="flex items-center gap-3">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold text-white"
@@ -443,32 +627,48 @@ export function EventsPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                      {attendee.date}
-                    </span>
-                    <span
-                      className="rounded px-2 py-0.5 text-[10px] font-medium"
+
+                  <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                    {attendee.date}
+                  </span>
+
+                  <span
+                    className="w-fit rounded px-2 py-0.5 text-[10px] font-medium"
+                    style={{
+                      backgroundColor: sourceColors[attendee.source].bg,
+                      color: sourceColors[attendee.source].text,
+                    }}
+                  >
+                    {attendee.source}
+                  </span>
+
+                  <span
+                    className="w-fit rounded px-2 py-0.5 text-[10px] font-medium"
+                    style={{
+                      backgroundColor: attendee.status === "Confermato" ? "#D1FAE5" : "#FEF3C7",
+                      color: attendee.status === "Confermato" ? "#059669" : "#D97706",
+                    }}
+                  >
+                    {attendee.status}
+                  </span>
+
+                  {/* NEW: Check-in Checkbox */}
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => toggleCheckIn(attendee.id)}
+                      className="flex h-6 w-6 items-center justify-center rounded border-2 transition-colors"
                       style={{
-                        backgroundColor: sourceColors[attendee.source].bg,
-                        color: sourceColors[attendee.source].text,
+                        borderColor: attendee.checkedIn ? "#10B981" : "#E5E7EB",
+                        backgroundColor: attendee.checkedIn ? "#10B981" : "transparent",
                       }}
                     >
-                      {attendee.source}
-                    </span>
-                    <span
-                      className="rounded px-2 py-0.5 text-[10px] font-medium"
-                      style={{
-                        backgroundColor: attendee.status === "Confermato" ? "#D1FAE5" : "#FEF3C7",
-                        color: attendee.status === "Confermato" ? "#059669" : "#D97706",
-                      }}
-                    >
-                      {attendee.status}
-                    </span>
+                      {attendee.checkedIn && <Check className="h-4 w-4 text-white" />}
+                    </button>
                   </div>
                 </div>
               ))}
-              {selectedEvent.attendees.length === 0 && (
+
+              {attendees.length === 0 && (
                 <div className="p-8 text-center">
                   <Users className="mx-auto mb-2 h-8 w-8" style={{ color: "#D1D5DB" }} />
                   <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -482,6 +682,38 @@ export function EventsPage() {
 
         {activeTab === "promozione" && (
           <div className="space-y-6">
+            {/* NEW: Copy Registration Link */}
+            <div className="flex items-center justify-between rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div>
+                <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                  Link registrazione
+                </p>
+                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                  {selectedEvent.registrationLink}
+                </p>
+              </div>
+              <button
+                onClick={copyRegistrationLink}
+                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium transition-colors"
+                style={{
+                  backgroundColor: linkCopied ? "#D1FAE5" : "#EFF6FF",
+                  color: linkCopied ? "#059669" : "#2563EB",
+                }}
+              >
+                {linkCopied ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Copiato!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4" />
+                    Copia link
+                  </>
+                )}
+              </button>
+            </div>
+
             {/* Email Sequence */}
             <div>
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
@@ -500,71 +732,81 @@ export function EventsPage() {
                     style={{ borderColor: "#E5E7EB" }}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-[14px]">
-                        {email.status === "done" ? "✅" : email.status === "scheduled" ? "⏰" : "📝"}
-                      </span>
+                      <div
+                        className="h-2 w-2 rounded-full"
+                        style={{
+                          backgroundColor:
+                            email.status === "done"
+                              ? "#10B981"
+                              : email.status === "scheduled"
+                              ? "#F59E0B"
+                              : "#D1D5DB",
+                        }}
+                      />
                       <div>
                         <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                           {email.name}
                         </p>
-                        <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                          {email.date} · {email.sent ? "Inviata" : email.status === "scheduled" ? "Programmata" : "Bozza"}
+                        <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                          {email.sent ? `Inviata ${email.date}` : `Programmata ${email.date}`}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      {email.openRate && (
-                        <span className="text-[12px]" style={{ color: "#059669" }}>
-                          Open rate {email.openRate}%
-                        </span>
-                      )}
-                      {!email.sent && (
-                        <button className="text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                          {email.status === "draft" ? "Apri in Content Factory" : "Modifica"}
-                        </button>
-                      )}
-                    </div>
+                    {email.openRate && (
+                      <span className="text-[12px] font-medium" style={{ color: "#059669" }}>
+                        {email.openRate}% open rate
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Social Posts */}
+            {/* Connected Posts */}
             <div>
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
-                Post promozionali
+                Post collegati
               </h3>
               <div className="space-y-2">
-                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[14px]">✅</span>
-                    <div>
-                      <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
-                        Post LinkedIn: Workshop in arrivo
-                      </p>
-                      <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                        Pubblicato · 234 views · 12 reactions
-                      </p>
+                {[
+                  { title: "Promo Workshop — LinkedIn personale", status: "Pubblicato", date: "5 mar" },
+                  { title: "Promo Workshop — LinkedIn aziendale", status: "Programmato", date: "10 apr" },
+                ].map((post, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-[16px]">&#128221;</span>
+                      <div>
+                        <p className="text-[13px] font-medium hover:underline" style={{ color: "#1B2B4B" }}>
+                          {post.title}
+                        </p>
+                        <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                          {post.date}
+                        </p>
+                      </div>
                     </div>
+                    <span
+                      className="rounded px-2 py-0.5 text-[10px] font-medium"
+                      style={{
+                        backgroundColor: post.status === "Pubblicato" ? "#D1FAE5" : "#FEF3C7",
+                        color: post.status === "Pubblicato" ? "#059669" : "#D97706",
+                      }}
+                    >
+                      {post.status}
+                    </span>
                   </div>
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[14px]">📝</span>
-                    <div>
-                      <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
-                        Post speaker anticipation
-                      </p>
-                      <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                        Bozza
-                      </p>
-                    </div>
-                  </div>
-                  <button className="text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                    Apri in Content Factory
-                  </button>
-                </div>
+                ))}
               </div>
+              <button
+                className="mt-2 flex items-center gap-1 text-[13px] hover:underline"
+                style={{ color: "#2563EB" }}
+              >
+                <Plus className="h-4 w-4" />
+                Collega post dalla Content Factory
+              </button>
             </div>
           </div>
         )}
@@ -576,186 +818,150 @@ export function EventsPage() {
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Trascrizioni Fireflies
               </h3>
-              <div className="space-y-2">
-                <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="text-[14px]">📞</span>
-                    <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
-                      Call con Sara Muller · 32 min · 20 mar
-                    </p>
-                  </div>
-                  <p className="mb-2 text-[13px]" style={{ color: "#7C8CA2" }}>
-                    Key: Interessata a coaching team. Budget confermato.
-                  </p>
-                  <div className="flex gap-3">
-                    <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                      Apri trascrizione completa
-                      <ExternalLink className="h-3 w-3" />
-                    </button>
-                    <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                      Vai al profilo CRM
-                      <ExternalLink className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-                <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="text-[14px]">📞</span>
-                    <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
-                      Call con Marco Bianchi · 18 min · 25 mar
-                    </p>
-                  </div>
-                  <p className="mb-2 text-[13px]" style={{ color: "#7C8CA2" }}>
-                    Key: Vuole portare 2 colleghi. Chiede sconto gruppo.
-                  </p>
-                  <button className="flex items-center gap-1 text-[12px] hover:underline" style={{ color: "#2563EB" }}>
-                    Apri trascrizione
-                    <ExternalLink className="h-3 w-3" />
-                  </button>
-                </div>
+              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
+                  Nessuna trascrizione disponibile. Le trascrizioni appariranno qui dopo l&apos;evento.
+                </p>
               </div>
             </div>
 
             {/* Content Recycling */}
-            <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+            <div>
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Content recycling
               </h3>
-              <button
-                className="flex items-center gap-2 rounded-lg px-6 py-3 text-[14px] font-medium text-white"
-                style={{ backgroundColor: "#2563EB" }}
-              >
-                <span className="text-[16px]">&#x1F504;</span>
-                Genera contenuti post-evento
-              </button>
-              <p className="mt-2 text-[12px]" style={{ color: "#7C8CA2" }}>
-                Crea automaticamente: post recap, newsletter, email di ringraziamento
-              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  className="rounded-lg border p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <span className="mb-2 block text-[20px]">&#128221;</span>
+                  <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                    Genera post recap
+                  </p>
+                  <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                    Crea un post con i momenti salienti
+                  </p>
+                </button>
+                <button
+                  className="rounded-lg border p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <span className="mb-2 block text-[20px]">&#127897;</span>
+                  <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                    Estrai citazioni
+                  </p>
+                  <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                    Quote degli speaker per social
+                  </p>
+                </button>
+              </div>
             </div>
 
-            {/* Feedback */}
-            <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-              <h3 className="mb-2 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
-                Feedback
+            {/* NPS */}
+            <div>
+              <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
+                Feedback (NPS)
               </h3>
-              <p className="text-[24px] font-bold" style={{ color: "#059669" }}>
-                NPS: 8.5/10
-              </p>
-              <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                Basato su 5 risposte
-              </p>
+              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
+                  Il sondaggio NPS verrà inviato 24h dopo l&apos;evento.
+                </p>
+                <button className="mt-2 text-[13px] hover:underline" style={{ color: "#2563EB" }}>
+                  Configura domande NPS
+                </button>
+              </div>
             </div>
           </div>
         )}
 
         {activeTab === "logistica" && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
-              {/* Location */}
-              <div>
-                <label className="mb-1 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
-                  Location
-                </label>
-                <input
-                  type="text"
-                  defaultValue={selectedEvent.location}
-                  className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{ borderColor: "#E5E7EB" }}
-                />
-              </div>
-
-              {/* Time */}
-              <div>
-                <label className="mb-1 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
-                  Orario
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    defaultValue="09:00"
-                    className="w-24 rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
-                  />
-                  <span className="py-2">—</span>
-                  <input
-                    type="text"
-                    defaultValue="17:00"
-                    className="w-24 rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Speaker */}
+            {/* Speakers */}
             <div>
-              <label className="mb-2 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
+              <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Speaker
-              </label>
-              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white"
-                    style={{ backgroundColor: "#2563EB" }}
-                  >
-                    EC
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-white"
+                      style={{ backgroundColor: "#2563EB" }}
+                    >
+                      EC
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                        Emanuele Casero
+                      </p>
+                      <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                        Host & Facilitatore
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[14px] font-medium" style={{ color: "#1B2B4B" }}>
-                      Emanuele Casero
-                    </p>
-                    <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                      Coach AI & Strategist
-                    </p>
-                  </div>
+                  <button className="text-[12px] hover:underline" style={{ color: "#2563EB" }}>
+                    Modifica
+                  </button>
                 </div>
               </div>
+              <button className="mt-2 flex items-center gap-1 text-[13px] hover:underline" style={{ color: "#2563EB" }}>
+                <Plus className="h-4 w-4" />
+                Aggiungi speaker
+              </button>
             </div>
 
             {/* Agenda */}
             <div>
-              <label className="mb-2 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
+              <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Agenda
-              </label>
-              <textarea
-                className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB", minHeight: "100px" }}
-                defaultValue={`09:00 — Registrazione e welcome coffee
-09:30 — Introduzione: AI e leadership oggi
-10:30 — Coffee break
-10:45 — Workshop pratico: prompt engineering
-12:30 — Pranzo
-14:00 — Sessione coaching di gruppo
-16:00 — Q&A e networking
-17:00 — Chiusura`}
-              />
+              </h3>
+              <div className="space-y-2">
+                {[
+                  { time: "09:00", title: "Registrazione e welcome coffee" },
+                  { time: "09:30", title: "Introduzione all'AI & Leadership" },
+                  { time: "10:30", title: "Coffee break" },
+                  { time: "10:45", title: "Workshop interattivo" },
+                  { time: "12:30", title: "Q&A e networking lunch" },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 rounded-lg border p-3"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    <span className="text-[13px] font-medium" style={{ color: "#2563EB" }}>
+                      {item.time}
+                    </span>
+                    <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
+                      {item.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Materials */}
             <div>
-              <label className="mb-2 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
+              <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Materiali
-              </label>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB", borderStyle: "dashed" }}>
-                <div className="flex items-center justify-center gap-2">
-                  <Upload className="h-5 w-5" style={{ color: "#7C8CA2" }} />
-                  <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
-                    Trascina file qui o clicca per caricare
-                  </span>
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[16px]">&#128196;</span>
+                    <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
+                      Slide presentazione.pdf
+                    </span>
+                  </div>
+                  <button className="text-[12px] hover:underline" style={{ color: "#2563EB" }}>
+                    Download
+                  </button>
                 </div>
               </div>
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="mb-2 block text-[12px] font-semibold" style={{ color: "#7C8CA2" }}>
-                Note operative
-              </label>
-              <textarea
-                className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
-                placeholder="Aggiungi note operative..."
-              />
+              <button className="mt-2 flex items-center gap-1 text-[13px] hover:underline" style={{ color: "#2563EB" }}>
+                <Upload className="h-4 w-4" />
+                Carica materiale
+              </button>
             </div>
           </div>
         )}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Plus, X, ChevronRight, ExternalLink, FileText, Phone, Calendar, GripVertical, AlertTriangle } from "lucide-react"
+import { Plus, X, ChevronRight, ExternalLink, FileText, Phone, Calendar, GripVertical, AlertTriangle, Copy, Archive, Check, Trophy } from "lucide-react"
 
 interface Deal {
   id: string
@@ -12,8 +12,10 @@ interface Deal {
   value: number
   daysInStage: number
   nextAction: string
-  stage: "discovery" | "qualifica" | "proposta" | "negoziazione"
+  stage: "discovery" | "qualifica" | "proposta" | "negoziazione" | "vinto" | "perso"
   isStalled: boolean
+  closeDate?: string
+  lostReason?: string
 }
 
 const initialDeals: Deal[] = [
@@ -65,6 +67,33 @@ const initialDeals: Deal[] = [
     stage: "proposta",
     isStalled: true,
   },
+  {
+    id: "5",
+    contactName: "Marco Belli",
+    contactInitials: "MB",
+    company: "Startup Hub",
+    product: "Coaching individuale",
+    value: 4500,
+    daysInStage: 0,
+    nextAction: "",
+    stage: "vinto",
+    isStalled: false,
+    closeDate: "28 mar 2025",
+  },
+  {
+    id: "6",
+    contactName: "Laura Neri",
+    contactInitials: "LN",
+    company: "Digital AG",
+    product: "Workshop team",
+    value: 3500,
+    daysInStage: 0,
+    nextAction: "",
+    stage: "perso",
+    isStalled: false,
+    closeDate: "20 mar 2025",
+    lostReason: "Tempistica",
+  },
 ]
 
 const stages = [
@@ -72,6 +101,17 @@ const stages = [
   { id: "qualifica", label: "Qualifica", color: "#2563EB" },
   { id: "proposta", label: "Proposta", color: "#7C3AED" },
   { id: "negoziazione", label: "Negoziazione", color: "#059669" },
+  { id: "vinto", label: "Chiuso Vinto", color: "#10B981", isFinal: true },
+  { id: "perso", label: "Chiuso Perso", color: "#EF4444", isFinal: true },
+]
+
+const lostReasons = [
+  "Prezzo",
+  "Tempistica",
+  "Concorrenza",
+  "Budget",
+  "Non interessato",
+  "Altro",
 ]
 
 const interactionHistory = [
@@ -90,11 +130,18 @@ export function PipelinePage() {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null)
   const [draggedDeal, setDraggedDeal] = useState<Deal | null>(null)
   const [newNote, setNewNote] = useState("")
+  const [showLostReasonModal, setShowLostReasonModal] = useState(false)
+  const [pendingLostDeal, setPendingLostDeal] = useState<Deal | null>(null)
+  const [selectedLostReason, setSelectedLostReason] = useState("")
+  const [lostNotes, setLostNotes] = useState("")
 
   const getStageDeals = (stageId: string) => deals.filter((d) => d.stage === stageId)
   const getStageTotal = (stageId: string) =>
     deals.filter((d) => d.stage === stageId).reduce((sum, d) => sum + d.value, 0)
-  const totalPipeline = deals.reduce((sum, d) => sum + d.value, 0)
+  
+  const activeStages = stages.filter(s => !s.isFinal)
+  const totalPipeline = deals.filter(d => !["vinto", "perso"].includes(d.stage)).reduce((sum, d) => sum + d.value, 0)
+  const wonThisMonth = deals.filter(d => d.stage === "vinto").reduce((sum, d) => sum + d.value, 0)
 
   const handleDragStart = (deal: Deal) => {
     setDraggedDeal(deal)
@@ -106,28 +153,173 @@ export function PipelinePage() {
 
   const handleDrop = (stageId: string) => {
     if (draggedDeal) {
-      setDeals((prev) =>
-        prev.map((d) =>
-          d.id === draggedDeal.id ? { ...d, stage: stageId as Deal["stage"], daysInStage: 0, isStalled: false } : d
+      if (stageId === "perso") {
+        // Show lost reason modal
+        setPendingLostDeal(draggedDeal)
+        setShowLostReasonModal(true)
+      } else {
+        setDeals((prev) =>
+          prev.map((d) =>
+            d.id === draggedDeal.id 
+              ? { 
+                  ...d, 
+                  stage: stageId as Deal["stage"], 
+                  daysInStage: 0, 
+                  isStalled: false,
+                  closeDate: stageId === "vinto" ? new Date().toLocaleDateString("it-CH", { day: "numeric", month: "short", year: "numeric" }) : undefined
+                } 
+              : d
+          )
         )
-      )
+      }
       setDraggedDeal(null)
     }
   }
 
+  const confirmLostDeal = () => {
+    if (pendingLostDeal && selectedLostReason) {
+      setDeals((prev) =>
+        prev.map((d) =>
+          d.id === pendingLostDeal.id 
+            ? { 
+                ...d, 
+                stage: "perso" as Deal["stage"], 
+                daysInStage: 0, 
+                isStalled: false,
+                closeDate: new Date().toLocaleDateString("it-CH", { day: "numeric", month: "short", year: "numeric" }),
+                lostReason: selectedLostReason
+              } 
+            : d
+        )
+      )
+      setShowLostReasonModal(false)
+      setPendingLostDeal(null)
+      setSelectedLostReason("")
+      setLostNotes("")
+    }
+  }
+
   const moveToStage = (dealId: string, newStage: string) => {
+    if (newStage === "perso") {
+      const deal = deals.find(d => d.id === dealId)
+      if (deal) {
+        setPendingLostDeal(deal)
+        setShowLostReasonModal(true)
+      }
+      return
+    }
+
     setDeals((prev) =>
       prev.map((d) =>
-        d.id === dealId ? { ...d, stage: newStage as Deal["stage"], daysInStage: 0, isStalled: false } : d
+        d.id === dealId 
+          ? { 
+              ...d, 
+              stage: newStage as Deal["stage"], 
+              daysInStage: 0, 
+              isStalled: false,
+              closeDate: newStage === "vinto" ? new Date().toLocaleDateString("it-CH", { day: "numeric", month: "short", year: "numeric" }) : undefined
+            } 
+          : d
       )
     )
     if (selectedDeal?.id === dealId) {
-      setSelectedDeal({ ...selectedDeal, stage: newStage as Deal["stage"], daysInStage: 0, isStalled: false })
+      setSelectedDeal({ 
+        ...selectedDeal, 
+        stage: newStage as Deal["stage"], 
+        daysInStage: 0, 
+        isStalled: false 
+      })
     }
+  }
+
+  const duplicateDeal = (deal: Deal) => {
+    const newDeal: Deal = {
+      ...deal,
+      id: `${deal.id}-copy-${Date.now()}`,
+      stage: "discovery",
+      daysInStage: 0,
+      isStalled: false,
+      closeDate: undefined,
+      lostReason: undefined,
+    }
+    setDeals(prev => [...prev, newDeal])
   }
 
   return (
     <div className="flex h-full">
+      {/* Lost Reason Modal */}
+      {showLostReasonModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-[400px] rounded-xl bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
+                Motivo della perdita
+              </h2>
+              <button onClick={() => {
+                setShowLostReasonModal(false)
+                setPendingLostDeal(null)
+              }}>
+                <X className="h-5 w-5" style={{ color: "#7C8CA2" }} />
+              </button>
+            </div>
+            <p className="mb-4 text-[13px]" style={{ color: "#7C8CA2" }}>
+              Seleziona il motivo per cui il deal con <strong>{pendingLostDeal?.contactName}</strong> non è andato a buon fine. Questo aiuterà a migliorare le future proposte.
+            </p>
+            <div className="mb-4 space-y-2">
+              {lostReasons.map(reason => (
+                <button
+                  key={reason}
+                  onClick={() => setSelectedLostReason(reason)}
+                  className="flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-gray-50"
+                  style={{
+                    borderColor: selectedLostReason === reason ? "#EF4444" : "#E5E7EB",
+                    backgroundColor: selectedLostReason === reason ? "#FEF2F2" : "transparent",
+                  }}
+                >
+                  <div
+                    className="flex h-5 w-5 items-center justify-center rounded-full border-2"
+                    style={{
+                      borderColor: selectedLostReason === reason ? "#EF4444" : "#E5E7EB",
+                      backgroundColor: selectedLostReason === reason ? "#EF4444" : "transparent",
+                    }}
+                  >
+                    {selectedLostReason === reason && <Check className="h-3 w-3 text-white" />}
+                  </div>
+                  <span className="text-[13px]" style={{ color: "#1B2B4B" }}>{reason}</span>
+                </button>
+              ))}
+            </div>
+            <textarea
+              value={lostNotes}
+              onChange={(e) => setLostNotes(e.target.value)}
+              placeholder="Note aggiuntive (opzionale)..."
+              className="mb-4 w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-red-500"
+              style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  setShowLostReasonModal(false)
+                  setPendingLostDeal(null)
+                }}
+                className="rounded-lg border px-4 py-2 text-[13px] font-medium"
+                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+              >
+                Annulla
+              </button>
+              <button
+                onClick={confirmLostDeal}
+                disabled={!selectedLostReason}
+                className="rounded-lg px-4 py-2 text-[13px] font-medium text-white transition-colors disabled:opacity-50"
+                style={{ backgroundColor: "#EF4444" }}
+              >
+                Conferma perdita
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Kanban Area */}
       <div className={`flex-1 overflow-x-auto p-6 transition-all ${selectedDeal ? "pr-0" : ""}`}>
         {/* Header */}
@@ -136,9 +328,22 @@ export function PipelinePage() {
             <h1 className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
               Pipeline vendite
             </h1>
-            <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
-              {deals.length} deal attivi · CHF {totalPipeline.toLocaleString("it-CH")} in pipeline
-            </p>
+            {/* NEW: Prominent Pipeline Value */}
+            <div className="mt-1 flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-[13px]" style={{ color: "#7C8CA2" }}>Pipeline:</span>
+                <span className="text-[20px] font-bold" style={{ color: "#059669" }}>
+                  CHF {totalPipeline.toLocaleString("it-CH")}
+                </span>
+              </div>
+              <span style={{ color: "#E5E7EB" }}>·</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[13px]" style={{ color: "#7C8CA2" }}>Vinti questo mese:</span>
+                <span className="text-[16px] font-bold" style={{ color: "#10B981" }}>
+                  CHF {wonThisMonth.toLocaleString("it-CH")}
+                </span>
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <select
@@ -164,8 +369,10 @@ export function PipelinePage() {
           {stages.map((stage) => (
             <div
               key={stage.id}
-              className="w-[280px] shrink-0 rounded-lg"
-              style={{ backgroundColor: "#FAFBFC" }}
+              className="w-[260px] shrink-0 rounded-lg"
+              style={{ 
+                backgroundColor: stage.id === "vinto" ? "#F0FDF4" : stage.id === "perso" ? "#FEF2F2" : "#FAFBFC"
+              }}
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(stage.id)}
             >
@@ -173,6 +380,7 @@ export function PipelinePage() {
               <div className="p-3">
                 <div className="mb-1 flex items-center justify-between">
                   <div className="flex items-center gap-2">
+                    {stage.id === "vinto" && <Trophy className="h-4 w-4" style={{ color: "#10B981" }} />}
                     <div className="h-2 w-2 rounded-full" style={{ backgroundColor: stage.color }} />
                     <span className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                       {stage.label}
@@ -185,7 +393,7 @@ export function PipelinePage() {
                     </span>
                   </div>
                 </div>
-                <p className="text-[14px] font-bold" style={{ color: "#059669" }}>
+                <p className="text-[14px] font-bold" style={{ color: stage.id === "perso" ? "#EF4444" : "#059669" }}>
                   CHF {getStageTotal(stage.id).toLocaleString("it-CH")}
                 </p>
               </div>
@@ -195,19 +403,19 @@ export function PipelinePage() {
                 {getStageDeals(stage.id).map((deal) => (
                   <div
                     key={deal.id}
-                    draggable
+                    draggable={!stage.isFinal}
                     onDragStart={() => handleDragStart(deal)}
                     onClick={() => setSelectedDeal(deal)}
                     className="cursor-pointer rounded-lg border bg-white p-3 shadow-sm transition-shadow hover:shadow-md"
                     style={{
-                      borderColor: deal.isStalled ? "#FCA5A5" : "#E5E7EB",
+                      borderColor: deal.isStalled ? "#FCA5A5" : stage.id === "vinto" ? "#86EFAC" : stage.id === "perso" ? "#FECACA" : "#E5E7EB",
                       borderLeftWidth: "3px",
-                      borderLeftColor: deal.isStalled ? "#EF4444" : "#2563EB",
+                      borderLeftColor: deal.isStalled ? "#EF4444" : stage.color,
                     }}
                   >
                     <div className="mb-2 flex items-start justify-between">
                       <div className="flex items-center gap-2">
-                        <GripVertical className="h-4 w-4 cursor-grab" style={{ color: "#D1D5DB" }} />
+                        {!stage.isFinal && <GripVertical className="h-4 w-4 cursor-grab" style={{ color: "#D1D5DB" }} />}
                         <button
                           className="text-[14px] font-semibold hover:underline"
                           style={{ color: "#1B2B4B" }}
@@ -224,6 +432,15 @@ export function PipelinePage() {
                           Stallo
                         </span>
                       )}
+                      {stage.id === "vinto" && (
+                        <span
+                          className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
+                          style={{ backgroundColor: "#D1FAE5", color: "#059669" }}
+                        >
+                          <Check className="h-3 w-3" />
+                          Vinto
+                        </span>
+                      )}
                     </div>
                     <p className="mb-1 text-[12px]" style={{ color: "#7C8CA2" }}>
                       {deal.company}
@@ -232,40 +449,56 @@ export function PipelinePage() {
                       {deal.product}
                     </p>
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-[16px] font-bold" style={{ color: "#059669" }}>
+                      <span className="text-[16px] font-bold" style={{ color: stage.id === "perso" ? "#EF4444" : "#059669" }}>
                         {deal.value > 0 ? `CHF ${deal.value.toLocaleString("it-CH")}` : "Da definire"}
                       </span>
-                      <span
-                        className="text-[11px]"
-                        style={{ color: deal.daysInStage > 10 ? "#EF4444" : "#7C8CA2" }}
-                      >
-                        {deal.daysInStage} giorni
-                      </span>
+                      {!stage.isFinal && (
+                        <span
+                          className="text-[11px]"
+                          style={{ color: deal.daysInStage > 10 ? "#EF4444" : "#7C8CA2" }}
+                        >
+                          {deal.daysInStage} giorni
+                        </span>
+                      )}
+                      {deal.closeDate && (
+                        <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                          {deal.closeDate}
+                        </span>
+                      )}
                     </div>
-                    <p className="mb-3 text-[12px]" style={{ color: "#2563EB" }}>
-                      {deal.nextAction}
-                    </p>
-                    <div className="flex gap-2">
-                      <button
-                        className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                        style={{ borderColor: "#E5E7EB" }}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setSelectedDeal(deal)
-                        }}
-                      >
-                        <FileText className="h-3 w-3" />
-                        Materiali
-                      </button>
-                      <button
-                        className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                        style={{ borderColor: "#E5E7EB" }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Phone className="h-3 w-3" />
-                        Log
-                      </button>
-                    </div>
+                    {deal.lostReason && (
+                      <p className="mb-2 text-[11px]" style={{ color: "#EF4444" }}>
+                        Motivo: {deal.lostReason}
+                      </p>
+                    )}
+                    {deal.nextAction && (
+                      <p className="mb-3 text-[12px]" style={{ color: "#2563EB" }}>
+                        {deal.nextAction}
+                      </p>
+                    )}
+                    {!stage.isFinal && (
+                      <div className="flex gap-2">
+                        <button
+                          className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
+                          style={{ borderColor: "#E5E7EB" }}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedDeal(deal)
+                          }}
+                        >
+                          <FileText className="h-3 w-3" />
+                          Materiali
+                        </button>
+                        <button
+                          className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
+                          style={{ borderColor: "#E5E7EB" }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Phone className="h-3 w-3" />
+                          Log
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
 
@@ -275,7 +508,7 @@ export function PipelinePage() {
                     style={{ borderColor: "#E5E7EB" }}
                   >
                     <p className="text-[12px]" style={{ color: "#9CA3AF" }}>
-                      Trascina un deal qui
+                      {stage.isFinal ? "Nessun deal" : "Trascina un deal qui"}
                     </p>
                   </div>
                 )}
@@ -468,6 +701,24 @@ export function PipelinePage() {
                   <Calendar className="h-4 w-4" />
                   Programma call (Calendly)
                 </button>
+                {/* NEW: Duplicate and Archive buttons */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => duplicateDeal(selectedDeal)}
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg border py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                  >
+                    <Copy className="h-4 w-4" />
+                    Duplica
+                  </button>
+                  <button
+                    className="flex flex-1 items-center justify-center gap-1 rounded-lg border py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                  >
+                    <Archive className="h-4 w-4" />
+                    Archivia
+                  </button>
+                </div>
               </div>
             </div>
 
