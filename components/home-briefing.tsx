@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ChevronDown } from "lucide-react"
 
 // Alert data
 const alerts = [
@@ -63,7 +63,7 @@ const kpis = [
   },
 ]
 
-// Agent work data
+// Agent work data with destination info
 const agentWork = [
   {
     id: 1,
@@ -71,7 +71,8 @@ const agentWork = [
     initials: "CW",
     output: "Post R1: «Come cambierà il mio lavoro con l'AI?»",
     time: "stanotte",
-    link: "content-factory",
+    link: "content",
+    destination: "Content Factory",
   },
   {
     id: 2,
@@ -80,6 +81,7 @@ const agentWork = [
     output: "Piano editoriale settimana 15 (14 contenuti su 5 canali)",
     time: "stanotte",
     link: "editorial",
+    destination: "Piano editoriale",
   },
   {
     id: 3,
@@ -88,6 +90,7 @@ const agentWork = [
     output: "Briefing: fill rate workshop critico, 4 azioni suggerite",
     time: "08:00",
     link: "command",
+    destination: "Centro di Comando",
   },
   {
     id: 4,
@@ -96,24 +99,26 @@ const agentWork = [
     output: "Lead escalato: Claudia Bernasconi → Sales (score 14, 3 eventi)",
     time: "03:00",
     link: "crm",
+    destination: "Contatti & CRM",
   },
 ]
 
-// Content to approve
+// Content to approve (compacted for right column)
 const contentToApprove = [
   {
     id: 1,
     title: "R1 — AI e coaching: una domanda che vale",
-    meta: "Copywriter · LinkedIn pers. · oggi",
-    preview:
-      "Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non è mai tecnica. È sempre umana: «Come cambierà il mio lavoro?»",
+    channel: "LinkedIn",
   },
   {
     id: 2,
-    title: "Newsletter: Quando l'AI sbaglia, impariamo",
-    meta: "Copywriter · Beehiiv · domani",
-    preview:
-      "La settimana scorsa ho chiesto a Claude di analizzare una strategia di pricing. Il risultato? Un disastro creativo che mi ha insegnato più di un successo.",
+    title: "Newsletter: Quando l'AI sbaglia",
+    channel: "Beehiiv",
+  },
+  {
+    id: 3,
+    title: "Email follow-up Claudia B.",
+    channel: "Email",
   },
 ]
 
@@ -147,7 +152,7 @@ const events = [
 const hotContacts = [
   {
     id: 1,
-    name: "Sara Müller",
+    name: "Sara Muller",
     company: "SwissAI Lab",
     stage: "S4",
     action: "Negoziazione",
@@ -193,17 +198,27 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
     <div className="flex h-full gap-6 overflow-auto p-6">
       {/* Main Column - 70% */}
       <div className="flex w-[70%] flex-col gap-6">
-        {/* Section 1 - Greeting */}
-        <div>
-          <h1
-            className="text-[22px] font-bold"
-            style={{ color: "#1B2B4B" }}
+        {/* Section 1 - Greeting with Project Selector */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h1
+              className="text-[22px] font-bold"
+              style={{ color: "#1B2B4B" }}
+            >
+              Buongiorno Emanuele
+            </h1>
+            <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
+              Martedi 1 aprile - 3 azioni urgenti - 3 contenuti da approvare
+            </p>
+          </div>
+          {/* Project Selector */}
+          <button 
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border text-[13px] font-medium transition-colors hover:bg-gray-50"
+            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
           >
-            Buongiorno Emanuele
-          </h1>
-          <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
-            Martedì 1 aprile · 3 azioni urgenti · 3 contenuti da approvare
-          </p>
+            Progetto: HumanAImpact
+            <ChevronDown className="h-4 w-4" style={{ color: "#7C8CA2" }} />
+          </button>
         </div>
 
         {/* Section 2 - Alerts */}
@@ -286,7 +301,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                       className="text-[12px] font-medium"
                       style={{ color: "#059669" }}
                     >
-                      ↑ {kpi.trend}
+                      ^ {kpi.trend}
                     </span>
                   </div>
                   <div className="mt-3 flex items-center gap-2">
@@ -323,7 +338,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
           </div>
         </div>
 
-        {/* Section 4 - Agent Work */}
+        {/* Section 4 - Agent Work with destination indicators */}
         <div>
           <h2
             className="mb-4 text-[12px] font-semibold uppercase tracking-wider"
@@ -349,6 +364,9 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                   <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
                     <strong>{work.agent}:</strong> {work.output}
                   </span>
+                  <span className="ml-2 text-[11px]" style={{ color: "#2563EB" }}>
+                    → {work.destination}
+                  </span>
                 </div>
                 <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   {work.time}
@@ -358,56 +376,10 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
             ))}
           </div>
         </div>
-
-        {/* Section 5 - Content to Approve */}
-        <div>
-          <div className="mb-4 flex items-center justify-between">
-            <h2
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
-            >
-              Da approvare
-            </h2>
-            <button
-              onClick={() => onNavigate("approval")}
-              className="flex items-center gap-1 text-[13px] font-medium transition-opacity hover:opacity-80"
-              style={{ color: "#2563EB" }}
-            >
-              Vedi tutti
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="flex flex-col gap-3">
-            {contentToApprove.map((content) => (
-              <button
-                key={content.id}
-                onClick={() => onNavigate("approval")}
-                className="w-full rounded-lg bg-white p-4 text-left transition-all hover:border-blue-400"
-                style={{ border: "1px solid #E5E7EB" }}
-              >
-                <h3
-                  className="text-[14px] font-semibold"
-                  style={{ color: "#1B2B4B" }}
-                >
-                  {content.title}
-                </h3>
-                <p className="mt-1 text-[12px]" style={{ color: "#7C8CA2" }}>
-                  {content.meta}
-                </p>
-                <p
-                  className="mt-2 line-clamp-2 text-[13px] leading-relaxed"
-                  style={{ color: "#374151" }}
-                >
-                  {content.preview}
-                </p>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Right Column - 30% */}
-      <div className="flex w-[30%] flex-col gap-6">
+      <div className="flex w-[30%] flex-col gap-5">
         {/* Card 1 - Upcoming Events */}
         <div
           className="rounded-lg bg-white p-4"
@@ -463,7 +435,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                   {event.name}
                 </h4>
                 <p className="mt-1 text-[12px]" style={{ color: "#7C8CA2" }}>
-                  {event.date} · {event.enrolled}/{event.target} iscritti
+                  {event.date} - {event.enrolled}/{event.target} iscritti
                 </p>
                 <div className="mt-2 flex items-center gap-2">
                   <div
@@ -550,7 +522,59 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
           </div>
         </div>
 
-        {/* Card 3 - Active Processes */}
+        {/* Card 3 - Content to Approve (moved from main column) */}
+        <div
+          className="rounded-lg bg-white p-4"
+          style={{ border: "1px solid #E5E7EB" }}
+        >
+          <div className="mb-3 flex items-center justify-between">
+            <h3
+              className="text-[12px] font-semibold uppercase tracking-wider"
+              style={{ color: "#7C8CA2" }}
+            >
+              Da approvare
+            </h3>
+            <span 
+              className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+              style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
+            >
+              3
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {contentToApprove.map((content) => (
+              <button
+                key={content.id}
+                onClick={() => onNavigate("approval")}
+                className="flex items-center justify-between rounded-lg p-2 text-left transition-colors hover:bg-gray-50"
+                style={{ backgroundColor: "#F9FAFB" }}
+              >
+                <span 
+                  className="text-[12px] font-medium truncate flex-1"
+                  style={{ color: "#1B2B4B" }}
+                >
+                  {content.title}
+                </span>
+                <span 
+                  className="ml-2 text-[10px] px-2 py-0.5 rounded"
+                  style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                >
+                  {content.channel}
+                </span>
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => onNavigate("approval")}
+            className="mt-3 flex w-full items-center justify-center gap-1 text-[12px] font-medium transition-opacity hover:opacity-80"
+            style={{ color: "#2563EB" }}
+          >
+            Approva tutti
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        {/* Card 4 - Active Processes */}
         <div
           className="rounded-lg bg-white p-4"
           style={{ border: "1px solid #E5E7EB" }}
@@ -612,7 +636,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                   </p>
                   {process.status === "paused" && (
                     <p className="text-[10px]" style={{ color: "#7C3AED" }}>
-                      ⏸ In attesa
+                      In attesa
                     </p>
                   )}
                 </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { ChevronRight, ChevronDown } from "lucide-react"
+import { ChevronRight, ChevronDown, Check, Image } from "lucide-react"
 
 interface ApprovalItem {
   id: string
@@ -30,27 +30,58 @@ const approvalItems: ApprovalItem[] = [
     scheduledDate: "oggi",
     daysWaiting: 4,
     hasImage: true,
-    content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non è mai tecnica. È sempre umana: «Come cambierà il mio lavoro?»
+    content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non e mai tecnica. E sempre umana: "Come cambiera il mio lavoro?"
 
-È una domanda che merita rispetto, non una risposta preconfezionata.
+E una domanda che merita rispetto, non una risposta preconfezionata.
 
-Perché la verità è che l'AI non sostituisce il lavoro — ridefinisce il valore che ciascuno porta.
+Perche la verita e che l'AI non sostituisce il lavoro — ridefinisce il valore che ciascuno porta.
 
-Chi sa ascoltare, interpretare, connettere: diventa più prezioso.
-Chi esegue senza comprendere: è già in competizione con un algoritmo.
+Chi sa ascoltare, interpretare, connettere: diventa piu prezioso.
+Chi esegue senza comprendere: e gia in competizione con un algoritmo.
 
-La domanda giusta non è «l'AI prenderà il mio posto?»
-È: «Cosa so fare che nessuna macchina può replicare?»
+La domanda giusta non e "l'AI prendera il mio posto?"
+E: "Cosa so fare che nessuna macchina puo replicare?"
 
 #AI #coaching #futurodellavoro #humanAImpact`,
     context: {
       process: "Piano editoriale settimana 15",
       rubric: "R1 — Una domanda che vale",
-      scheduledFull: "Lunedì 7 aprile, 08:30"
+      scheduledFull: "Lunedi 7 aprile, 08:30"
     }
   },
   {
     id: "2",
+    title: "Azione Board: Brief promozione workshop",
+    type: "process",
+    channel: "Processo",
+    agent: "Operator",
+    scheduledDate: "urgente",
+    daysWaiting: 5,
+    content: `BRIEF AZIONE: Promozione Workshop AI & Leadership
+
+SITUAZIONE ATTUALE:
+- Fill rate: 28% (7/25 iscritti)
+- Giorni mancanti: 15
+- Soglia minima viabilita: 60%
+
+AZIONI DA APPROVARE:
+1. Post LinkedIn urgente con CTA diretta
+2. Email mirata a 12 contatti target (score >8)
+3. Reminder Telegram bilingue
+4. Coinvolgimento speaker per post anticipazione
+
+RISULTATO ATTESO:
+Raggiungere almeno 15 iscritti (60%) entro 7 giorni.
+
+Approvi l'attivazione del processo di promozione urgente?`,
+    context: {
+      process: "Promozione evento",
+      rubric: "Azione operativa",
+      scheduledFull: "Immediato"
+    }
+  },
+  {
+    id: "3",
     title: "Newsletter — Settimana 14",
     type: "newsletter",
     channel: "Beehiiv",
@@ -58,11 +89,11 @@ La domanda giusta non è «l'AI prenderà il mio posto?»
     scheduledDate: "domani 8:00",
     content: `Ciao,
 
-Questa settimana parliamo di errori. Sì, proprio di errori.
+Questa settimana parliamo di errori. Si, proprio di errori.
 
 Quando un'intelligenza artificiale sbaglia, cosa possiamo imparare? 
 
-La risposta non è scontata: l'errore di un algoritmo spesso rivela i nostri bias nascosti, i dati che abbiamo trascurato, le domande che non ci siamo posti.
+La risposta non e scontata: l'errore di un algoritmo spesso rivela i nostri bias nascosti, i dati che abbiamo trascurato, le domande che non ci siamo posti.
 
 In questo numero esploriamo tre casi reali di "fallimenti AI" che si sono trasformati in lezioni preziose per le aziende coinvolte.
 
@@ -71,11 +102,11 @@ Emanuele`,
     context: {
       process: "Newsletter settimanale",
       rubric: "Editoriale",
-      scheduledFull: "Mercoledì 9 aprile, 08:00"
+      scheduledFull: "Mercoledi 9 aprile, 08:00"
     }
   },
   {
-    id: "3",
+    id: "4",
     title: "Email follow-up Claudia Bernasconi",
     type: "email",
     channel: "Email",
@@ -102,7 +133,7 @@ Emanuele Casero`,
     }
   },
   {
-    id: "4",
+    id: "5",
     title: "Post EN: Leadership in the age of AI",
     type: "post",
     channel: "LinkedIn pers.",
@@ -126,37 +157,7 @@ Because in a world of artificial intelligence, authentic leadership becomes the 
     context: {
       process: "Piano editoriale settimana 15",
       rubric: "R3 — Leadership content",
-      scheduledFull: "Martedì 8 aprile, 14:00"
-    }
-  },
-  {
-    id: "5",
-    title: "Azione Board: Brief promozione workshop",
-    type: "process",
-    channel: "Processo",
-    agent: "Operator",
-    scheduledDate: "urgente",
-    content: `BRIEF AZIONE: Promozione Workshop AI & Leadership
-
-SITUAZIONE ATTUALE:
-- Fill rate: 28% (7/25 iscritti)
-- Giorni mancanti: 15
-- Soglia minima viabilità: 60%
-
-AZIONI DA APPROVARE:
-1. Post LinkedIn urgente con CTA diretta
-2. Email mirata a 12 contatti target (score >8)
-3. Reminder Telegram bilingue
-4. Coinvolgimento speaker per post anticipazione
-
-RISULTATO ATTESO:
-Raggiungere almeno 15 iscritti (60%) entro 7 giorni.
-
-Approvi l'attivazione del processo di promozione urgente?`,
-    context: {
-      process: "Promozione evento",
-      rubric: "Azione operativa",
-      scheduledFull: "Immediato"
+      scheduledFull: "Martedi 8 aprile, 14:00"
     }
   }
 ]
@@ -179,8 +180,17 @@ export function ApprovalPage() {
   const [selectedId, setSelectedId] = useState("1")
   const [activeFilter, setActiveFilter] = useState("all")
   const [contextExpanded, setContextExpanded] = useState(true)
+  const [approvedCount, setApprovedCount] = useState(0)
+  const [animatingOut, setAnimatingOut] = useState<string | null>(null)
 
-  const selectedItem = approvalItems.find(item => item.id === selectedId)
+  // Sort items: urgent first (higher daysWaiting first)
+  const sortedItems = [...approvalItems].sort((a, b) => {
+    const aUrgent = a.daysWaiting && a.daysWaiting >= 3 ? a.daysWaiting : 0
+    const bUrgent = b.daysWaiting && b.daysWaiting >= 3 ? b.daysWaiting : 0
+    return bUrgent - aUrgent
+  })
+
+  const selectedItem = sortedItems.find(item => item.id === selectedId)
 
   const filters = [
     { id: "all", label: "Tutti", count: 5 },
@@ -191,8 +201,8 @@ export function ApprovalPage() {
   ]
 
   const filteredItems = activeFilter === "all" 
-    ? approvalItems 
-    : approvalItems.filter(item => item.type === activeFilter)
+    ? sortedItems 
+    : sortedItems.filter(item => item.type === activeFilter)
 
   const goToNext = useCallback(() => {
     const currentIndex = filteredItems.findIndex(item => item.id === selectedId)
@@ -201,6 +211,16 @@ export function ApprovalPage() {
     }
   }, [filteredItems, selectedId])
 
+  const handleApprove = useCallback(() => {
+    setAnimatingOut(selectedId)
+    setApprovedCount(prev => prev + 1)
+    
+    setTimeout(() => {
+      setAnimatingOut(null)
+      goToNext()
+    }, 300)
+  }, [selectedId, goToNext])
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -208,7 +228,7 @@ export function ApprovalPage() {
       
       switch (e.key.toLowerCase()) {
         case "e":
-          // Approve action
+          handleApprove()
           break
         case "m":
           // Edit action
@@ -224,7 +244,7 @@ export function ApprovalPage() {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [goToNext])
+  }, [goToNext, handleApprove])
 
   return (
     <div className="flex h-full">
@@ -241,6 +261,30 @@ export function ApprovalPage() {
           <p className="text-[12px] mt-1" style={{ color: "#7C8CA2" }}>
             5 in attesa
           </p>
+          
+          {/* Progress Bar */}
+          <div className="mt-3">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[11px] font-medium" style={{ color: "#1B2B4B" }}>
+                {approvedCount}/5 approvati
+              </span>
+              <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                {Math.round((approvedCount / 5) * 100)}%
+              </span>
+            </div>
+            <div 
+              className="h-1.5 rounded-full overflow-hidden"
+              style={{ backgroundColor: "#E5E7EB" }}
+            >
+              <div 
+                className="h-full rounded-full transition-all duration-300"
+                style={{ 
+                  backgroundColor: "#059669",
+                  width: `${(approvedCount / 5) * 100}%`
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
@@ -270,7 +314,9 @@ export function ApprovalPage() {
             <button
               key={item.id}
               onClick={() => setSelectedId(item.id)}
-              className="w-full text-left p-4 border-b transition-colors"
+              className={`w-full text-left p-4 border-b transition-all duration-300 ${
+                animatingOut === item.id ? 'opacity-0 transform -translate-x-full' : ''
+              }`}
               style={{
                 borderColor: "#E5E7EB",
                 backgroundColor: selectedId === item.id ? "#EFF6FF" : "transparent",
@@ -329,7 +375,7 @@ export function ApprovalPage() {
                   {selectedItem.title}
                 </h2>
                 <p className="text-[13px] mt-1" style={{ color: "#7C8CA2" }}>
-                  {selectedItem.agent} · {selectedItem.channel} · {selectedItem.scheduledDate}
+                  {selectedItem.agent} - {selectedItem.channel} - {selectedItem.scheduledDate}
                 </p>
               </div>
               <span 
@@ -399,55 +445,60 @@ export function ApprovalPage() {
                 </div>
               </div>
 
-              {/* Image Preview */}
+              {/* Image Preview - Enhanced */}
               {selectedItem.hasImage && (
                 <div 
-                  className="mt-6 max-w-[640px] rounded-lg border-2 border-dashed p-4"
-                  style={{ borderColor: "#D1D5DB" }}
+                  className="mt-6 max-w-[640px] rounded-lg border overflow-hidden"
+                  style={{ borderColor: "#E5E7EB" }}
                 >
                   <div 
-                    className="w-full h-[180px] rounded flex items-center justify-center"
+                    className="w-full h-[200px] flex items-center justify-center"
                     style={{ backgroundColor: "#F3F4F6" }}
                   >
                     <div className="text-center">
-                      <p className="text-[13px]" style={{ color: "#6B7280" }}>
+                      <Image size={48} style={{ color: "#9CA3AF" }} className="mx-auto mb-3" />
+                      <p className="text-[13px] font-medium" style={{ color: "#6B7280" }}>
                         brand-ai-coaching-01.jpg
                       </p>
                       <p className="text-[11px] mt-1" style={{ color: "#9CA3AF" }}>
-                        1200 x 628
+                        1200 x 628 px
                       </p>
                     </div>
                   </div>
-                  <button 
-                    className="mt-3 text-[12px] px-3 py-1.5 rounded border transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#D1D5DB", color: "#6B7280" }}
-                  >
-                    Cambia immagine
-                  </button>
+                  <div className="p-3 border-t" style={{ borderColor: "#E5E7EB" }}>
+                    <button 
+                      className="text-[12px] px-3 py-1.5 rounded border transition-colors hover:bg-gray-50"
+                      style={{ borderColor: "#D1D5DB", color: "#6B7280" }}
+                    >
+                      Cambia immagine
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Action Bar */}
+            {/* Action Bar - Enhanced */}
             <div 
               className="border-t p-4 flex items-center justify-between"
               style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
             >
               <div className="flex items-center gap-3">
                 <button
-                  className="px-6 py-2.5 rounded-lg text-[14px] font-semibold text-white transition-colors hover:opacity-90"
+                  onClick={handleApprove}
+                  className="flex items-center gap-2 px-7 py-3 rounded-lg text-[15px] font-semibold text-white transition-colors hover:opacity-90"
                   style={{ backgroundColor: "#059669" }}
                 >
+                  <Check size={18} />
                   Approva e pubblica
                 </button>
                 <button
-                  className="px-4 py-2.5 rounded-lg text-[14px] font-medium border transition-colors hover:bg-gray-50"
+                  className="px-5 py-3 rounded-lg text-[14px] font-medium border transition-colors hover:bg-gray-50"
                   style={{ borderColor: "#D1D5DB", color: "#374151" }}
                 >
                   Modifica
                 </button>
                 <button
-                  className="px-4 py-2.5 rounded-lg text-[14px] font-medium border transition-colors hover:bg-red-50"
+                  className="px-5 py-3 rounded-lg text-[14px] font-medium border transition-colors hover:bg-red-50"
                   style={{ borderColor: "#FCA5A5", color: "#DC2626" }}
                 >
                   Rifiuta
@@ -455,7 +506,7 @@ export function ApprovalPage() {
               </div>
               <button
                 onClick={goToNext}
-                className="px-4 py-2.5 rounded-lg text-[14px] font-medium border transition-colors hover:bg-blue-50 flex items-center gap-2"
+                className="px-5 py-3 rounded-lg text-[14px] font-medium border transition-colors hover:bg-blue-50 flex items-center gap-2"
                 style={{ borderColor: "#2563EB", color: "#2563EB" }}
               >
                 Prossimo
@@ -469,7 +520,7 @@ export function ApprovalPage() {
               style={{ backgroundColor: "#FFFFFF" }}
             >
               <p className="text-[10px]" style={{ color: "#9CA3AF" }}>
-                E = Approva · M = Modifica · R = Rifiuta · → = Prossimo
+                E = Approva - M = Modifica - R = Rifiuta - → = Prossimo
               </p>
             </div>
           </>

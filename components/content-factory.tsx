@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Plus, Image, RefreshCw, ClipboardCheck, MessageSquare, Share2, Check, X, Calendar, Loader2 } from "lucide-react"
+import { Plus, Image, RefreshCw, ClipboardCheck, MessageSquare, Share2, Check, X, Calendar, Loader2, Bold, Italic, Link2, List } from "lucide-react"
 
 type ContentStatus = "approved" | "draft" | "generating" | "idea" | "scheduled"
 type ContentType = "post" | "newsletter" | "article" | "email" | "idea"
@@ -17,6 +17,7 @@ interface ContentItem {
   hasImage: boolean
   content?: string
   imageName?: string
+  comments?: number
 }
 
 const contents: ContentItem[] = [
@@ -29,18 +30,19 @@ const contents: ContentItem[] = [
     rubrica: "R1",
     date: "Lun 7/4",
     hasImage: true,
-    imageName: "brand-ai-coaching-01.jpg · 1200×628",
-    content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non è mai tecnica. È sempre umana: «Come cambierà il mio lavoro?»
+    imageName: "brand-ai-coaching-01.jpg - 1200x628",
+    comments: 2,
+    content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non e mai tecnica. E sempre umana: "Come cambiera il mio lavoro?"
 
-È una domanda che merita rispetto, non una risposta preconfezionata.
+E una domanda che merita rispetto, non una risposta preconfezionata.
 
-Perché la verità è che l'AI non sostituisce il lavoro — ridefinisce il valore che ciascuno porta.
+Perche la verita e che l'AI non sostituisce il lavoro — ridefinisce il valore che ciascuno porta.
 
-Chi sa ascoltare, interpretare, connettere: diventa più prezioso.
-Chi esegue senza comprendere: è già in competizione con un algoritmo.
+Chi sa ascoltare, interpretare, connettere: diventa piu prezioso.
+Chi esegue senza comprendere: e gia in competizione con un algoritmo.
 
-La domanda giusta non è «l'AI prenderà il mio posto?»
-È: «Cosa so fare che nessuna macchina può replicare?»
+La domanda giusta non e "l'AI prendera il mio posto?"
+E: "Cosa so fare che nessuna macchina puo replicare?"
 
 #AI #coaching #futurodellavoro #humanAImpact`
   },
@@ -52,11 +54,12 @@ La domanda giusta non è «l'AI prenderà il mio posto?»
     channel: "Beehiiv",
     date: "Mer 9/4",
     hasImage: false,
+    comments: 1,
     content: `Ciao,
 
 questa settimana voglio parlarti di fallimenti. Non dei tuoi — dei miei. O meglio, di quelli dell'intelligenza artificiale che uso ogni giorno.
 
-Perché l'AI sbaglia. Spesso. E quando sbaglia, ci offre una finestra rara: la possibilità di capire come funziona davvero.
+Perche l'AI sbaglia. Spesso. E quando sbaglia, ci offre una finestra rara: la possibilita di capire come funziona davvero.
 
 Ho chiesto a Claude di analizzare i dati del mio ultimo workshop. Il risultato? Un'analisi impeccabile... del workshop sbagliato. Aveva confuso le date.
 
@@ -113,22 +116,22 @@ What's your experience? How is AI changing the way you lead?
     channel: "Email",
     date: "8/4",
     hasImage: false,
-    content: `Oggetto: [Workshop 15/4] Ultime 18 disponibilità
+    content: `Oggetto: [Workshop 15/4] Ultime 18 disponibilita
 
 Ciao {{nome}},
 
-ti scrivo perché mancano solo 7 giorni al workshop "AI & Leadership" e restano ancora 18 posti disponibili.
+ti scrivo perche mancano solo 7 giorni al workshop "AI & Leadership" e restano ancora 18 posti disponibili.
 
-So che il tuo tempo è prezioso, quindi vado dritto al punto:
+So che il tuo tempo e prezioso, quindi vado dritto al punto:
 
 In 3 ore scoprirai:
-• Come integrare l'AI nelle decisioni strategiche senza perdere il controllo
-• I 3 errori che il 90% dei leader fa con l'AI (e come evitarli)
-• Un framework pratico che potrai usare già dal giorno dopo
+- Come integrare l'AI nelle decisioni strategiche senza perdere il controllo
+- I 3 errori che il 90% dei leader fa con l'AI (e come evitarli)
+- Un framework pratico che potrai usare gia dal giorno dopo
 
-Non è teoria. È esperienza condensata da 50+ workshop con aziende svizzere.
+Non e teoria. E esperienza condensata da 50+ workshop con aziende svizzere.
 
-👉 Riserva il tuo posto: [LINK]
+Riserva il tuo posto: [LINK]
 
 Se hai domande, rispondi a questa email. Sono qui.
 
@@ -181,6 +184,7 @@ export function ContentFactory() {
   const [ideaChannel, setIdeaChannel] = useState("linkedin")
   const [ideaRubrica, setIdeaRubrica] = useState("r1")
   const [ideaLanguage, setIdeaLanguage] = useState("it")
+  const [showChannelPreview, setShowChannelPreview] = useState(false)
 
   const filteredContents = activeFilter === "all" 
     ? contents 
@@ -276,6 +280,12 @@ export function ContentFactory() {
                     {item.hasImage && (
                       <Image size={12} style={{ color: "#7C8CA2" }} />
                     )}
+                    {item.comments && item.comments > 0 && (
+                      <span className="flex items-center gap-0.5 text-[10px]" style={{ color: "#7C8CA2" }}>
+                        <MessageSquare size={10} />
+                        {item.comments}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -314,7 +324,7 @@ export function ContentFactory() {
                       </span>
                     )}
                     <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
-                      Copywriter · {selectedContent.channel} · Italiano
+                      Copywriter - {selectedContent.channel} - Italiano
                     </span>
                   </div>
                 </div>
@@ -342,6 +352,25 @@ export function ContentFactory() {
                   </button>
                 </div>
               </div>
+              
+              {/* Channel Preview Toggle */}
+              {selectedContent.channel === "LinkedIn pers." && selectedContent.status !== "idea" && selectedContent.status !== "generating" && (
+                <div className="mt-3 flex items-center gap-2">
+                  <button
+                    onClick={() => setShowChannelPreview(!showChannelPreview)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-md text-[12px] font-medium transition-colors"
+                    style={{ 
+                      backgroundColor: showChannelPreview ? "#DBEAFE" : "#F3F4F6",
+                      color: showChannelPreview ? "#2563EB" : "#6B7280"
+                    }}
+                  >
+                    <span className={`w-3 h-3 rounded-full border-2 flex items-center justify-center ${showChannelPreview ? 'border-blue-500' : 'border-gray-400'}`}>
+                      {showChannelPreview && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                    </span>
+                    Preview canale
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Content Area */}
@@ -431,7 +460,7 @@ export function ContentFactory() {
                       className="w-full mt-6 py-3 rounded-lg text-[14px] font-semibold text-white transition-colors hover:opacity-90"
                       style={{ backgroundColor: "#2563EB" }}
                     >
-                      Genera con Copywriter →
+                      Genera con Copywriter
                     </button>
                   </div>
                 </div>
@@ -459,11 +488,133 @@ export function ContentFactory() {
                     </div>
                   </div>
                 </div>
+              ) : showChannelPreview && selectedContent.channel === "LinkedIn pers." ? (
+                /* LinkedIn Preview Mockup */
+                <div className="max-w-[620px] mx-auto">
+                  <div 
+                    className="bg-white rounded-lg border overflow-hidden"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    {/* LinkedIn Header */}
+                    <div className="p-4 flex items-start gap-3">
+                      <div 
+                        className="w-12 h-12 rounded-full flex items-center justify-center text-[16px] font-bold flex-shrink-0"
+                        style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                      >
+                        EC
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[14px] font-semibold" style={{ color: "#000000" }}>
+                          Emanuele Casero
+                        </p>
+                        <p className="text-[12px]" style={{ color: "#666666" }}>
+                          Coach AI & Strategist | Founder HumanAImpact
+                        </p>
+                        <p className="text-[11px] mt-0.5" style={{ color: "#999999" }}>
+                          1 g - Modificato - <span className="inline-flex items-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></span>
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* LinkedIn Content */}
+                    <div className="px-4 pb-3">
+                      <p 
+                        className="text-[14px] whitespace-pre-wrap"
+                        style={{ color: "#000000", lineHeight: 1.5 }}
+                      >
+                        {selectedContent.content}
+                      </p>
+                    </div>
+                    
+                    {/* LinkedIn Image */}
+                    {selectedContent.hasImage && (
+                      <div 
+                        className="w-full h-[300px] flex items-center justify-center"
+                        style={{ backgroundColor: "#F3F4F6" }}
+                      >
+                        <div className="text-center">
+                          <Image size={48} style={{ color: "#9CA3AF" }} className="mx-auto mb-2" />
+                          <p className="text-[12px]" style={{ color: "#6B7280" }}>
+                            {selectedContent.imageName}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* LinkedIn Engagement Bar */}
+                    <div className="px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: "#E5E7EB" }}>
+                      <div className="flex items-center gap-1 text-[12px]" style={{ color: "#666666" }}>
+                        <span className="flex -space-x-1">
+                          <span className="w-4 h-4 rounded-full bg-blue-500"></span>
+                          <span className="w-4 h-4 rounded-full bg-red-500"></span>
+                        </span>
+                        <span className="ml-1">24</span>
+                      </div>
+                      <div className="text-[12px]" style={{ color: "#666666" }}>
+                        3 commenti - 2 diffusioni
+                      </div>
+                    </div>
+                    
+                    {/* LinkedIn Actions */}
+                    <div className="px-4 py-2 border-t flex items-center justify-around" style={{ borderColor: "#E5E7EB" }}>
+                      <button className="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-100 text-[13px]" style={{ color: "#666666" }}>
+                        Consiglia
+                      </button>
+                      <button className="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-100 text-[13px]" style={{ color: "#666666" }}>
+                        Commenta
+                      </button>
+                      <button className="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-100 text-[13px]" style={{ color: "#666666" }}>
+                        Diffondi
+                      </button>
+                      <button className="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-100 text-[13px]" style={{ color: "#666666" }}>
+                        Invia
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-center mt-4 text-[11px]" style={{ color: "#7C8CA2" }}>
+                    Anteprima LinkedIn - come apparira nel feed
+                  </p>
+                </div>
               ) : (
                 /* Content Display */
                 <div className="max-w-[620px] mx-auto">
+                  {/* Editing Toolbar */}
                   <div 
-                    className="bg-white rounded-lg p-6 border"
+                    className="bg-white rounded-t-lg border border-b-0 px-3 py-2 flex items-center gap-1"
+                    style={{ borderColor: "#E5E7EB" }}
+                  >
+                    <button 
+                      className="p-2 rounded hover:bg-gray-100 transition-colors"
+                      title="Grassetto"
+                    >
+                      <Bold size={16} style={{ color: "#6B7280" }} />
+                    </button>
+                    <button 
+                      className="p-2 rounded hover:bg-gray-100 transition-colors"
+                      title="Corsivo"
+                    >
+                      <Italic size={16} style={{ color: "#6B7280" }} />
+                    </button>
+                    <button 
+                      className="p-2 rounded hover:bg-gray-100 transition-colors"
+                      title="Link"
+                    >
+                      <Link2 size={16} style={{ color: "#6B7280" }} />
+                    </button>
+                    <button 
+                      className="p-2 rounded hover:bg-gray-100 transition-colors"
+                      title="Lista"
+                    >
+                      <List size={16} style={{ color: "#6B7280" }} />
+                    </button>
+                    <div className="h-5 w-px mx-2" style={{ backgroundColor: "#E5E7EB" }} />
+                    <span className="text-[11px]" style={{ color: "#9CA3AF" }}>
+                      Modifica inline
+                    </span>
+                  </div>
+                  
+                  <div 
+                    className="bg-white rounded-b-lg border p-6"
                     style={{ borderColor: "#E5E7EB" }}
                   >
                     <p 
@@ -480,7 +631,7 @@ export function ContentFactory() {
                   {/* Image Area */}
                   {selectedContent.hasImage && (
                     <div 
-                      className="mt-4 bg-white rounded-lg p-4 border"
+                      className="mt-4 bg-white rounded-lg border p-4"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <div 
