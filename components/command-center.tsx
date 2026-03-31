@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send, Trash2 } from "lucide-react"
+import { Send, Trash2, Save, Download, MoreHorizontal } from "lucide-react"
 
 interface Message {
   id: number
@@ -90,6 +90,21 @@ const suggestionChips = ["Analisi settimanale", "Stato KPI", "Prossime azioni"]
 export function CommandCenter() {
   const [messages] = useState<Message[]>(initialMessages)
   const [inputValue, setInputValue] = useState("")
+  const [showCanvasMenu, setShowCanvasMenu] = useState(false)
+  const [showChatMenu, setShowChatMenu] = useState(false)
+  const [savedCanvases, setSavedCanvases] = useState<string[]>([])
+
+  const handleSaveCanvas = () => {
+    const canvasName = `Canvas ${new Date().toLocaleDateString('it-IT')} - Workshop Analysis`
+    setSavedCanvases([...savedCanvases, canvasName])
+    setShowCanvasMenu(false)
+    // In a real app, this would save to backend
+  }
+
+  const handleExportConversation = () => {
+    // In a real app, this would export to PDF or text
+    setShowChatMenu(false)
+  }
 
   return (
     <div className="flex h-full">
@@ -125,14 +140,40 @@ export function CommandCenter() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ backgroundColor: "#059669" }}
-            />
-            <span className="text-[12px]" style={{ color: "#059669" }}>
-              Online
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: "#059669" }}
+              />
+              <span className="text-[12px]" style={{ color: "#059669" }}>
+                Online
+              </span>
+            </div>
+            {/* Chat Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowChatMenu(!showChatMenu)}
+                className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                <MoreHorizontal size={18} style={{ color: "#7C8CA2" }} />
+              </button>
+              {showChatMenu && (
+                <div 
+                  className="absolute right-0 top-full mt-1 w-48 rounded-lg border bg-white shadow-lg z-10"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <button
+                    onClick={handleExportConversation}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] text-left hover:bg-gray-50 transition-colors"
+                    style={{ color: "#1B2B4B" }}
+                  >
+                    <Download size={14} />
+                    Esporta conversazione
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -249,13 +290,58 @@ export function CommandCenter() {
           <p className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
             Canvas Strategist
           </p>
-          <button
-            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] transition-colors hover:bg-gray-100"
-            style={{ color: "#7C8CA2" }}
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            Pulisci
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Canvas Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowCanvasMenu(!showCanvasMenu)}
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-medium border transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              >
+                <Save size={14} />
+                Salva
+              </button>
+              {showCanvasMenu && (
+                <div 
+                  className="absolute right-0 top-full mt-1 w-56 rounded-lg border bg-white shadow-lg z-10"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  <button
+                    onClick={handleSaveCanvas}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] text-left hover:bg-gray-50 transition-colors"
+                    style={{ color: "#1B2B4B" }}
+                  >
+                    <Save size={14} />
+                    Salva canvas corrente
+                  </button>
+                  {savedCanvases.length > 0 && (
+                    <>
+                      <div className="border-t my-1" style={{ borderColor: "#E5E7EB" }} />
+                      <p className="px-4 py-1.5 text-[10px] uppercase font-medium" style={{ color: "#7C8CA2" }}>
+                        Canvas salvati
+                      </p>
+                      {savedCanvases.map((canvas, i) => (
+                        <button
+                          key={i}
+                          className="w-full px-4 py-2 text-[12px] text-left hover:bg-gray-50 transition-colors truncate"
+                          style={{ color: "#6B7280" }}
+                        >
+                          {canvas}
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+            <button
+              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] transition-colors hover:bg-gray-100"
+              style={{ color: "#7C8CA2" }}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Pulisci
+            </button>
+          </div>
         </div>
 
         {/* Canvas Content */}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { ChevronRight, ChevronDown, Check, Image } from "lucide-react"
+import { ChevronRight, ChevronDown, Check, Image, Clock, X, ArrowUpDown } from "lucide-react"
 
 interface ApprovalItem {
   id: string
@@ -176,28 +176,55 @@ const typeLabels: Record<string, string> = {
   process: "Processo"
 }
 
+type SortOption = "urgency" | "date" | "type"
+
 export function ApprovalPage() {
   const [selectedId, setSelectedId] = useState("1")
   const [activeFilter, setActiveFilter] = useState("all")
   const [contextExpanded, setContextExpanded] = useState(true)
   const [approvedCount, setApprovedCount] = useState(0)
   const [animatingOut, setAnimatingOut] = useState<string | null>(null)
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [sortBy, setSortBy] = useState<SortOption>("urgency")
+  const [showSortMenu, setShowSortMenu] = useState(false)
+  const [snoozedItems, setSnoozedItems] = useState<string[]>([])
 
-  // Sort items: urgent first (higher daysWaiting first)
-  const sortedItems = [...approvalItems].sort((a, b) => {
-    const aUrgent = a.daysWaiting && a.daysWaiting >= 3 ? a.daysWaiting : 0
-    const bUrgent = b.daysWaiting && b.daysWaiting >= 3 ? b.daysWaiting : 0
-    return bUrgent - aUrgent
-  })
+  // Sort items based on selected option
+  const sortItems = (items: ApprovalItem[]) => {
+    // First filter out snoozed items
+    const activeItems = items.filter(item => !snoozedItems.includes(item.id))
+    
+    switch (sortBy) {
+      case "urgency":
+        return [...activeItems].sort((a, b) => {
+          const aUrgent = a.daysWaiting && a.daysWaiting >= 3 ? a.daysWaiting : 0
+          const bUrgent = b.daysWaiting && b.daysWaiting >= 3 ? b.daysWaiting : 0
+          return bUrgent - aUrgent
+        })
+      case "date":
+        return [...activeItems].sort((a, b) => {
+          // Simple date sorting - in real app would use actual dates
+          if (a.scheduledDate === "oggi" || a.scheduledDate === "urgente") return -1
+          if (b.scheduledDate === "oggi" || b.scheduledDate === "urgente") return 1
+          return 0
+        })
+      case "type":
+        return [...activeItems].sort((a, b) => a.type.localeCompare(b.type))
+      default:
+        return activeItems
+    }
+  }
+
+  const sortedItems = sortItems(approvalItems)
 
   const selectedItem = sortedItems.find(item => item.id === selectedId)
 
   const filters = [
-    { id: "all", label: "Tutti", count: 5 },
-    { id: "post", label: "Post", count: 2 },
-    { id: "newsletter", label: "Newsletter", count: 1 },
-    { id: "email", label: "Email", count: 1 },
-    { id: "process", label: "Processi", count: 1 }
+    { id: "all", label: "Tutti", count: sortedItems.length },
+    { id: "post", label: "Post", count: sortedItems.filter(i => i.type === "post").length },
+    { id: "newsletter", label: "Newsletter", count: sortedItems.filter(i => i.type === "newsletter").length },
+    { id: "email", label: "Email", count: sortedItems.filter(i => i.type === "email").length },
+    { id: "process", label: "Processi", count: sortedItems.filter(i => i.type === "process").length }
   ]
 
   const filteredItems = activeFilter === "all" 
@@ -221,6 +248,32 @@ export function ApprovalPage() {
     }, 300)
   }, [selectedId, goToNext])
 
+  const handleSnooze = useCallback((id: string) => {
+    setSnoozedItems([...snoozedItems, id])
+    goToNext()
+  }, [snoozedItems, goToNext])
+
+  const handleSelectItem = (id: string) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter(i => i !== id))
+    } else {
+      setSelectedItems([...selectedItems, id])
+    }
+  }
+
+  const handleSelectAll = () => {
+    if (selectedItems.length === filteredItems.length) {
+      setSelectedItems([])
+    } else {
+      setSelectedItems(filteredItems.map(i => i.id))
+    }
+  }
+
+  const handleBatchApprove = () => {
+    setApprovedCount(prev => prev + selectedItems.length)
+    setSelectedItems([])
+  }
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -236,6 +289,9 @@ export function ApprovalPage() {
         case "r":
           // Reject action
           break
+        case "s":
+          if (selectedItem) handleSnooze(selectedItem.id)
+          break
         case "arrowright":
           goToNext()
           break
@@ -244,7 +300,13 @@ export function ApprovalPage() {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [goToNext, handleApprove])
+  }, [goToNext, handleApprove, handleSnooze, selectedItem])
+
+  const sortLabels: Record<SortOption, string> = {
+    urgency: "Urgenti prima",
+    date: "Per data",
+    type: "Per tipo"
+  }
 
   return (
     <div className="flex h-full">
@@ -255,21 +317,59 @@ export function ApprovalPage() {
       >
         {/* Header */}
         <div className="p-4 border-b" style={{ borderColor: "#E5E7EB" }}>
-          <h1 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
-            Approvazione
-          </h1>
-          <p className="text-[12px] mt-1" style={{ color: "#7C8CA2" }}>
-            5 in attesa
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
+                Approvazione
+              </h1>
+              <p className="text-[12px] mt-1" style={{ color: "#7C8CA2" }}>
+                {sortedItems.length} in attesa
+                {snoozedItems.length > 0 && ` - ${snoozedItems.length} rimandati`}
+              </p>
+            </div>
+            
+            {/* Sort Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setShowSortMenu(!showSortMenu)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+              >
+                <ArrowUpDown size={14} />
+                {sortLabels[sortBy]}
+              </button>
+              {showSortMenu && (
+                <div 
+                  className="absolute right-0 top-full mt-1 w-40 rounded-lg border bg-white shadow-lg z-10"
+                  style={{ borderColor: "#E5E7EB" }}
+                >
+                  {(Object.keys(sortLabels) as SortOption[]).map(option => (
+                    <button
+                      key={option}
+                      onClick={() => {
+                        setSortBy(option)
+                        setShowSortMenu(false)
+                      }}
+                      className="w-full px-4 py-2 text-[13px] text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                      style={{ color: sortBy === option ? "#2563EB" : "#1B2B4B" }}
+                    >
+                      {sortLabels[option]}
+                      {sortBy === option && <Check size={14} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
           
           {/* Progress Bar */}
           <div className="mt-3">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[11px] font-medium" style={{ color: "#1B2B4B" }}>
-                {approvedCount}/5 approvati
+                {approvedCount}/{approvalItems.length} approvati
               </span>
               <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
-                {Math.round((approvedCount / 5) * 100)}%
+                {Math.round((approvedCount / approvalItems.length) * 100)}%
               </span>
             </div>
             <div 
@@ -280,12 +380,66 @@ export function ApprovalPage() {
                 className="h-full rounded-full transition-all duration-300"
                 style={{ 
                   backgroundColor: "#059669",
-                  width: `${(approvedCount / 5) * 100}%`
+                  width: `${(approvedCount / approvalItems.length) * 100}%`
                 }}
               />
             </div>
           </div>
         </div>
+
+        {/* Batch Actions Bar */}
+        {selectedItems.length > 0 && (
+          <div 
+            className="p-3 border-b flex items-center justify-between"
+            style={{ borderColor: "#E5E7EB", backgroundColor: "#EFF6FF" }}
+          >
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedItems.length === filteredItems.length}
+                onChange={handleSelectAll}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                {selectedItems.length} selezionati
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={handleBatchApprove}
+                className="px-3 py-1.5 rounded-md text-[11px] font-medium text-white transition-colors hover:opacity-90"
+                style={{ backgroundColor: "#059669" }}
+              >
+                Approva selezionati
+              </button>
+              <button 
+                className="px-3 py-1.5 rounded-md text-[11px] font-medium border transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                onClick={() => setSelectedItems([])}
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Select All Row */}
+        {selectedItems.length === 0 && filteredItems.length > 0 && (
+          <div 
+            className="px-4 py-2 border-b flex items-center gap-2"
+            style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}
+          >
+            <input
+              type="checkbox"
+              checked={false}
+              onChange={handleSelectAll}
+              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+              Seleziona tutti
+            </span>
+          </div>
+        )}
 
         {/* Filters */}
         <div 
@@ -311,10 +465,9 @@ export function ApprovalPage() {
         {/* List */}
         <div className="flex-1 overflow-y-auto">
           {filteredItems.map(item => (
-            <button
+            <div
               key={item.id}
-              onClick={() => setSelectedId(item.id)}
-              className={`w-full text-left p-4 border-b transition-all duration-300 ${
+              className={`w-full text-left p-4 border-b transition-all duration-300 flex items-start gap-3 ${
                 animatingOut === item.id ? 'opacity-0 transform -translate-x-full' : ''
               }`}
               style={{
@@ -323,40 +476,53 @@ export function ApprovalPage() {
                 borderLeft: selectedId === item.id ? "3px solid #2563EB" : "3px solid transparent"
               }}
             >
-              <div className="flex items-start justify-between gap-2">
-                <h3 
-                  className="text-[13px] font-semibold line-clamp-2"
-                  style={{ color: "#1B2B4B" }}
-                >
-                  {item.title}
-                </h3>
-                {item.daysWaiting && item.daysWaiting >= 3 && (
-                  <span 
-                    className="text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0"
-                    style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
+              {/* Checkbox */}
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(item.id)}
+                onChange={() => handleSelectItem(item.id)}
+                className="w-4 h-4 mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              
+              <button
+                onClick={() => setSelectedId(item.id)}
+                className="flex-1 text-left"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <h3 
+                    className="text-[13px] font-semibold line-clamp-2"
+                    style={{ color: "#1B2B4B" }}
                   >
-                    {item.daysWaiting}gg
+                    {item.title}
+                  </h3>
+                  {item.daysWaiting && item.daysWaiting >= 3 && (
+                    <span 
+                      className="text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0"
+                      style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
+                    >
+                      {item.daysWaiting}gg
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                  <span 
+                    className="text-[11px] px-2 py-0.5 rounded"
+                    style={{ backgroundColor: "#F3F4F6", color: "#7C8CA2" }}
+                  >
+                    {item.channel}
                   </span>
-                )}
-              </div>
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
-                <span 
-                  className="text-[11px] px-2 py-0.5 rounded"
-                  style={{ backgroundColor: "#F3F4F6", color: "#7C8CA2" }}
-                >
-                  {item.channel}
-                </span>
-                <span 
-                  className="text-[11px] px-2 py-0.5 rounded"
-                  style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
-                >
-                  {item.agent}
-                </span>
-                <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
-                  {item.scheduledDate}
-                </span>
-              </div>
-            </button>
+                  <span 
+                    className="text-[11px] px-2 py-0.5 rounded"
+                    style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                  >
+                    {item.agent}
+                  </span>
+                  <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                    {item.scheduledDate}
+                  </span>
+                </div>
+              </button>
+            </div>
           ))}
         </div>
       </div>
@@ -498,6 +664,14 @@ export function ApprovalPage() {
                   Modifica
                 </button>
                 <button
+                  onClick={() => handleSnooze(selectedItem.id)}
+                  className="flex items-center gap-1.5 px-5 py-3 rounded-lg text-[14px] font-medium border transition-colors hover:bg-amber-50"
+                  style={{ borderColor: "#FCD34D", color: "#D97706" }}
+                >
+                  <Clock size={16} />
+                  Rimanda
+                </button>
+                <button
                   className="px-5 py-3 rounded-lg text-[14px] font-medium border transition-colors hover:bg-red-50"
                   style={{ borderColor: "#FCA5A5", color: "#DC2626" }}
                 >
@@ -520,7 +694,7 @@ export function ApprovalPage() {
               style={{ backgroundColor: "#FFFFFF" }}
             >
               <p className="text-[10px]" style={{ color: "#9CA3AF" }}>
-                E = Approva - M = Modifica - R = Rifiuta - → = Prossimo
+                E = Approva - M = Modifica - S = Rimanda - R = Rifiuta - → = Prossimo
               </p>
             </div>
           </>

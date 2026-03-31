@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Plus, Image, RefreshCw, ClipboardCheck, MessageSquare, Share2, Check, X, Calendar, Loader2, Bold, Italic, Link2, List } from "lucide-react"
+import { Plus, Image, RefreshCw, ClipboardCheck, MessageSquare, Share2, Check, X, Calendar, Loader2, Bold, Italic, Link2, List, Copy, History, MoreHorizontal, GripVertical } from "lucide-react"
 
 type ContentStatus = "approved" | "draft" | "generating" | "idea" | "scheduled"
 type ContentType = "post" | "newsletter" | "article" | "email" | "idea"
@@ -18,6 +18,7 @@ interface ContentItem {
   content?: string
   imageName?: string
   comments?: number
+  versions?: number
 }
 
 const contents: ContentItem[] = [
@@ -32,6 +33,7 @@ const contents: ContentItem[] = [
     hasImage: true,
     imageName: "brand-ai-coaching-01.jpg - 1200x628",
     comments: 2,
+    versions: 3,
     content: `Ogni volta che entro in un'azienda per parlare di intelligenza artificiale, la prima domanda non e mai tecnica. E sempre umana: "Come cambiera il mio lavoro?"
 
 E una domanda che merita rispetto, non una risposta preconfezionata.
@@ -55,6 +57,7 @@ E: "Cosa so fare che nessuna macchina puo replicare?"
     date: "Mer 9/4",
     hasImage: false,
     comments: 1,
+    versions: 2,
     content: `Ciao,
 
 questa settimana voglio parlarti di fallimenti. Non dei tuoi — dei miei. O meglio, di quelli dell'intelligenza artificiale che uso ogni giorno.
@@ -80,6 +83,7 @@ Emanuele`
     channel: "LinkedIn pers.",
     date: "Mar 8/4",
     hasImage: false,
+    versions: 1,
     content: `Leadership isn't about having all the answers anymore.
 
 It's about asking the right questions — to your team, to your data, and yes, to your AI.
@@ -176,6 +180,13 @@ const typeFilters = [
   { key: "idea", label: "Idee", count: 1 }
 ]
 
+const duplicateChannels = [
+  { id: "instagram", label: "Instagram", icon: "IG" },
+  { id: "newsletter", label: "Newsletter", icon: "NL" },
+  { id: "telegram", label: "Telegram", icon: "TG" },
+  { id: "linkedin-az", label: "LinkedIn aziendale", icon: "LA" },
+]
+
 export function ContentFactory() {
   const [selectedId, setSelectedId] = useState("1")
   const [activeFilter, setActiveFilter] = useState("all")
@@ -185,12 +196,34 @@ export function ContentFactory() {
   const [ideaRubrica, setIdeaRubrica] = useState("r1")
   const [ideaLanguage, setIdeaLanguage] = useState("it")
   const [showChannelPreview, setShowChannelPreview] = useState(false)
+  const [showDuplicateMenu, setShowDuplicateMenu] = useState(false)
+  const [showVersionsModal, setShowVersionsModal] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
 
   const filteredContents = activeFilter === "all" 
     ? contents 
     : contents.filter(c => c.type === activeFilter)
 
   const selectedContent = contents.find(c => c.id === selectedId)
+
+  const handleSelectItem = (id: string) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems(selectedItems.filter(i => i !== id))
+    } else {
+      setSelectedItems([...selectedItems, id])
+    }
+  }
+
+  const handleSelectAll = () => {
+    if (selectedItems.length === filteredContents.length) {
+      setSelectedItems([])
+    } else {
+      setSelectedItems(filteredContents.map(c => c.id))
+    }
+  }
+
+  const draftCount = filteredContents.filter(c => c.status === "draft").length
 
   return (
     <div className="flex h-full">
@@ -233,59 +266,114 @@ export function ContentFactory() {
           </div>
         </div>
 
+        {/* Batch Actions Bar */}
+        {selectedItems.length > 0 && (
+          <div 
+            className="p-3 border-b flex items-center justify-between"
+            style={{ borderColor: "#E5E7EB", backgroundColor: "#EFF6FF" }}
+          >
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedItems.length === filteredContents.length}
+                onChange={handleSelectAll}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
+                {selectedItems.length} selezionati
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                className="px-3 py-1.5 rounded-md text-[11px] font-medium text-white transition-colors hover:opacity-90"
+                style={{ backgroundColor: "#059669" }}
+              >
+                Approva tutti
+              </button>
+              <button 
+                className="px-3 py-1.5 rounded-md text-[11px] font-medium border transition-colors hover:bg-gray-50"
+                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                onClick={() => setSelectedItems([])}
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Content List */}
         <div className="flex-1 overflow-y-auto">
-          {filteredContents.map(item => (
+          {filteredContents.map((item, index) => (
             <div
               key={item.id}
-              onClick={() => setSelectedId(item.id)}
-              className="p-3 border-b cursor-pointer transition-colors"
+              className="p-3 border-b cursor-pointer transition-colors flex items-start gap-2"
               style={{
                 borderColor: "#E5E7EB",
                 backgroundColor: selectedId === item.id ? "#EFF6FF" : "transparent",
                 borderLeft: selectedId === item.id ? "3px solid #2563EB" : "3px solid transparent"
               }}
             >
-              <div className="flex items-start gap-2">
-                <div 
-                  className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"
-                  style={{ backgroundColor: statusDotColors[item.status] }}
-                />
-                <div className="flex-1 min-w-0">
-                  <p 
-                    className="text-[13px] font-semibold truncate"
-                    style={{ color: "#1B2B4B" }}
-                  >
-                    {item.title}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <span 
-                      className="px-2 py-0.5 rounded text-[10px] font-medium"
-                      style={{ 
-                        backgroundColor: statusColors[item.status].bg,
-                        color: statusColors[item.status].text
-                      }}
+              {/* Drag Handle */}
+              <div className="pt-1 cursor-grab" title="Trascina per riordinare">
+                <GripVertical size={14} style={{ color: "#D1D5DB" }} />
+              </div>
+              
+              {/* Checkbox */}
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(item.id)}
+                onChange={(e) => {
+                  e.stopPropagation()
+                  handleSelectItem(item.id)
+                }}
+                className="w-4 h-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              
+              <div 
+                className="flex-1 min-w-0"
+                onClick={() => setSelectedId(item.id)}
+              >
+                <div className="flex items-start gap-2">
+                  <div 
+                    className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0"
+                    style={{ backgroundColor: statusDotColors[item.status] }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p 
+                      className="text-[13px] font-semibold truncate"
+                      style={{ color: "#1B2B4B" }}
                     >
-                      {statusColors[item.status].label}
-                    </span>
-                    <span 
-                      className="px-2 py-0.5 rounded text-[10px] font-medium"
-                      style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
-                    >
-                      {item.channel}
-                    </span>
-                    <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
-                      {item.date}
-                    </span>
-                    {item.hasImage && (
-                      <Image size={12} style={{ color: "#7C8CA2" }} />
-                    )}
-                    {item.comments && item.comments > 0 && (
-                      <span className="flex items-center gap-0.5 text-[10px]" style={{ color: "#7C8CA2" }}>
-                        <MessageSquare size={10} />
-                        {item.comments}
+                      {item.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span 
+                        className="px-2 py-0.5 rounded text-[10px] font-medium"
+                        style={{ 
+                          backgroundColor: statusColors[item.status].bg,
+                          color: statusColors[item.status].text
+                        }}
+                      >
+                        {statusColors[item.status].label}
                       </span>
-                    )}
+                      <span 
+                        className="px-2 py-0.5 rounded text-[10px] font-medium"
+                        style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                      >
+                        {item.channel}
+                      </span>
+                      <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                        {item.date}
+                      </span>
+                      {item.hasImage && (
+                        <Image size={12} style={{ color: "#7C8CA2" }} />
+                      )}
+                      {item.comments && item.comments > 0 && (
+                        <span className="flex items-center gap-0.5 text-[10px]" style={{ color: "#7C8CA2" }}>
+                          <MessageSquare size={10} />
+                          {item.comments}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -329,6 +417,56 @@ export function ContentFactory() {
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  {/* Duplicate for other channel */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowDuplicateMenu(!showDuplicateMenu)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
+                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    >
+                      <Copy size={14} />
+                      Duplica per...
+                    </button>
+                    {showDuplicateMenu && (
+                      <div 
+                        className="absolute right-0 top-full mt-1 w-48 rounded-lg border bg-white shadow-lg z-10"
+                        style={{ borderColor: "#E5E7EB" }}
+                      >
+                        <p className="px-3 py-2 text-[10px] uppercase font-medium border-b" style={{ color: "#7C8CA2", borderColor: "#E5E7EB" }}>
+                          Duplica per altro canale
+                        </p>
+                        {duplicateChannels.map(ch => (
+                          <button
+                            key={ch.id}
+                            onClick={() => setShowDuplicateMenu(false)}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-left hover:bg-gray-50 transition-colors"
+                            style={{ color: "#1B2B4B" }}
+                          >
+                            <span 
+                              className="w-5 h-5 rounded text-[9px] font-bold flex items-center justify-center"
+                              style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                            >
+                              {ch.icon}
+                            </span>
+                            {ch.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Previous versions */}
+                  {selectedContent.versions && selectedContent.versions > 1 && (
+                    <button 
+                      onClick={() => setShowVersionsModal(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
+                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    >
+                      <History size={14} />
+                      Versioni ({selectedContent.versions})
+                    </button>
+                  )}
+                  
                   <button 
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
                     style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
@@ -511,7 +649,7 @@ export function ContentFactory() {
                           Coach AI & Strategist | Founder HumanAImpact
                         </p>
                         <p className="text-[11px] mt-0.5" style={{ color: "#999999" }}>
-                          1 g - Modificato - <span className="inline-flex items-center"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></span>
+                          1 g - Modificato - 🌐
                         </p>
                       </div>
                     </div>
@@ -745,6 +883,61 @@ export function ContentFactory() {
           </>
         )}
       </div>
+
+      {/* Versions Modal */}
+      {showVersionsModal && selectedContent && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowVersionsModal(false)}
+        >
+          <div 
+            className="bg-white rounded-xl w-[500px] max-h-[80vh] overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: "#E5E7EB" }}>
+              <h3 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
+                Versioni precedenti
+              </h3>
+              <button 
+                onClick={() => setShowVersionsModal(false)}
+                className="p-1 rounded hover:bg-gray-100"
+              >
+                <X size={18} style={{ color: "#6B7280" }} />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto max-h-[60vh]">
+              {[...Array(selectedContent.versions || 1)].map((_, i) => (
+                <div 
+                  key={i}
+                  className="p-3 rounded-lg border mb-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                  style={{ borderColor: i === 0 ? "#2563EB" : "#E5E7EB", backgroundColor: i === 0 ? "#EFF6FF" : "white" }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                      Versione {(selectedContent.versions || 1) - i}
+                      {i === 0 && <span className="ml-2 text-[10px] px-2 py-0.5 rounded" style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}>Attuale</span>}
+                    </span>
+                    <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                      {i === 0 ? "oggi 08:15" : i === 1 ? "ieri 14:30" : "2 giorni fa"}
+                    </span>
+                  </div>
+                  <p className="text-[12px] line-clamp-2" style={{ color: "#6B7280" }}>
+                    {selectedContent.content?.substring(0, 100)}...
+                  </p>
+                  {i > 0 && (
+                    <button 
+                      className="mt-2 text-[11px] font-medium"
+                      style={{ color: "#2563EB" }}
+                    >
+                      Ripristina questa versione
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
