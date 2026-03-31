@@ -1,19 +1,32 @@
+"use client"
+
+import { useState } from "react"
 import { SidebarNav } from "@/components/sidebar-nav"
+import { HomeBriefing } from "@/components/home-briefing"
 
 export default function Home() {
+  const [activeItem, setActiveItem] = useState("home")
+
+  const handleNavigate = (id: string) => {
+    setActiveItem(id)
+  }
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <SidebarNav />
+      <SidebarNav activeItem={activeItem} onNavigate={handleNavigate} />
 
       {/* Main Content Area */}
-      <main
-        className="flex flex-1 items-center justify-center p-[18px]"
-        style={{ backgroundColor: "#F7F8FA" }}
-      >
-        <p className="text-[14px] text-gray-500">
-          Seleziona una pagina dalla sidebar
-        </p>
+      <main className="flex-1 overflow-hidden" style={{ backgroundColor: "#F7F8FA" }}>
+        {activeItem === "home" ? (
+          <HomeBriefing onNavigate={handleNavigate} />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
+              Pagina &quot;{activeItem}&quot; in costruzione
+            </p>
+          </div>
+        )}
       </main>
     </div>
   )

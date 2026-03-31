@@ -53,8 +53,12 @@ const navSections: NavSection[] = [
   },
 ]
 
-export function SidebarNav() {
-  const [activeItem, setActiveItem] = useState("home")
+interface SidebarNavProps {
+  activeItem: string
+  onNavigate: (id: string) => void
+}
+
+export function SidebarNav({ activeItem, onNavigate }: SidebarNavProps) {
   const [systemOpen, setSystemOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -67,15 +71,15 @@ export function SidebarNav() {
         {/* Logo */}
         <div
           className="p-4"
-          style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.06)" }}
+          style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}
         >
-          <div className="text-[16px]">
+          <div className="text-[18px]">
             <span className="font-bold text-white">HumanAI</span>
-            <span style={{ color: "rgba(255, 255, 255, 0.4)" }}>mpact</span>
+            <span style={{ color: "rgba(255, 255, 255, 0.5)" }}>mpact</span>
           </div>
           <div
-            className="text-[11px]"
-            style={{ color: "rgba(255, 255, 255, 0.25)" }}
+            className="text-[12px]"
+            style={{ color: "rgba(255, 255, 255, 0.4)" }}
           >
             piattaforma operativa
           </div>
@@ -85,27 +89,29 @@ export function SidebarNav() {
         <div className="p-4 pt-3">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 transition-colors"
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 transition-colors"
             style={{
-              border: "1px dashed rgba(255, 255, 255, 0.15)",
+              border: "1px dashed rgba(255, 255, 255, 0.25)",
               backgroundColor: "transparent",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)"
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.45)"
+              e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.03)"
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)"
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.25)"
+              e.currentTarget.style.backgroundColor = "transparent"
             }}
           >
             <span
-              className="text-[12px]"
-              style={{ color: "rgba(255, 255, 255, 0.4)" }}
+              className="text-[14px] font-medium"
+              style={{ color: "rgba(255, 255, 255, 0.6)" }}
             >
               +
             </span>
             <span
-              className="text-[12px]"
-              style={{ color: "rgba(255, 255, 255, 0.4)" }}
+              className="text-[13px]"
+              style={{ color: "rgba(255, 255, 255, 0.6)" }}
             >
               Cattura idea...
             </span>
@@ -121,29 +127,29 @@ export function SidebarNav() {
                   {section.collapsible ? (
                     <button
                       onClick={() => setSystemOpen(!systemOpen)}
-                      className="flex w-full items-center justify-between px-[14px] pb-[2px] pt-[10px]"
+                      className="flex w-full items-center justify-between px-[14px] pb-[4px] pt-[14px]"
                       style={{
-                        color: "rgba(255, 255, 255, 0.25)",
-                        fontSize: "9px",
-                        fontWeight: "bold",
+                        color: "rgba(255, 255, 255, 0.45)",
+                        fontSize: "10px",
+                        fontWeight: 600,
                         textTransform: "uppercase",
                         letterSpacing: "1.2px",
                       }}
                     >
                       <span>{section.title}</span>
                       {systemOpen ? (
-                        <ChevronDown className="h-3 w-3" />
+                        <ChevronDown className="h-3.5 w-3.5" />
                       ) : (
-                        <ChevronRight className="h-3 w-3" />
+                        <ChevronRight className="h-3.5 w-3.5" />
                       )}
                     </button>
                   ) : (
                     <div
-                      className="px-[14px] pb-[2px] pt-[10px]"
+                      className="px-[14px] pb-[4px] pt-[14px]"
                       style={{
-                        color: "rgba(255, 255, 255, 0.25)",
-                        fontSize: "9px",
-                        fontWeight: "bold",
+                        color: "rgba(255, 255, 255, 0.45)",
+                        fontSize: "10px",
+                        fontWeight: 600,
                         textTransform: "uppercase",
                         letterSpacing: "1.2px",
                       }}
@@ -159,41 +165,41 @@ export function SidebarNav() {
                 section.items.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveItem(item.id)}
-                    className="flex w-full items-center px-[14px] py-[7px] transition-colors"
+                    onClick={() => onNavigate(item.id)}
+                    className="flex w-full items-center px-[14px] py-[9px] transition-colors"
                     style={{
                       backgroundColor:
-                        activeItem === item.id
-                          ? "#2563EB"
-                          : "transparent",
+                        activeItem === item.id ? "#2563EB" : "transparent",
                       color:
                         activeItem === item.id
                           ? "rgba(255, 255, 255, 1)"
-                          : "rgba(255, 255, 255, 0.55)",
-                      fontSize: "12.5px",
+                          : "rgba(255, 255, 255, 0.75)",
+                      fontSize: "14px",
                     }}
                     onMouseEnter={(e) => {
                       if (activeItem !== item.id) {
                         e.currentTarget.style.backgroundColor =
-                          "rgba(255, 255, 255, 0.05)"
+                          "rgba(255, 255, 255, 0.07)"
+                        e.currentTarget.style.color = "rgba(255, 255, 255, 0.95)"
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (activeItem !== item.id) {
                         e.currentTarget.style.backgroundColor = "transparent"
+                        e.currentTarget.style.color = "rgba(255, 255, 255, 0.75)"
                       }
                     }}
                   >
                     <span
-                      className="w-[18px] text-center"
-                      style={{ marginRight: "8px" }}
+                      className="w-[22px] text-center"
+                      style={{ marginRight: "10px", fontSize: "15px" }}
                     >
                       {item.emoji}
                     </span>
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.badge && (
                       <span
-                        className="rounded-[7px] px-[5px] py-[1px] text-[8px] font-bold text-white"
+                        className="rounded-[8px] px-[6px] py-[2px] text-[10px] font-bold text-white"
                         style={{ backgroundColor: "#DC2626" }}
                       >
                         {item.badge}
@@ -207,25 +213,25 @@ export function SidebarNav() {
 
         {/* Footer */}
         <div
-          className="flex items-center gap-3 px-[14px] py-[12px]"
-          style={{ borderTop: "1px solid rgba(255, 255, 255, 0.06)" }}
+          className="flex items-center gap-3 px-[14px] py-[14px]"
+          style={{ borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}
         >
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[12px] font-bold text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-bold text-white"
             style={{ backgroundColor: "#2563EB" }}
           >
             EC
           </div>
           <div className="flex flex-col">
             <span
-              className="text-[12px]"
-              style={{ color: "rgba(255, 255, 255, 0.6)" }}
+              className="text-[13px] font-medium"
+              style={{ color: "rgba(255, 255, 255, 0.85)" }}
             >
               Emanuele Casero
             </span>
             <span
-              className="text-[10px]"
-              style={{ color: "rgba(255, 255, 255, 0.3)" }}
+              className="text-[11px]"
+              style={{ color: "rgba(255, 255, 255, 0.45)" }}
             >
               HumanAImpact
             </span>
