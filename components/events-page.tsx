@@ -106,6 +106,7 @@ export function EventsPage() {
     { id: "promozione", label: "Promozione" },
     { id: "post-evento", label: "Post-evento" },
     { id: "logistica", label: "Logistica" },
+    { id: "progettazione", label: "Progettazione" },
   ]
 
   const isCritical = selectedEvent.fillRate < 40 && parseInt(selectedEvent.countdown.replace("D-", "")) < 20
@@ -1034,6 +1035,74 @@ export function EventsPage() {
                 <Upload className="h-4 w-4" />
                 Carica materiale
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Progettazione Tab */}
+        {activeTab === "progettazione" && (
+          <div className="space-y-6">
+            <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}>
+              <h3 className="mb-4 text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
+                Modalità progettazione
+              </h3>
+              <p className="text-[13px] mb-6" style={{ color: "#7C8CA2" }}>
+                Lo Strategist ti guida nella pianificazione strutturata dell'evento. Rispondi alle domande seguenti per definire il concept, il messaggio e i KPI dell'evento.
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  { label: "Obiettivo primario dell'evento", placeholder: "Es: Acquisire 20 nuovi contatti qualificati", section: "concept" },
+                  { label: "Pubblico target", placeholder: "Es: CTOe CIO di aziende 50-500 dipendenti", section: "concept" },
+                  { label: "Messaggio chiave", placeholder: "Es: AI come amplificatore di potenziale umano", section: "concept" },
+                  { label: "KPI di successo", placeholder: "Es: 30 registrazioni, 80% fill rate, 5 deal da contatti", section: "kpi" },
+                ].map((field, idx) => (
+                  <div key={idx}>
+                    <label className="block text-[12px] font-medium mb-2" style={{ color: "#1B2B4B" }}>
+                      {field.label}
+                    </label>
+                    <textarea
+                      placeholder={field.placeholder}
+                      rows={2}
+                      className="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style={{ borderColor: "#E5E7EB" }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <button
+                  className="flex-1 px-4 py-2 rounded-lg text-white font-medium"
+                  style={{ backgroundColor: "#2563EB" }}
+                >
+                  Genera piano dettagliato con Strategist
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg border font-medium"
+                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                >
+                  Salva bozza
+                </button>
+              </div>
+            </div>
+
+            {/* Generated Plan */}
+            <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB" }}>
+              <h3 className="mb-4 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
+                Piano generato dallo Strategist
+              </h3>
+              <div className="space-y-3 text-[13px]" style={{ color: "#7C8CA2" }}>
+                <p>
+                  <strong style={{ color: "#1B2B4B" }}>Fasi proposte:</strong> 1) Teaser 2 settimane prima, 2) Email sequenze personalizzate, 3) Post LinkedIn con testimonial, 4) Reminder 48h, 5) Follow-up post-evento
+                </p>
+                <p>
+                  <strong style={{ color: "#1B2B4B" }}>Budget stimato:</strong> CHF 2'500 (location, catering, tech, promo)
+                </p>
+                <p>
+                  <strong style={{ color: "#1B2B4B" }}>Timeline critica:</strong> Annuncio lunedì, iscrizioni fino a giovedì, invio agenda venerdì
+                </p>
+              </div>
             </div>
           </div>
         )}

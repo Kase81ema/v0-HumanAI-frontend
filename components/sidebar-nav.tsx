@@ -29,8 +29,9 @@ const navSections: NavSection[] = [
   {
     title: "CONTENUTI",
     items: [
-      { emoji: "✏️", label: "Content Factory", id: "content" },
-      { emoji: "📅", label: "Piano editoriale", id: "editorial" },
+      { emoji: "✨", label: "Content Studio", id: "content-studio" },
+      { emoji: "🔍", label: "Deep Research", id: "deep-research" },
+      { emoji: "📅", label: "Planner", id: "planner" },
       { emoji: "✓", label: "Approvazione", badge: 3, id: "approval" },
     ],
   },

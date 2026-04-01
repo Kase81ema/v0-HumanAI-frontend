@@ -4,7 +4,9 @@ import { useState } from "react"
 import { SidebarNav } from "@/components/sidebar-nav"
 import { HomeBriefing } from "@/components/home-briefing"
 import { CommandCenter } from "@/components/command-center"
-import { ContentFactory } from "@/components/content-factory"
+import { ContentStudio } from "@/components/content-studio"
+import { DeepResearch } from "@/components/deep-research"
+import { Planner } from "@/components/planner"
 import { ApprovalPage } from "@/components/approval-page"
 import { CrmPage } from "@/components/crm-page"
 import { EventsPage } from "@/components/events-page"
@@ -34,8 +36,12 @@ export default function Home() {
           <HomeBriefing onNavigate={handleNavigate} />
         ) : activeItem === "command" ? (
           <CommandCenter />
-        ) : activeItem === "content" ? (
-          <ContentFactory />
+        ) : activeItem === "content-studio" ? (
+          <ContentStudio />
+        ) : activeItem === "deep-research" ? (
+          <DeepResearch />
+        ) : activeItem === "planner" ? (
+          <Planner />
         ) : activeItem === "approval" ? (
           <ApprovalPage />
         ) : activeItem === "crm" ? (
