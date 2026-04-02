@@ -87,10 +87,10 @@ export function DeepResearch() {
       <div className="border-b px-6 py-4" style={{ borderColor: "#E5E7EB" }}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-[22px] font-bold" style={{ color: "#1B2B4B" }}>
+            <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
               Deep Research
             </h1>
-            <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
+            <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
               Raccogli e organizza ricerche di mercato, competitor e trend
             </p>
           </div>

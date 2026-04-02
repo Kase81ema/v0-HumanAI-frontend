@@ -34,25 +34,22 @@ export function Planner() {
   return (
     <div className="flex h-full flex-col overflow-hidden" style={{ backgroundColor: "var(--color-bg-primary)" }}>
       {/* Header */}
-      <div className="border-b px-8 py-6" style={{ borderColor: "var(--color-border)" }}>
+      <div className="border-b px-6 py-4" style={{ borderColor: "var(--color-border)" }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-6xl font-bold" style={{ color: "var(--color-text-primary)" }}>
+            <h1 className="text-xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
               Planner
             </h1>
-            <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
+            <p className="text-sm mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
               Sequenze email e comunicazioni programmate
             </p>
           </div>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-            style={{ 
-              backgroundColor: "var(--color-primary)",
-              boxShadow: "var(--shadow-md)"
-            }}
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+            style={{ backgroundColor: "var(--color-primary)" }}
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4" />
             Nuova sequenza
           </button>
         </div>
@@ -86,24 +83,24 @@ export function Planner() {
           <>
             {mockSequences.length === 0 ? (
               /* Empty State with Guided Onboarding */
-              <div className="flex h-full flex-col items-center justify-center py-24 text-center">
+              <div className="flex h-full flex-col items-center justify-center py-12 text-center">
                 <div
-                  className="mb-8 flex h-24 w-24 items-center justify-center rounded-lg"
+                  className="mb-5 flex h-16 w-16 items-center justify-center rounded-lg"
                   style={{ backgroundColor: "var(--color-primary-light)" }}
                 >
-                  <Mail className="h-12 w-12" style={{ color: "var(--color-primary)" }} />
+                  <Mail className="h-8 w-8" style={{ color: "var(--color-primary)" }} />
                 </div>
 
-                <h2 className="text-4xl font-bold mb-3" style={{ color: "var(--color-text-primary)" }}>
+                <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--color-text-primary)" }}>
                   Nessuna sequenza ancora
                 </h2>
 
-                <p className="text-lg mb-8 max-w-xl" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="text-sm mb-6 max-w-md" style={{ color: "var(--color-text-secondary)" }}>
                   Crea la tua prima sequenza email automatica. Guida i tuoi contatti attraverso un percorso personalizzato con trigger intelligenti.
                 </p>
 
                 {/* Feature Cards */}
-                <div className="mb-12 grid grid-cols-3 gap-6 w-full max-w-2xl">
+                <div className="mb-8 grid grid-cols-3 gap-4 w-full max-w-xl">
                   {[
                     {
                       icon: Zap,

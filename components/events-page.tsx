@@ -419,27 +419,27 @@ export function EventsPage() {
 
             {/* Metrics Cards */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da LinkedIn
                 </p>
-                <p className="text-[24px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
                   3
                 </p>
               </div>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da Email
                 </p>
-                <p className="text-[24px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
                   2
                 </p>
               </div>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
-                <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Diretti
                 </p>
-                <p className="text-[24px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
                   2
                 </p>
               </div>

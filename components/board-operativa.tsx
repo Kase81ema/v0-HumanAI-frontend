@@ -257,28 +257,30 @@ export function BoardOperativa() {
     <div className="flex h-full">
       {/* Lista processi */}
       <div
-        className="flex h-full w-[360px] flex-col border-r"
+        className="flex h-full w-[300px] flex-col border-r"
         style={{ borderColor: "var(--color-border)" }}
       >
-        <div className="p-6 border-b" style={{ borderColor: "var(--color-border)" }}>
-          <div className="mb-3">
-            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
-              Board Operativa
-            </h2>
-            <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
-              4 processi · 1 in attesa
-            </p>
+        <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-semibold" style={{ color: "var(--color-text-primary)" }}>
+                Board Operativa
+              </h2>
+              <p className="text-xs mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
+                4 processi · 1 in attesa
+              </p>
+            </div>
+            <button
+              className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90"
+              style={{ backgroundColor: "var(--color-primary)" }}
+            >
+              + Nuovo
+            </button>
           </div>
-          <button
-            className="w-full py-3 rounded-lg text-base font-semibold text-white transition-all hover:opacity-90"
-            style={{ backgroundColor: "var(--color-primary)" }}
-          >
-            + Nuova situazione
-          </button>
         </div>
 
         {/* Filtri */}
-        <div className="flex gap-2 overflow-x-auto px-6 py-4 border-b" style={{ borderColor: "var(--color-border)" }}>
+        <div className="flex gap-2 overflow-x-auto px-4 py-3 border-b" style={{ borderColor: "var(--color-border)" }}>
           {filters.map((f) => (
             <button
               key={f.id}
@@ -373,14 +375,14 @@ export function BoardOperativa() {
       {/* Dettaglio processo */}
       <div className="flex flex-1 flex-col overflow-hidden" style={{ backgroundColor: "var(--color-bg-primary)" }}>
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-8 py-6" style={{ borderColor: "var(--color-border)" }}>
+        <div className="flex items-center justify-between border-b px-6 py-4" style={{ borderColor: "var(--color-border)" }}>
           <div>
-            <div className="mb-3 flex items-center gap-3">
-              <h1 className="text-3xl font-bold" style={{ color: "var(--color-text-primary)" }}>
+            <div className="mb-2 flex items-center gap-2">
+              <h1 className="text-base font-semibold" style={{ color: "var(--color-text-primary)" }}>
                 {selectedProcess.title}
               </h1>
               <span
-                className="rounded px-3 py-1 text-sm font-medium"
+                className="rounded px-2 py-0.5 text-xs font-medium"
                 style={{
                   backgroundColor: statusConfig[selectedProcess.status].bgColor,
                   color: statusConfig[selectedProcess.status].color,
@@ -390,16 +392,16 @@ export function BoardOperativa() {
               </span>
               {selectedProcess.urgent && (
                 <span
-                  className="rounded px-3 py-1 text-sm font-bold text-white"
+                  className="rounded px-2 py-0.5 text-xs font-semibold text-white"
                   style={{ backgroundColor: "#DC2626" }}
                 >
-                  Priorita alta
+                  Urgente
                 </span>
               )}
             </div>
             {/* Progress bar */}
-            <div className="flex items-center gap-4">
-              <div className="h-3 w-64 overflow-hidden rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
+            <div className="flex items-center gap-3">
+              <div className="h-2 w-48 overflow-hidden rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
@@ -408,44 +410,44 @@ export function BoardOperativa() {
                   }}
                 />
               </div>
-              <span className="text-base" style={{ color: "var(--color-text-secondary)" }}>
-                {selectedProcess.progress} di {selectedProcess.totalSteps} step completati
+              <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                {selectedProcess.progress} di {selectedProcess.totalSteps} step
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {selectedProcess.status === "draft" && (
               <button
-                className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white"
+                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white"
                 style={{ backgroundColor: "var(--color-primary)" }}
               >
-                <Play className="h-5 w-5" /> Avvia
+                <Play className="h-4 w-4" /> Avvia
               </button>
             )}
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="rounded-lg border p-3 transition-colors hover:bg-gray-100"
+                className="rounded-lg border p-2 transition-colors hover:bg-gray-100"
                 style={{ borderColor: "var(--color-border)" }}
               >
-                <MoreHorizontal className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
+                <MoreHorizontal className="h-4 w-4" style={{ color: "var(--color-text-secondary)" }} />
               </button>
               {showMenu && (
                 <div
-                  className="absolute right-0 top-full z-10 mt-2 w-64 rounded-lg border bg-white py-1 shadow-lg"
+                  className="absolute right-0 top-full z-10 mt-1 w-48 rounded-lg border bg-white py-1 shadow-lg"
                   style={{ borderColor: "var(--color-border)" }}
                 >
-                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base hover:bg-gray-50">
-                    <Copy className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
+                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50">
+                    <Copy className="h-4 w-4" style={{ color: "var(--color-text-secondary)" }} />
                     Duplica processo
                   </button>
-                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base hover:bg-gray-50">
-                    <Bookmark className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
+                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50">
+                    <Bookmark className="h-4 w-4" style={{ color: "var(--color-text-secondary)" }} />
                     Salva come template
                   </button>
-                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base text-red-600 hover:bg-red-50">
-                    <Trash2 className="h-5 w-5" />
+                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50">
+                    <Trash2 className="h-4 w-4" />
                     Annulla processo
                   </button>
                 </div>
@@ -455,8 +457,8 @@ export function BoardOperativa() {
         </div>
 
         {/* Timeline degli step */}
-        <div className="flex-1 overflow-y-auto p-8">
-          <div className="relative pl-10">
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="relative pl-8">
             {/* Vertical line */}
             <div
               className="absolute bottom-0 left-3 top-0 w-1"

@@ -536,10 +536,10 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               {selectedContact.initials}
             </div>
             <div>
-              <h1 className="text-[22px] font-bold" style={{ color: "#1B2B4B" }}>
+              <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                 {selectedContact.name}
               </h1>
-              <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
+              <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
                 {selectedContact.role}
               </p>
               <button className="text-[14px] hover:underline" style={{ color: "#2563EB" }}>

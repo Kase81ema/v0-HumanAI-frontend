@@ -138,14 +138,14 @@ export function ContentStudio() {
 
   if (viewMode === "wizard") {
     return (
-      <div className="flex h-full flex-col p-8" style={{ backgroundColor: "var(--color-bg-primary)" }}>
+      <div className="flex h-full flex-col p-6" style={{ backgroundColor: "var(--color-bg-primary)" }}>
         {/* Header with close button */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold" style={{ color: "var(--color-text-primary)" }}>
+            <h1 className="text-xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
               Crea nuovo contenuto
             </h1>
-            <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
+            <p className="text-sm mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
               Step {wizardStep} di 3
             </p>
           </div>
@@ -435,26 +435,23 @@ export function ContentStudio() {
 
   // LIST VIEW (default)
   return (
-    <div className="flex h-full flex-col p-8" style={{ backgroundColor: "var(--color-bg-primary)" }}>
+    <div className="flex h-full flex-col p-6" style={{ backgroundColor: "var(--color-bg-primary)" }}>
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold" style={{ color: "var(--color-text-primary)" }}>
+          <h1 className="text-xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
             Content Studio
           </h1>
-          <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
-            Gestisci e monitora tutti i tuoi contenuti in un'unica dashboard
+          <p className="text-sm mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
+            Gestisci e monitora tutti i tuoi contenuti
           </p>
         </div>
         <button
           onClick={() => setViewMode("wizard")}
-          className="px-6 py-3 rounded-lg text-white font-semibold transition-all hover:opacity-90 active:scale-95 flex items-center gap-2"
-          style={{
-            backgroundColor: "var(--color-primary)",
-            height: "var(--input-height)"
-          }}
+          className="px-4 py-2 rounded-lg text-white text-sm font-semibold transition-all hover:opacity-90 flex items-center gap-2"
+          style={{ backgroundColor: "var(--color-primary)" }}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-4 w-4" />
           Nuovo contenuto
         </button>
       </div>

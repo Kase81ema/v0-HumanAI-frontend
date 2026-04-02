@@ -206,33 +206,32 @@ interface HomeBriefingProps {
 
 export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
   return (
-    <div className="flex h-full gap-8 overflow-auto p-8" style={{ backgroundColor: "var(--color-bg-primary)" }}>
+    <div className="flex h-full gap-6 overflow-auto p-6" style={{ backgroundColor: "var(--color-bg-primary)" }}>
       {/* Main Column - 70% */}
-      <div className="flex w-[70%] flex-col gap-8">
+      <div className="flex w-[70%] flex-col gap-6">
         {/* Section 1 - Greeting with Project Selector */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <div>
             <h1
-              className="text-6xl font-bold"
+              className="text-xl font-semibold"
               style={{ color: "var(--color-text-primary)" }}
             >
               Buongiorno Emanuele
             </h1>
-            <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
-              Martedi 1 aprile - 3 azioni urgenti - 3 contenuti da approvare
+            <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+              Martedi 1 aprile · 3 azioni urgenti · 3 contenuti da approvare
             </p>
           </div>
           {/* Project Selector */}
           <button 
-            className="flex items-center gap-2 px-4 py-3 rounded-lg border text-base font-medium transition-colors hover:bg-gray-100"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors hover:bg-gray-100"
             style={{ 
               borderColor: "var(--color-border)",
-              color: "var(--color-text-primary)",
-              height: "var(--input-height)"
+              color: "var(--color-text-primary)"
             }}
           >
             Progetto: HumanAImpact
-            <ChevronDown className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
+            <ChevronDown className="h-4 w-4" style={{ color: "var(--color-text-secondary)" }} />
           </button>
         </div>
 
@@ -278,12 +277,12 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
         {/* Section 3 - KPIs */}
         <div>
           <h2
-            className="text-sm font-semibold uppercase tracking-wider mb-6"
+            className="text-xs font-semibold uppercase tracking-wider mb-4"
             style={{ color: "var(--color-text-secondary)" }}
           >
             Indicatori e soglie di crescita
           </h2>
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-4 gap-4">
             {kpis.map((kpi, index) => {
               const percentage = Math.round((kpi.current / kpi.target) * 100)
               const barColor =
@@ -296,15 +295,15 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
               return (
                 <div
                   key={index}
-                  className="rounded-lg bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+                  className="rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition-shadow"
                   style={{ border: "1px solid var(--color-border)" }}
                 >
                   <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                     {kpi.label}
                   </p>
-                  <div className="mt-3 flex items-baseline gap-3">
+                  <div className="mt-2 flex items-baseline gap-2">
                     <span
-                      className="text-5xl font-bold"
+                      className="text-2xl font-bold"
                       style={{ color: "var(--color-text-primary)" }}
                     >
                       {kpi.value}
@@ -415,15 +414,15 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
       </div>
 
       {/* Right Column - 30% */}
-      <div className="flex w-[30%] flex-col gap-6">
+      <div className="flex w-[30%] flex-col gap-4">
         {/* Card 1 - Upcoming Events */}
         <div
-          className="rounded-lg bg-white p-6 shadow-sm"
+          className="rounded-lg bg-white p-4 shadow-sm"
           style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h3
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: "var(--color-text-secondary)" }}
             >
               Eventi prossimi
@@ -504,12 +503,12 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Card 2 - Hot Contacts */}
         <div
-          className="rounded-lg bg-white p-6 shadow-sm"
+          className="rounded-lg bg-white p-4 shadow-sm"
           style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h3
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: "var(--color-text-secondary)" }}
             >
               Contatti caldi
@@ -562,12 +561,12 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Card 3 - Content to Approve (moved from main column) */}
         <div
-          className="rounded-lg bg-white p-6 shadow-sm"
+          className="rounded-lg bg-white p-4 shadow-sm"
           style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h3
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: "var(--color-text-secondary)" }}
             >
               Da approvare
@@ -617,12 +616,12 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Card 4 - Active Processes */}
         <div
-          className="rounded-lg bg-white p-6 shadow-sm"
+          className="rounded-lg bg-white p-4 shadow-sm"
           style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between">
             <h3
-              className="text-sm font-semibold uppercase tracking-wider"
+              className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: "var(--color-text-secondary)" }}
             >
               Processi attivi
