@@ -242,7 +242,7 @@ export function EventsPage() {
       </div>
 
       {/* Right Panel - Event Detail */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6 max-w-3xl">
         {/* Event Header */}
         <div className="mb-6 flex items-start justify-between">
           <div>
@@ -260,7 +260,7 @@ export function EventsPage() {
                 {selectedEvent.countdown}
               </span>
             </div>
-            <h1 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+            <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
               {selectedEvent.name}
             </h1>
             <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
@@ -423,7 +423,7 @@ export function EventsPage() {
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da LinkedIn
                 </p>
-                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
                   3
                 </p>
               </div>
@@ -431,7 +431,7 @@ export function EventsPage() {
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da Email
                 </p>
-                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
                   2
                 </p>
               </div>
@@ -439,7 +439,7 @@ export function EventsPage() {
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Diretti
                 </p>
-                <p className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+                <p className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
                   2
                 </p>
               </div>

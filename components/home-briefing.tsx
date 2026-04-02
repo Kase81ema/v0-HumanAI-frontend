@@ -207,8 +207,8 @@ interface HomeBriefingProps {
 export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
   return (
     <div className="flex h-full gap-6 overflow-auto p-6" style={{ backgroundColor: "var(--color-bg-primary)" }}>
-      {/* Main Column - 70% */}
-      <div className="flex w-[70%] flex-col gap-6">
+      {/* Main Column - constrained width */}
+      <div className="flex flex-col gap-6 max-w-3xl flex-1">
         {/* Section 1 - Greeting with Project Selector */}
         <div className="flex items-center justify-between">
           <div>
@@ -413,8 +413,8 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
         </div>
       </div>
 
-      {/* Right Column - 30% */}
-      <div className="flex w-[30%] flex-col gap-4">
+      {/* Right Column - sidebar */}
+      <div className="flex w-[320px] flex-shrink-0 flex-col gap-4">
         {/* Card 1 - Upcoming Events */}
         <div
           className="rounded-lg bg-white p-4 shadow-sm"

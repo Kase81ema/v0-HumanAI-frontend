@@ -1,5 +1,22 @@
 @import 'tailwindcss';
 
+@theme inline {
+  /* shadcn semantic colors */
+  --color-background: #FFFFFF;
+  --color-foreground: #1B2B4B;
+  --color-muted: #F3F4F6;
+  --color-muted-foreground: #7C8CA2;
+  --color-accent: #DBEAFE;
+  --color-accent-foreground: #2563EB;
+  --color-border: #E5E7EB;
+  --color-input: #E5E7EB;
+  --color-ring: #2563EB;
+  --color-primary: #2563EB;
+  --color-primary-foreground: #FFFFFF;
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: #FFFFFF;
+}
+
 :root {
   /* Brand Colors */
   --color-primary: #2563EB;

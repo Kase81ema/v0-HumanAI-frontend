@@ -515,7 +515,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
 
   if (view === "profile" && selectedContact) {
     return (
-      <div className="h-full overflow-y-auto p-6">
+      <div className="h-full overflow-y-auto p-6 max-w-4xl">
         {/* Breadcrumb */}
         <button
           onClick={() => setView("list")}
@@ -1088,7 +1088,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+          <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
             Contatti & CRM
           </h1>
           <p className="text-[13px]" style={{ color: "#7C8CA2" }}>

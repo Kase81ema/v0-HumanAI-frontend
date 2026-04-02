@@ -323,7 +323,7 @@ export function TeamAgenti() {
           <>
             {/* Header */}
             <div className="mb-6">
-              <h1 className="mb-2 text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+              <h1 className="mb-1 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Team Agenti
               </h1>
               <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -380,7 +380,7 @@ export function TeamAgenti() {
 
                       <div className="flex items-center gap-3">
                         <span
-                          className="text-[20px] font-bold"
+                          className="text-[16px] font-semibold"
                           style={{ color: getScoreColor(agent.score) }}
                         >
                           {agent.score}
@@ -497,7 +497,7 @@ export function TeamAgenti() {
           <div className="mx-auto max-w-[700px]">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="mb-3 text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+              <h1 className="mb-2 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Orientamento strategico
               </h1>
               <p className="text-[14px] leading-relaxed" style={{ color: "#7C8CA2" }}>

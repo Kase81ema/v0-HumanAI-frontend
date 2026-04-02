@@ -78,7 +78,7 @@ export function Planner() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto p-8">
+      <div className="flex-1 overflow-auto p-6 max-w-4xl">
         {activeTab === "sequences" && (
           <>
             {mockSequences.length === 0 ? (

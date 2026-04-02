@@ -138,7 +138,7 @@ export function ProgettoTimeline() {
     <div className="h-full overflow-y-auto p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="mb-2 text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+        <h1 className="mb-1 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
           Progetto HumanAImpact — Piano Anno 1
         </h1>
         <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -234,7 +234,7 @@ export function ProgettoTimeline() {
                 </div>
                 {phase.progress > 0 && (
                   <span
-                    className="text-[20px] font-bold"
+                    className="text-[16px] font-bold"
                     style={{ color: phase.progress >= 80 ? "#16A34A" : "#2563EB" }}
                   >
                     {phase.progress}%

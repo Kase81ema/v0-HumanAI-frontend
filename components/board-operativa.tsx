@@ -458,7 +458,7 @@ export function BoardOperativa() {
 
         {/* Timeline degli step */}
         <div className="flex-1 overflow-y-auto p-6">
-          <div className="relative pl-8">
+          <div className="relative pl-8 max-w-2xl">
             {/* Vertical line */}
             <div
               className="absolute bottom-0 left-3 top-0 w-1"

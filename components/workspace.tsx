@@ -276,7 +276,7 @@ export function Workspace() {
           {activeSection === "identity" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                   Identità del progetto
                 </h2>
                 <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -562,7 +562,7 @@ export function Workspace() {
           {activeSection === "brand" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                   Brand & identità visiva
                 </h2>
                 <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -777,7 +777,7 @@ export function Workspace() {
           {activeSection === "channels" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                   Canali e profili collegati
                 </h2>
                 <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -924,7 +924,7 @@ export function Workspace() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                  <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                     Prodotti e servizi
                   </h2>
                   <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -988,7 +988,7 @@ export function Workspace() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                  <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                     Knowledge Base
                   </h2>
                   <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -1087,7 +1087,7 @@ export function Workspace() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                  <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                     Rubriche editoriali
                   </h2>
                   <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>
@@ -1156,7 +1156,7 @@ export function Workspace() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-[20px] font-bold" style={{ color: "#1B2B4B" }}>
+                  <h2 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                     Team e collaboratori
                   </h2>
                   <p className="mt-1 text-[13px]" style={{ color: "#7C8CA2" }}>

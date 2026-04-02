@@ -325,14 +325,14 @@ export function PipelinePage() {
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+            <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
               Pipeline vendite
             </h1>
             {/* NEW: Prominent Pipeline Value */}
             <div className="mt-1 flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-[13px]" style={{ color: "#7C8CA2" }}>Pipeline:</span>
-                <span className="text-[20px] font-bold" style={{ color: "#059669" }}>
+                <span className="text-[16px] font-bold" style={{ color: "#059669" }}>
                   CHF {totalPipeline.toLocaleString("it-CH")}
                 </span>
               </div>

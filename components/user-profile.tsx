@@ -81,7 +81,7 @@ export function UserProfile() {
         className="px-8 py-6"
         style={{ borderBottom: "1px solid #E5E7EB" }}
       >
-        <h1 className="text-[24px] font-semibold" style={{ color: "#1A1F36" }}>
+        <h1 className="text-[16px] font-semibold" style={{ color: "#1A1F36" }}>
           Profilo Utente
         </h1>
         <p className="mt-1 text-[14px]" style={{ color: "#7C8CA2" }}>
@@ -121,7 +121,7 @@ export function UserProfile() {
                     type="text"
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="mb-1 rounded-lg border px-3 py-1.5 text-[20px] font-semibold"
+                    className="mb-1 rounded-lg border px-3 py-1.5 text-[16px] font-semibold"
                     style={{ 
                       color: "#1A1F36", 
                       borderColor: "#E5E7EB",
@@ -129,7 +129,7 @@ export function UserProfile() {
                     }}
                   />
                 ) : (
-                  <h2 className="text-[20px] font-semibold" style={{ color: "#1A1F36" }}>
+                  <h2 className="text-[16px] font-semibold" style={{ color: "#1A1F36" }}>
                     {profile.name}
                   </h2>
                 )}

@@ -373,7 +373,7 @@ export function CommandCenter() {
                   style={{ backgroundColor: "#FEF2F2" }}
                 >
                   <p
-                    className="text-[20px] font-bold"
+                    className="text-[16px] font-bold"
                     style={{ color: "#DC2626" }}
                   >
                     7/25
@@ -387,7 +387,7 @@ export function CommandCenter() {
                   style={{ backgroundColor: "#FEF2F2" }}
                 >
                   <p
-                    className="text-[20px] font-bold"
+                    className="text-[16px] font-bold"
                     style={{ color: "#DC2626" }}
                   >
                     28%
@@ -401,7 +401,7 @@ export function CommandCenter() {
                   style={{ backgroundColor: "#F3F4F6" }}
                 >
                   <p
-                    className="text-[20px] font-bold"
+                    className="text-[16px] font-bold"
                     style={{ color: "#1B2B4B" }}
                   >
                     D-15

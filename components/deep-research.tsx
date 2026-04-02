@@ -132,7 +132,7 @@ export function DeepResearch() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         {activeTab === "topics" ? (
-          <div className="p-6 max-w-6xl">
+          <div className="p-6 max-w-3xl">
             {/* Filter */}
             <div className="mb-6">
               <div className="relative">
@@ -202,7 +202,7 @@ export function DeepResearch() {
             {/* Selected Topic Details */}
             {selectedTopic && (
               <div className="mt-8 border-t pt-8" style={{ borderColor: "#E5E7EB" }}>
-                <h2 className="text-[18px] font-bold mb-4" style={{ color: "#1B2B4B" }}>
+                <h2 className="text-[15px] font-semibold mb-3" style={{ color: "#1B2B4B" }}>
                   {selectedTopic.title}
                 </h2>
 

@@ -181,7 +181,7 @@ export function PianoEditoriale() {
       {/* Header */}
       <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
         <div>
-          <h1 className="mb-1 text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+          <h1 className="mb-1 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
             Piano editoriale — Settimana 15
           </h1>
           <p className="text-[13px]" style={{ color: "#7C8CA2" }}>

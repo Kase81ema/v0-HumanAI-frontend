@@ -138,7 +138,7 @@ export function Orientamento() {
       <div className="w-full max-w-[700px]">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-3 text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+          <h1 className="mb-2 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
             Orientamento strategico
           </h1>
           <p className="text-[14px] leading-relaxed" style={{ color: "#7C8CA2" }}>
