@@ -855,7 +855,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
           {activeTab === "opportunita" && (
             <div className="space-y-6">
               {selectedContact.dealValue && (
-                <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                       Deal attivo
@@ -910,14 +910,14 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   Prodotti suggeriti
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <p className="text-[14px] font-medium" style={{ color: "#1B2B4B" }}>Workshop AI & Leadership</p>
                     <p className="text-[13px]" style={{ color: "#059669" }}>CHF 3&apos;500</p>
                     <p className="mt-2 text-[12px]" style={{ color: "#7C8CA2" }}>
                       Match: ha espresso interesse per formazione team durante la call
                     </p>
                   </div>
-                  <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <p className="text-[14px] font-medium" style={{ color: "#1B2B4B" }}>Coaching Individuale CEO</p>
                     <p className="text-[13px]" style={{ color: "#059669" }}>CHF 8&apos;000</p>
                     <p className="mt-2 text-[12px]" style={{ color: "#7C8CA2" }}>
@@ -931,7 +931,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
 
           {activeTab === "sequenze" && (
             <div className="space-y-4">
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span
@@ -995,7 +995,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
 
           {activeTab === "connessioni" && (
             <div className="space-y-4">
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
                   Presentato da
                 </h3>
@@ -1022,7 +1022,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   Contatti correlati (stessa azienda/settore)
                 </h3>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-gray-50" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm transition-colors hover:bg-gray-50" style={{ borderColor: "var(--color-border)" }}>
                     <div className="flex items-center gap-3">
                       <div
                         className="flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold text-white"
@@ -1063,7 +1063,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               </button>
 
               <div className="mt-6 space-y-3">
-                <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+                <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                   <p className="text-[14px]" style={{ color: "#1B2B4B" }}>
                     Molto interessata al coaching team. Ha menzionato che il CEO è favorevole.
                     Budget già allocato per Q2.

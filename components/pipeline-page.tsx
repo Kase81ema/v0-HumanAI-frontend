@@ -577,7 +577,7 @@ export function PipelinePage() {
               <h3 className="mb-3 text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
                 Contatto
               </h3>
-              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center gap-3">
                   <div
                     className="flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-bold text-white"

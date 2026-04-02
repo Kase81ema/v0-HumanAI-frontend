@@ -207,8 +207,8 @@ export function Orientamento() {
         <div className="mb-6">
           <button
             onClick={() => setHistoryOpen(!historyOpen)}
-            className="flex w-full items-center justify-between rounded-lg border p-3 transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB" }}
+            className="flex w-full items-center justify-between rounded-lg border bg-white p-3 shadow-sm transition-colors hover:bg-gray-50"
+            style={{ borderColor: "var(--color-border)" }}
           >
             <span className="text-[13px] font-medium" style={{ color: "#6B7280" }}>
               Storico modifiche
@@ -221,7 +221,7 @@ export function Orientamento() {
           </button>
 
           {historyOpen && (
-            <div className="mt-2 space-y-2 rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+            <div className="mt-2 space-y-2 rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
               {history.map((entry, idx) => (
                 <div key={idx} className="text-[12px]" style={{ color: "#6B7280" }}>
                   <span className="font-medium">{entry.date}:</span> {entry.slider} da {entry.from}% a {entry.to}% — <span className="italic">Motivo: {entry.reason}</span>

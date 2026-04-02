@@ -613,7 +613,7 @@ export function Workspace() {
                   Colori brand
                 </label>
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <div className="flex items-center gap-3">
                       <div
                         className="h-10 w-10 rounded-lg"
@@ -632,7 +632,7 @@ export function Workspace() {
                       </div>
                     </div>
                   </div>
-                  <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <div className="flex items-center gap-3">
                       <div
                         className="h-10 w-10 rounded-lg"
@@ -651,7 +651,7 @@ export function Workspace() {
                       </div>
                     </div>
                   </div>
-                  <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <div className="flex items-center gap-3">
                       <div
                         className="h-10 w-10 rounded-lg border"
@@ -803,7 +803,7 @@ export function Workspace() {
                   {projectData.channels.map((channel, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between rounded-lg border p-3"
+                      className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <div className="flex items-center gap-3">
@@ -848,7 +848,7 @@ export function Workspace() {
                   {projectData.integrations.map((integration, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between rounded-lg border p-3"
+                      className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
                       style={{ borderColor: "#E5E7EB" }}
                     >
                       <div className="flex items-center gap-3">
@@ -944,7 +944,7 @@ export function Workspace() {
                 {projectData.products.map((product, i) => (
                   <div
                     key={i}
-                    className="rounded-lg border p-4"
+                    className="rounded-lg border bg-white p-4 shadow-sm"
                     style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-start justify-between">
@@ -1024,7 +1024,7 @@ export function Workspace() {
                 {projectData.documents.map((doc, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between rounded-lg border p-4"
+                    className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
                     style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-center gap-3">
@@ -1107,7 +1107,7 @@ export function Workspace() {
                 {projectData.rubriche.map((rubrica, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between rounded-lg border p-4"
+                    className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
                     style={{
                       borderColor: "#E5E7EB",
                       backgroundColor: rubrica.active ? "#FFFFFF" : "#FAFAFA",
@@ -1176,7 +1176,7 @@ export function Workspace() {
                 {projectData.team.map((member, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between rounded-lg border p-4"
+                    className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
                     style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-center gap-3">
@@ -1222,7 +1222,7 @@ export function Workspace() {
               </div>
 
               <div
-                className="rounded-lg border p-4"
+                className="rounded-lg border bg-white p-4 shadow-sm"
                 style={{ borderColor: "#FCD34D", backgroundColor: "#FFFBEB" }}
               >
                 <div className="flex items-start gap-3">

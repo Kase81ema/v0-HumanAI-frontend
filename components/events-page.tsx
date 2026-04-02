@@ -403,7 +403,7 @@ export function EventsPage() {
             </div>
 
             {/* Chart Placeholder */}
-            <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB" }}>
+            <div className="rounded-lg border bg-white p-6 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
               <h3 className="mb-4 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Andamento iscrizioni
               </h3>
@@ -419,7 +419,7 @@ export function EventsPage() {
 
             {/* Metrics Cards */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da LinkedIn
                 </p>
@@ -427,7 +427,7 @@ export function EventsPage() {
                   3
                 </p>
               </div>
-              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Da Email
                 </p>
@@ -435,7 +435,7 @@ export function EventsPage() {
                   2
                 </p>
               </div>
-              <div className="rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
                   Diretti
                 </p>
@@ -706,7 +706,7 @@ export function EventsPage() {
         {activeTab === "promozione" && (
           <div className="space-y-6">
             {/* NEW: Copy Registration Link */}
-            <div className="flex items-center justify-between rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+            <div className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
               <div>
                 <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                   Link registrazione
@@ -841,7 +841,7 @@ export function EventsPage() {
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Trascrizioni Fireflies
               </h3>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
                   Nessuna trascrizione disponibile. Le trascrizioni appariranno qui dopo l&apos;evento.
                 </p>
@@ -886,7 +886,7 @@ export function EventsPage() {
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Feedback (NPS)
               </h3>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
                   Il sondaggio NPS verrà inviato 24h dopo l&apos;evento.
                 </p>
@@ -905,7 +905,7 @@ export function EventsPage() {
               <h3 className="mb-3 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Gruppo WhatsApp evento
               </h3>
-              <div className="rounded-lg border p-4" style={{ borderColor: "#E5E7EB" }}>
+              <div className="rounded-lg border bg-white p-4 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                 <div className="flex items-center gap-3">
                   <div
                     className="flex h-10 w-10 items-center justify-center rounded-lg"
@@ -956,7 +956,7 @@ export function EventsPage() {
                 Speaker
               </h3>
               <div className="space-y-2">
-                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                <div className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                   <div className="flex items-center gap-3">
                     <div
                       className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-white"
@@ -1019,7 +1019,7 @@ export function EventsPage() {
                 Materiali
               </h3>
               <div className="space-y-2">
-                <div className="flex items-center justify-between rounded-lg border p-3" style={{ borderColor: "#E5E7EB" }}>
+                <div className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                   <div className="flex items-center gap-2">
                     <span className="text-[16px]">&#128196;</span>
                     <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
@@ -1088,7 +1088,7 @@ export function EventsPage() {
             </div>
 
             {/* Generated Plan */}
-            <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB" }}>
+            <div className="rounded-lg border bg-white p-6 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
               <h3 className="mb-4 text-[14px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Piano generato dallo Strategist
               </h3>

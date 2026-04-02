@@ -188,7 +188,7 @@ export function ContentStudio() {
                   <button
                     key={topic.id}
                     onClick={() => handleTopicSelect(topic)}
-                    className="flex items-center justify-between rounded-lg border-2 p-5 text-left transition-all hover:border-primary hover:bg-gray-50"
+                    className="flex items-center justify-between rounded-lg border bg-white p-5 shadow-sm text-left transition-all hover:border-blue-300 hover:shadow-md"
                     style={{ borderColor: "var(--color-border)" }}
                   >
                     <div className="flex-1">
@@ -235,7 +235,7 @@ export function ContentStudio() {
                 </p>
               </div>
 
-              <div className="rounded-lg bg-white p-6" style={{ border: "1px solid var(--color-border)" }}>
+              <div className="rounded-lg bg-white p-6 shadow-sm" style={{ border: "1px solid var(--color-border)" }}>
                 <h3 className="text-base font-semibold mb-4" style={{ color: "var(--color-text-primary)" }}>
                   Argomento selezionato: {selectedTopic.label}
                 </h3>
@@ -346,7 +346,7 @@ export function ContentStudio() {
                 </p>
               </div>
 
-              <div className="rounded-lg bg-white p-6" style={{ border: "1px solid var(--color-border)" }}>
+              <div className="rounded-lg bg-white p-6 shadow-sm" style={{ border: "1px solid var(--color-border)" }}>
                 <div className="prose max-w-none">
                   <div 
                     className="text-base leading-relaxed whitespace-pre-wrap"

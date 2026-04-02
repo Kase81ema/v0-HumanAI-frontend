@@ -492,9 +492,9 @@ export function BoardOperativa() {
 
                   {/* Step card */}
                   <div
-                    className="rounded-lg border p-6"
+                    className="rounded-lg border p-6 shadow-sm"
                     style={{
-                      backgroundColor: stepConfig.bgColor,
+                      backgroundColor: isWaiting ? stepConfig.bgColor : "#FFFFFF",
                       borderColor: isWaiting ? stepConfig.border : "var(--color-border)",
                       borderWidth: isWaiting ? "2px" : "1px",
                     }}

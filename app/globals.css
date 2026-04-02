@@ -1,15 +1,17 @@
 @import 'tailwindcss';
 
 @theme inline {
-  /* shadcn semantic colors */
-  --color-background: #FFFFFF;
+  /* shadcn semantic colors - aligned with design system */
+  --color-background: #F5F6F8;
   --color-foreground: #1B2B4B;
-  --color-muted: #F3F4F6;
-  --color-muted-foreground: #7C8CA2;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #1B2B4B;
+  --color-muted: #EBEDF0;
+  --color-muted-foreground: #6B7A90;
   --color-accent: #DBEAFE;
   --color-accent-foreground: #2563EB;
-  --color-border: #E5E7EB;
-  --color-input: #E5E7EB;
+  --color-border: #D1D5DB;
+  --color-input: #D1D5DB;
   --color-ring: #2563EB;
   --color-primary: #2563EB;
   --color-primary-foreground: #FFFFFF;
@@ -25,13 +27,14 @@
   
   /* Neutrals */
   --color-white: #FFFFFF;
-  --color-bg-primary: #F7F8FA;
-  --color-bg-secondary: #F3F4F6;
+  --color-bg-primary: #F5F6F8;
+  --color-bg-secondary: #EBEDF0;
+  --color-bg-card: #FFFFFF;
   --color-text-primary: #1B2B4B;
-  --color-text-secondary: #7C8CA2;
+  --color-text-secondary: #6B7A90;
   --color-text-tertiary: #9CA3AF;
-  --color-border: #E5E7EB;
-  --color-border-light: #F3F4F6;
+  --color-border: #D1D5DB;
+  --color-border-light: #E5E7EB;
   
   /* Status Colors */
   --color-success: #059669;
@@ -221,6 +224,18 @@
   
   .shadow-lg {
     box-shadow: var(--shadow-lg);
+  }
+  
+  /* Unified card style */
+  .card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .card:hover {
+    box-shadow: var(--shadow-md);
   }
 }
 
