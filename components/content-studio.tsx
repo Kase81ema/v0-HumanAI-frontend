@@ -481,7 +481,7 @@ export function ContentStudio() {
 
       {/* Content List */}
       <div className="flex-1 overflow-auto">
-        <div className="space-y-3">
+        <div className="space-y-3 max-w-2xl">
           {filteredContent.map((content) => (
             <div
               key={content.id}
