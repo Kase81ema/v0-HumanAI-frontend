@@ -305,7 +305,7 @@ export function ProgettoTimeline() {
               <div
                 key={idx}
                 className="rounded-xl border p-4"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <h3 className="mb-2 text-[14px] font-bold" style={{ color: "#1B2B4B" }}>
                   {target.title}

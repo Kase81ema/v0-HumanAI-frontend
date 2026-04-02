@@ -290,7 +290,7 @@ export function TeamAgenti() {
   return (
     <div className="h-full overflow-y-auto">
       {/* Tabs */}
-      <div className="sticky top-0 z-10 border-b bg-white" style={{ borderColor: "#E5E7EB" }}>
+      <div className="sticky top-0 z-10 border-b bg-white" style={{ borderColor: "var(--color-border)" }}>
         <div className="flex gap-0 px-6">
           <button
             onClick={() => setActiveTab("team")}
@@ -339,9 +339,9 @@ export function TeamAgenti() {
                 return (
                   <div
                     key={agent.id}
-                    className="rounded-xl border transition-all"
+                    className="rounded-xl border bg-white shadow-sm transition-all"
                     style={{
-                      borderColor: isExpanded ? "#2563EB" : "#E5E7EB",
+                      borderColor: isExpanded ? "#2563EB" : "var(--color-border)",
                       opacity: agent.active ? 1 : 0.6,
                     }}
                   >
@@ -395,7 +395,7 @@ export function TeamAgenti() {
 
                     {/* Expanded content */}
                     {isExpanded && (
-                      <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: "#E5E7EB" }}>
+                      <div className="border-t px-4 pb-4 pt-3" style={{ borderColor: "var(--color-border)" }}>
                         {/* Outputs */}
                         {agent.outputs.length > 0 && (
                           <div className="mb-4">
@@ -470,7 +470,7 @@ export function TeamAgenti() {
                           <div className="flex gap-2">
                             <button
                               className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-                              style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                              style={{ borderColor: "var(--color-border)", color: "#6B7280" }}
                             >
                               <Power className="h-3.5 w-3.5" />
                               {agent.active ? "Disabilita" : "Abilita"}
@@ -511,8 +511,8 @@ export function TeamAgenti() {
               {sliders.map((slider) => (
                 <div
                   key={slider.id}
-                  className="rounded-xl border p-5"
-                  style={{ borderColor: "#E5E7EB" }}
+                  className="rounded-xl border bg-white p-5 shadow-sm"
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-[15px] font-bold" style={{ color: "#1B2B4B" }}>

@@ -124,7 +124,7 @@ export function UserProfile() {
                     className="mb-1 rounded-lg border px-3 py-1.5 text-[16px] font-semibold"
                     style={{ 
                       color: "#1A1F36", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -141,7 +141,7 @@ export function UserProfile() {
                     className="rounded-lg border px-3 py-1 text-[14px]"
                     style={{ 
                       color: "#5E6B81", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -216,7 +216,7 @@ export function UserProfile() {
                     className="rounded border px-2 py-0.5 text-[14px]"
                     style={{ 
                       color: "#1A1F36", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -248,7 +248,7 @@ export function UserProfile() {
                     className="rounded border px-2 py-0.5 text-[14px]"
                     style={{ 
                       color: "#1A1F36", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -280,7 +280,7 @@ export function UserProfile() {
                     className="rounded border px-2 py-0.5 text-[14px]"
                     style={{ 
                       color: "#1A1F36", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -312,7 +312,7 @@ export function UserProfile() {
                     className="rounded border px-2 py-0.5 text-[14px]"
                     style={{ 
                       color: "#1A1F36", 
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       outline: "none"
                     }}
                   />
@@ -352,10 +352,10 @@ export function UserProfile() {
               <textarea
                 value={editForm.bio}
                 onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-                className="w-full rounded-lg border p-3 text-[14px]"
+                className="w-full rounded-lg border bg-white p-3 text-[14px] shadow-sm"
                 style={{ 
                   color: "#1A1F36", 
-                  borderColor: "#E5E7EB",
+                  borderColor: "var(--color-border)",
                   outline: "none",
                   resize: "none"
                 }}

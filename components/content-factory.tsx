@@ -236,10 +236,10 @@ export function ContentFactory() {
       {/* Left Panel - Content List */}
       <div 
         className="w-[30%] border-r flex flex-col"
-        style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+        style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
       >
         {/* Header */}
-        <div className="p-4 border-b" style={{ borderColor: "#E5E7EB" }}>
+        <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
           <div className="flex items-center justify-between mb-3">
             <h1 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
               Content Factory
@@ -276,7 +276,7 @@ export function ContentFactory() {
         {selectedItems.length > 0 && (
           <div 
             className="p-3 border-b flex items-center justify-between"
-            style={{ borderColor: "#E5E7EB", backgroundColor: "#EFF6FF" }}
+            style={{ borderColor: "var(--color-border)", backgroundColor: "#EFF6FF" }}
           >
             <div className="flex items-center gap-2">
               <input
@@ -298,7 +298,7 @@ export function ContentFactory() {
               </button>
               <button 
                 className="px-3 py-1.5 rounded-md text-[11px] font-medium border transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                style={{ borderColor: "var(--color-border)", color: "#6B7280" }}
                 onClick={() => setSelectedItems([])}
               >
                 Annulla
@@ -314,7 +314,7 @@ export function ContentFactory() {
               key={item.id}
               className="p-3 border-b cursor-pointer transition-colors flex items-start gap-2"
               style={{
-                borderColor: "#E5E7EB",
+                borderColor: "var(--color-border)",
                 backgroundColor: selectedId === item.id ? "#EFF6FF" : "transparent",
                 borderLeft: selectedId === item.id ? "3px solid #2563EB" : "3px solid transparent"
               }}
@@ -404,7 +404,7 @@ export function ContentFactory() {
         {selectedContent && (
           <>
             {/* Detail Header */}
-            <div className="p-4 border-b" style={{ borderColor: "#E5E7EB" }}>
+            <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
@@ -439,7 +439,7 @@ export function ContentFactory() {
                     <button 
                       onClick={() => setShowDuplicateMenu(!showDuplicateMenu)}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     >
                       <Copy size={14} />
                       Duplica per...
@@ -447,9 +447,9 @@ export function ContentFactory() {
                     {showDuplicateMenu && (
                       <div 
                         className="absolute right-0 top-full mt-1 w-48 rounded-lg border bg-white shadow-lg z-10"
-                        style={{ borderColor: "#E5E7EB" }}
+                        style={{ borderColor: "var(--color-border)" }}
                       >
-                        <p className="px-3 py-2 text-[10px] uppercase font-medium border-b" style={{ color: "#7C8CA2", borderColor: "#E5E7EB" }}>
+                        <p className="px-3 py-2 text-[10px] uppercase font-medium border-b" style={{ color: "#7C8CA2", borderColor: "var(--color-border)" }}>
                           Duplica per altro canale
                         </p>
                         {duplicateChannels.map(ch => (
@@ -477,7 +477,7 @@ export function ContentFactory() {
                     <button 
                       onClick={() => setShowVersionsModal(true)}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     >
                       <History size={14} />
                       Versioni ({selectedContent.versions})
@@ -486,21 +486,21 @@ export function ContentFactory() {
                   
                   <button 
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                   >
                     <Image size={14} />
                     Immagine
                   </button>
                   <button 
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                   >
                     <RefreshCw size={14} />
                     Rigenera
                   </button>
                   <button 
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                   >
                     <ClipboardCheck size={14} />
                     Verifica coerenza
@@ -533,7 +533,7 @@ export function ContentFactory() {
               {selectedContent.status === "idea" ? (
                 /* Idea Editor */
                 <div className="max-w-[620px] mx-auto">
-                  <div className="bg-white rounded-lg p-6 border" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="bg-white rounded-lg p-6 border shadow-sm" style={{ borderColor: "var(--color-border)" }}>
                     <h3 className="text-[16px] font-semibold text-center mb-4" style={{ color: "#1B2B4B" }}>
                       Descrivi la tua idea
                     </h3>
@@ -542,7 +542,7 @@ export function ContentFactory() {
                       onChange={(e) => setIdeaBrief(e.target.value)}
                       placeholder="Descrivi il tema, l'angolo, il tono che vuoi..."
                       className="w-full h-[120px] p-4 border rounded-lg text-[14px] resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     />
                     
                     <div className="grid grid-cols-4 gap-3 mt-4">
@@ -554,7 +554,7 @@ export function ContentFactory() {
                           value={ideaType}
                           onChange={(e) => setIdeaType(e.target.value)}
                           className="w-full px-3 py-2 border rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                         >
                           <option value="post">Post</option>
                           <option value="newsletter">Newsletter</option>
@@ -569,7 +569,7 @@ export function ContentFactory() {
                           value={ideaChannel}
                           onChange={(e) => setIdeaChannel(e.target.value)}
                           className="w-full px-3 py-2 border rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                         >
                           <option value="linkedin">LinkedIn pers.</option>
                           <option value="linkedin-company">LinkedIn aziendale</option>
@@ -585,7 +585,7 @@ export function ContentFactory() {
                           value={ideaRubrica}
                           onChange={(e) => setIdeaRubrica(e.target.value)}
                           className="w-full px-3 py-2 border rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                         >
                           <option value="r1">R1 — Una domanda</option>
                           <option value="r2">R2 — Caso studio</option>
@@ -602,7 +602,7 @@ export function ContentFactory() {
                           value={ideaLanguage}
                           onChange={(e) => setIdeaLanguage(e.target.value)}
                           className="w-full px-3 py-2 border rounded-md text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                         >
                           <option value="it">Italiano</option>
                           <option value="en">English</option>
@@ -622,7 +622,7 @@ export function ContentFactory() {
               ) : selectedContent.status === "generating" ? (
                 /* Generating State */
                 <div className="flex flex-col items-center justify-center h-full">
-                  <div className="bg-white rounded-lg p-8 border text-center" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="bg-white rounded-lg p-8 border text-center" style={{ borderColor: "var(--color-border)" }}>
                     <Loader2 
                       size={48} 
                       className="animate-spin mx-auto mb-4"
@@ -648,7 +648,7 @@ export function ContentFactory() {
                 <div className="max-w-[620px] mx-auto">
                   <div 
                     className="bg-white rounded-lg border overflow-hidden"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     {/* LinkedIn Header */}
                     <div className="p-4 flex items-start gap-3">
@@ -697,7 +697,7 @@ export function ContentFactory() {
                     )}
                     
                     {/* LinkedIn Engagement Bar */}
-                    <div className="px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: "#E5E7EB" }}>
+                    <div className="px-4 py-3 border-t flex items-center justify-between" style={{ borderColor: "var(--color-border)" }}>
                       <div className="flex items-center gap-1 text-[12px]" style={{ color: "#666666" }}>
                         <span className="flex -space-x-1">
                           <span className="w-4 h-4 rounded-full bg-blue-500"></span>
@@ -711,7 +711,7 @@ export function ContentFactory() {
                     </div>
                     
                     {/* LinkedIn Actions */}
-                    <div className="px-4 py-2 border-t flex items-center justify-around" style={{ borderColor: "#E5E7EB" }}>
+                    <div className="px-4 py-2 border-t flex items-center justify-around" style={{ borderColor: "var(--color-border)" }}>
                       <button className="flex items-center gap-2 px-4 py-2 rounded hover:bg-gray-100 text-[13px]" style={{ color: "#666666" }}>
                         Consiglia
                       </button>
@@ -736,7 +736,7 @@ export function ContentFactory() {
                   {/* Editing Toolbar */}
                   <div 
                     className="bg-white rounded-t-lg border border-b-0 px-3 py-2 flex items-center gap-1"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <button 
                       className="p-2 rounded hover:bg-gray-100 transition-colors"
@@ -770,7 +770,7 @@ export function ContentFactory() {
                   
                   <div 
                     className="bg-white rounded-b-lg border p-6"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <p 
                       className="text-[15px] whitespace-pre-wrap"
@@ -786,8 +786,8 @@ export function ContentFactory() {
                   {/* Image Area */}
                   {selectedContent.hasImage && (
                     <div 
-                      className="mt-4 bg-white rounded-lg border p-4"
-                      style={{ borderColor: "#E5E7EB" }}
+                      className="mt-4 bg-white rounded-lg border p-4 shadow-sm"
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <div 
                         className="border-2 border-dashed rounded-lg p-4 flex flex-col items-center justify-center"
@@ -804,7 +804,7 @@ export function ContentFactory() {
                         </p>
                         <button 
                           className="px-4 py-2 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                         >
                           Cambia immagine
                         </button>
@@ -818,7 +818,7 @@ export function ContentFactory() {
             {/* Action Bar */}
             <div 
               className="p-3 border-t flex items-center justify-between"
-              style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+              style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
             >
               <div className="flex gap-2">
                 {selectedContent.status === "draft" && (
@@ -832,13 +832,13 @@ export function ContentFactory() {
                     </button>
                     <button 
                       className="px-4 py-2.5 rounded-md text-[13px] font-medium border transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     >
                       Modifica
                     </button>
                     <button 
                       className="flex items-center gap-1.5 px-4 py-2.5 rounded-md text-[13px] font-medium border transition-colors hover:bg-red-50"
-                      style={{ borderColor: "#E5E7EB", color: "#DC2626" }}
+                      style={{ borderColor: "var(--color-border)", color: "#DC2626" }}
                     >
                       <X size={14} />
                       Rifiuta
@@ -855,7 +855,7 @@ export function ContentFactory() {
                     </button>
                     <button 
                       className="flex items-center gap-1.5 px-4 py-2.5 rounded-md text-[13px] font-medium border transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     >
                       <Calendar size={14} />
                       Programma
@@ -872,7 +872,7 @@ export function ContentFactory() {
                     </button>
                     <button 
                       className="flex items-center gap-1.5 px-4 py-2.5 rounded-md text-[13px] font-medium border transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                      style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                     >
                       <Calendar size={14} />
                       Modifica programmazione
@@ -883,14 +883,14 @@ export function ContentFactory() {
               <div className="flex gap-2">
                 <button 
                   className="flex items-center gap-1.5 px-3 py-2 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                  style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                 >
                   <MessageSquare size={14} />
                   Commenta
                 </button>
                 <button 
                   className="flex items-center gap-1.5 px-3 py-2 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                  style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                 >
                   <Share2 size={14} />
                   Assegna
@@ -911,7 +911,7 @@ export function ContentFactory() {
             className="bg-white rounded-xl w-[500px] max-h-[80vh] overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: "#E5E7EB" }}>
+            <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: "var(--color-border)" }}>
               <h3 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
                 Versioni precedenti
               </h3>

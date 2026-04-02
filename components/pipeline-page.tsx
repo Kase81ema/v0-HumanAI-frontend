@@ -270,10 +270,10 @@ export function PipelinePage() {
                 <button
                   key={reason}
                   onClick={() => setSelectedLostReason(reason)}
-                  className="flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-gray-50"
+                  className="flex w-full items-center gap-3 rounded-lg border p-3 shadow-sm text-left transition-colors hover:bg-gray-50"
                   style={{
-                    borderColor: selectedLostReason === reason ? "#EF4444" : "#E5E7EB",
-                    backgroundColor: selectedLostReason === reason ? "#FEF2F2" : "transparent",
+                    borderColor: selectedLostReason === reason ? "#EF4444" : "var(--color-border)",
+                    backgroundColor: selectedLostReason === reason ? "#FEF2F2" : "#FFFFFF",
                   }}
                 >
                   <div
@@ -294,7 +294,7 @@ export function PipelinePage() {
               onChange={(e) => setLostNotes(e.target.value)}
               placeholder="Note aggiuntive (opzionale)..."
               className="mb-4 w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-red-500"
-              style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
+              style={{ borderColor: "var(--color-border)", minHeight: "80px" }}
             />
             <div className="flex justify-end gap-2">
               <button
@@ -303,7 +303,7 @@ export function PipelinePage() {
                   setPendingLostDeal(null)
                 }}
                 className="rounded-lg border px-4 py-2 text-[13px] font-medium"
-                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
               >
                 Annulla
               </button>
@@ -348,7 +348,7 @@ export function PipelinePage() {
           <div className="flex items-center gap-3">
             <select
               className="rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <option>Periodo: Tutti</option>
               <option>Questo mese</option>
@@ -480,7 +480,7 @@ export function PipelinePage() {
                       <div className="flex gap-2">
                         <button
                           className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                          style={{ borderColor: "#E5E7EB" }}
+                          style={{ borderColor: "var(--color-border)" }}
                           onClick={(e) => {
                             e.stopPropagation()
                             setSelectedDeal(deal)
@@ -491,7 +491,7 @@ export function PipelinePage() {
                         </button>
                         <button
                           className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                          style={{ borderColor: "#E5E7EB" }}
+                          style={{ borderColor: "var(--color-border)" }}
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Phone className="h-3 w-3" />
@@ -505,7 +505,7 @@ export function PipelinePage() {
                 {getStageDeals(stage.id).length === 0 && (
                   <div
                     className="rounded-lg border-2 border-dashed p-4 text-center"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <p className="text-[12px]" style={{ color: "#9CA3AF" }}>
                       {stage.isFinal ? "Nessun deal" : "Trascina un deal qui"}
@@ -522,10 +522,10 @@ export function PipelinePage() {
       {selectedDeal && (
         <div
           className="h-full w-[400px] shrink-0 overflow-y-auto border-l bg-white"
-          style={{ borderColor: "#E5E7EB" }}
+          style={{ borderColor: "var(--color-border)" }}
         >
           {/* Panel Header */}
-          <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+          <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "var(--color-border)" }}>
             <div>
               <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
                 {selectedDeal.contactName}
@@ -651,7 +651,7 @@ export function PipelinePage() {
                   <div
                     key={index}
                     className="flex items-center justify-between rounded-lg border p-2"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <div className="flex items-center gap-2">
                       <FileText className="h-4 w-4" style={{ color: "#7C8CA2" }} />
@@ -674,7 +674,7 @@ export function PipelinePage() {
               </div>
               <button
                 className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#2563EB" }}
+                style={{ borderColor: "var(--color-border)", color: "#2563EB" }}
               >
                 Genera nuova proposta
                 <ChevronRight className="h-4 w-4" />
@@ -696,7 +696,7 @@ export function PipelinePage() {
                 </button>
                 <button
                   className="flex w-full items-center justify-center gap-1 rounded-lg border py-2.5 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                 >
                   <Calendar className="h-4 w-4" />
                   Programma call (Calendly)
@@ -706,14 +706,14 @@ export function PipelinePage() {
                   <button
                     onClick={() => duplicateDeal(selectedDeal)}
                     className="flex flex-1 items-center justify-center gap-1 rounded-lg border py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                    style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                   >
                     <Copy className="h-4 w-4" />
                     Duplica
                   </button>
                   <button
                     className="flex flex-1 items-center justify-center gap-1 rounded-lg border py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                    style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                   >
                     <Archive className="h-4 w-4" />
                     Archivia
@@ -731,7 +731,7 @@ export function PipelinePage() {
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 className="w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
+                style={{ borderColor: "var(--color-border)", minHeight: "80px" }}
                 placeholder="Scrivi una nota..."
               />
               <button
@@ -751,7 +751,7 @@ export function PipelinePage() {
                 value={selectedDeal.stage}
                 onChange={(e) => moveToStage(selectedDeal.id, e.target.value)}
                 className="w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 {stages.map((stage) => (
                   <option key={stage.id} value={stage.id}>

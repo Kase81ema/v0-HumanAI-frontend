@@ -179,7 +179,7 @@ export function PianoEditoriale() {
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+      <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "var(--color-border)" }}>
         <div>
           <h1 className="mb-1 text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
             Piano editoriale — Settimana 15
@@ -191,13 +191,13 @@ export function PianoEditoriale() {
         <div className="flex items-center gap-2">
           <button
             className="flex items-center gap-1 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#374151" }}
+            style={{ borderColor: "var(--color-border)", color: "#374151" }}
           >
             <ChevronLeft className="h-4 w-4" /> Prec.
           </button>
           <button
             className="flex items-center gap-1 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#374151" }}
+            style={{ borderColor: "var(--color-border)", color: "#374151" }}
           >
             Succ. <ChevronRight className="h-4 w-4" />
           </button>
@@ -211,7 +211,7 @@ export function PianoEditoriale() {
       </div>
 
       {/* Channel tabs */}
-      <div className="flex gap-1 overflow-x-auto border-b px-4 py-2" style={{ borderColor: "#E5E7EB" }}>
+      <div className="flex gap-1 overflow-x-auto border-b px-4 py-2" style={{ borderColor: "var(--color-border)" }}>
         {channels.map((channel) => (
           <button
             key={channel.id}
@@ -233,10 +233,10 @@ export function PianoEditoriale() {
           <div
             key={day.day}
             className="flex flex-1 flex-col border-r last:border-r-0"
-            style={{ borderColor: "#E5E7EB" }}
+            style={{ borderColor: "var(--color-border)" }}
           >
             {/* Day header */}
-            <div className="border-b p-3 text-center" style={{ borderColor: "#E5E7EB" }}>
+            <div className="border-b p-3 text-center" style={{ borderColor: "var(--color-border)" }}>
               <p className="text-[13px] font-semibold" style={{ color: "#1B2B4B" }}>
                 {day.day}
               </p>
@@ -304,7 +304,7 @@ export function PianoEditoriale() {
                     {isHovered && item.preview && (
                       <div
                         className="absolute left-full top-0 z-10 ml-2 w-[200px] rounded-lg border bg-white p-3 shadow-lg"
-                        style={{ borderColor: "#E5E7EB" }}
+                        style={{ borderColor: "var(--color-border)" }}
                       >
                         <p
                           className="line-clamp-3 text-[12px] leading-relaxed"
@@ -325,7 +325,7 @@ export function PianoEditoriale() {
       {/* Footer */}
       <div
         className="flex items-center justify-between border-t p-4"
-        style={{ borderColor: "#E5E7EB" }}
+        style={{ borderColor: "var(--color-border)" }}
       >
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
@@ -354,7 +354,7 @@ export function PianoEditoriale() {
         <div className="flex items-center gap-2">
           <button
             className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#374151" }}
+            style={{ borderColor: "var(--color-border)", color: "#374151" }}
           >
             <ArrowLeftRight className="h-4 w-4" /> Confronta con sett. precedente
           </button>

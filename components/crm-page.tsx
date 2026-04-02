@@ -287,7 +287,7 @@ export function CrmPage() {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-[680px] max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "var(--color-border)" }}>
           <div>
             <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
               Nuova email
@@ -308,7 +308,7 @@ export function CrmPage() {
             <label className="w-16 text-[13px] font-medium" style={{ color: "#7C8CA2" }}>Da:</label>
             <select
               className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <option>emanuele@human-aimpact.ch</option>
               <option>info@human-aimpact.ch</option>
@@ -321,7 +321,7 @@ export function CrmPage() {
             <div className="flex-1">
               <div 
                 className="flex flex-wrap gap-2 rounded-lg border p-2"
-                style={{ borderColor: "#E5E7EB", minHeight: "42px" }}
+                style={{ borderColor: "var(--color-border)", minHeight: "42px" }}
               >
                 <span
                   className="flex items-center gap-1 rounded-full px-3 py-1 text-[12px]"
@@ -360,11 +360,11 @@ export function CrmPage() {
                 onChange={(e) => setEmailSubject(e.target.value)}
                 placeholder="Oggetto dell'email..."
                 className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               />
               <button
                 className="flex items-center gap-1 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-blue-50"
-                style={{ borderColor: "#E5E7EB", color: "#2563EB" }}
+                style={{ borderColor: "var(--color-border)", color: "#2563EB" }}
               >
                 <Sparkles className="h-3.5 w-3.5" />
                 Suggerisci
@@ -397,7 +397,7 @@ export function CrmPage() {
                 <button
                   onClick={() => setShowTemplateDropdown(!showTemplateDropdown)}
                   className="flex items-center gap-1 rounded-lg border px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                 >
                   Template
                   <ChevronDown className="h-3.5 w-3.5" />
@@ -405,7 +405,7 @@ export function CrmPage() {
                 {showTemplateDropdown && (
                   <div
                     className="absolute right-0 top-full z-10 mt-1 w-72 rounded-lg border bg-white py-1 shadow-lg"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     {emailTemplates.map(template => (
                       <button
@@ -435,7 +435,7 @@ export function CrmPage() {
 
 Usa {nome}, {azienda}, {evento} per personalizzare."
               className="w-full rounded-lg border px-4 py-3 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB", minHeight: "200px" }}
+              style={{ borderColor: "var(--color-border)", minHeight: "200px" }}
             />
             <div className="mt-2 flex items-center gap-2">
               <button
@@ -452,7 +452,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
           </div>
 
           {/* Attachments */}
-          <div className="flex items-center gap-3 rounded-lg border-2 border-dashed p-3" style={{ borderColor: "#E5E7EB" }}>
+          <div className="flex items-center gap-3 rounded-lg border-2 border-dashed p-3" style={{ borderColor: "var(--color-border)" }}>
             <Paperclip className="h-4 w-4" style={{ color: "#7C8CA2" }} />
             <span className="text-[13px]" style={{ color: "#7C8CA2" }}>
               Trascina file o clicca per allegare
@@ -473,23 +473,23 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between border-t p-4" style={{ borderColor: "#E5E7EB" }}>
+        <div className="flex items-center justify-between border-t p-4" style={{ borderColor: "var(--color-border)" }}>
           <button
             className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
           >
             Anteprima
           </button>
           <div className="flex gap-2">
             <button
               className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+              style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
             >
               Salva bozza
             </button>
             <button
               className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
             >
               Salva come template
             </button>
@@ -583,7 +583,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               </button>
               <button
                 className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
               >
                 <Mail className="h-4 w-4" />
                 Email
@@ -601,14 +601,14 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               )}
               <button
                 className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
               >
                 <Calendar className="h-4 w-4" />
                 Calendly
               </button>
               <button
                 className="flex items-center justify-center rounded-lg border px-2 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
               >
                 <MoreHorizontal className="h-4 w-4" />
               </button>
@@ -617,7 +617,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-1 border-b" style={{ borderColor: "#E5E7EB" }}>
+        <div className="mb-6 flex gap-1 border-b" style={{ borderColor: "var(--color-border)" }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -672,7 +672,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   Azioni suggerite
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-4 shadow-sm transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "var(--color-border)" }}>
                     <div className="mb-2 text-[20px]">&#128188;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                       Invia proposta coaching team
@@ -681,7 +681,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                       Genera con Sales Agent
                     </button>
                   </div>
-                  <div className="rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-4 shadow-sm transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "var(--color-border)" }}>
                     <div className="mb-2 text-[20px]">&#128197;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                       Invita al Workshop 15 aprile
@@ -690,7 +690,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                       Genera invito personalizzato
                     </button>
                   </div>
-                  <div className="rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="rounded-lg border bg-white p-4 shadow-sm transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "var(--color-border)" }}>
                     <div className="mb-2 text-[20px]">&#128279;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                       Connetti con Mario Rossi
@@ -700,7 +700,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                     </button>
                   </div>
                   {/* Add to Event */}
-                  <div className="relative rounded-lg border p-4 transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="relative rounded-lg border bg-white p-4 shadow-sm transition-colors hover:border-blue-300 hover:bg-blue-50" style={{ borderColor: "var(--color-border)" }}>
                     <div className="mb-2 text-[20px]">&#127919;</div>
                     <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                       Aggiungi a evento
@@ -714,7 +714,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                       <ChevronDown className="h-3 w-3" />
                     </button>
                     {showAddToEventDropdown && (
-                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-lg border bg-white shadow-lg" style={{ borderColor: "#E5E7EB" }}>
+                      <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-lg border bg-white shadow-lg" style={{ borderColor: "var(--color-border)" }}>
                         {activeEvents.map(event => (
                           <button
                             key={event.id}
@@ -740,7 +740,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   </button>
                   <button
                     className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                    style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                   >
                     Archivia contatto
                   </button>
@@ -775,7 +775,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   <div className="mb-3 flex gap-2">
                     <select
                       className="rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <option>Tipo: Call</option>
                       <option>Tipo: Meeting</option>
@@ -786,13 +786,13 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                     <input
                       type="date"
                       className="rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                   <textarea
                     placeholder="Descrizione dell'interazione..."
                     className="mb-3 w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB", minHeight: "80px" }}
+                    style={{ borderColor: "var(--color-border)", minHeight: "80px" }}
                   />
                   <div className="flex gap-2">
                     <button
@@ -804,7 +804,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                     <button
                       onClick={() => setShowAddInteractionModal(false)}
                       className="rounded-lg border px-4 py-2 text-[13px] font-medium"
-                      style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                      style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                     >
                       Annulla
                     </button>
@@ -896,7 +896,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               {!selectedContact.dealValue && (
                 <button
                   className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 transition-colors hover:border-blue-300 hover:bg-blue-50"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <Plus className="h-5 w-5" style={{ color: "#2563EB" }} />
                   <span className="text-[14px] font-medium" style={{ color: "#2563EB" }}>
@@ -947,21 +947,21 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   <div className="flex gap-2">
                     <button
                       className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <Pause className="h-3 w-3" />
                       Pausa
                     </button>
                     <button
                       className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <SkipForward className="h-3 w-3" />
                       Salta step
                     </button>
                     <button
                       className="flex items-center gap-1 rounded border px-2 py-1 text-[11px] transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <Edit2 className="h-3 w-3" />
                       Personalizza
@@ -983,7 +983,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
 
               <button
                 className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 transition-colors hover:border-blue-300 hover:bg-blue-50"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <Plus className="h-4 w-4" style={{ color: "#2563EB" }} />
                 <span className="text-[13px]" style={{ color: "#2563EB" }}>
@@ -1052,7 +1052,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
             <div className="space-y-4">
               <textarea
                 className="w-full rounded-lg border px-4 py-3 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                style={{ borderColor: "#E5E7EB", minHeight: "120px" }}
+                style={{ borderColor: "var(--color-border)", minHeight: "120px" }}
                 placeholder="Aggiungi una nota..."
               />
               <button
@@ -1100,7 +1100,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
           <button
             onClick={() => setShowImportModal(true)}
             className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
           >
             <Upload className="h-4 w-4" />
             Importa
@@ -1129,7 +1129,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
             </div>
             <div
               className="mb-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <Upload className="mb-2 h-8 w-8" style={{ color: "#7C8CA2" }} />
               <p className="mb-1 text-[14px] font-medium" style={{ color: "#1B2B4B" }}>
@@ -1146,7 +1146,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
               <button
                 onClick={() => setShowImportModal(false)}
                 className="rounded-lg border px-4 py-2 text-[13px] font-medium"
-                style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
               >
                 Annulla
               </button>
@@ -1173,13 +1173,13 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
           <div className="flex gap-2">
             <button
               className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
             >
               Tagga
             </button>
             <button
               className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
             >
               Invita a evento
             </button>
@@ -1193,7 +1193,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
             </button>
             <button
               className="flex items-center gap-1.5 rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-              style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+              style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
             >
               <Download className="h-3.5 w-3.5" />
               Esporta
@@ -1271,7 +1271,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
       </div>
 
       {/* Contacts Table */}
-      <div className="rounded-lg border" style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}>
+      <div className="rounded-lg border" style={{ borderColor: "var(--color-border)", backgroundColor: "white" }}>
         {/* Table Header */}
         <div
           className="grid items-center gap-4 border-b px-6 py-3"
@@ -1398,7 +1398,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
             {hoveredContact === contact.id && (
               <div
                 className="absolute left-0 top-full z-20 w-80 rounded-lg border bg-white p-4 shadow-lg"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <div className="mb-3 flex items-center gap-3">
                   <div
@@ -1438,13 +1438,13 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
                   )}
                   <button
                     className="flex items-center justify-center rounded-lg border px-3 py-1.5"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <Phone className="h-4 w-4" style={{ color: "#7C8CA2" }} />
                   </button>
                   <button
                     className="flex items-center justify-center rounded-lg border px-3 py-1.5"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <Mail className="h-4 w-4" style={{ color: "#7C8CA2" }} />
                   </button>
@@ -1459,7 +1459,7 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
       <div className="mt-4 flex items-center justify-between">
         <button
           className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-gray-50"
-          style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+          style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
         >
           <Download className="h-4 w-4" />
           Esporta lista

@@ -161,7 +161,7 @@ export function CommandCenter() {
               {showChatMenu && (
                 <div 
                   className="absolute right-0 top-full mt-1 w-48 rounded-lg border bg-white shadow-lg z-10"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <button
                     onClick={handleExportConversation}
@@ -249,7 +249,7 @@ export function CommandCenter() {
               placeholder="Scrivi allo Strategist..."
               className="flex-1 rounded-lg border px-4 py-3 text-[14px] outline-none transition-all focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               style={{
-                borderColor: "#E5E7EB",
+                borderColor: "var(--color-border)",
                 color: "#1B2B4B",
               }}
             />
@@ -296,7 +296,7 @@ export function CommandCenter() {
               <button
                 onClick={() => setShowCanvasMenu(!showCanvasMenu)}
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
               >
                 <Save size={14} />
                 Salva
@@ -304,7 +304,7 @@ export function CommandCenter() {
               {showCanvasMenu && (
                 <div 
                   className="absolute right-0 top-full mt-1 w-56 rounded-lg border bg-white shadow-lg z-10"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <button
                     onClick={handleSaveCanvas}
@@ -316,7 +316,7 @@ export function CommandCenter() {
                   </button>
                   {savedCanvases.length > 0 && (
                     <>
-                      <div className="border-t my-1" style={{ borderColor: "#E5E7EB" }} />
+                      <div className="border-t my-1" style={{ borderColor: "var(--color-border)" }} />
                       <p className="px-4 py-1.5 text-[10px] uppercase font-medium" style={{ color: "#7C8CA2" }}>
                         Canvas salvati
                       </p>

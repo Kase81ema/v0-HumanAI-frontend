@@ -184,7 +184,7 @@ export function Workspace() {
       {/* Left Panel - Navigation */}
       <div
         className="w-[280px] flex-shrink-0 overflow-y-auto border-r p-5"
-        style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+        style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
       >
         {/* Completion Progress */}
         <div className="mb-6">
@@ -294,7 +294,7 @@ export function Workspace() {
                       type="text"
                       defaultValue={projectData.identity.name}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                   <div>
@@ -304,7 +304,7 @@ export function Workspace() {
                     <select
                       defaultValue={projectData.identity.sector}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <option>Coaching</option>
                       <option>Formazione</option>
@@ -323,7 +323,7 @@ export function Workspace() {
                     type="text"
                     defaultValue={projectData.identity.tagline}
                     className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                 </div>
 
@@ -335,7 +335,7 @@ export function Workspace() {
                     rows={6}
                     defaultValue={projectData.identity.description}
                     className="w-full rounded-lg border px-3 py-2 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                   <p className="mt-1 text-[11px]" style={{ color: "#7C8CA2" }}>
                     Questo testo viene iniettato nel contesto di ogni agente. Includi mission, vision, posizionamento e target.
@@ -351,7 +351,7 @@ export function Workspace() {
                       type="text"
                       defaultValue={projectData.identity.primaryMarket}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                   <div>
@@ -362,7 +362,7 @@ export function Workspace() {
                       type="text"
                       defaultValue={projectData.identity.secondaryMarkets}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                 </div>
@@ -396,7 +396,7 @@ export function Workspace() {
                       type="text"
                       defaultValue={projectData.identity.location}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                   <div>
@@ -407,7 +407,7 @@ export function Workspace() {
                       type="text"
                       defaultValue={projectData.identity.foundedYear}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                   <div>
@@ -417,7 +417,7 @@ export function Workspace() {
                     <select
                       defaultValue={projectData.identity.currency}
                       className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <option value="CHF">CHF - Franco svizzero</option>
                       <option value="EUR">EUR - Euro</option>
@@ -435,7 +435,7 @@ export function Workspace() {
                     defaultValue={projectData.identity.positioning}
                     placeholder="Descrivi chi siete, cosa fate, cosa NON fate (es: lo fanno i partner), e come vi posizionate. Questo testo guida tutti gli agenti nella produzione di contenuti."
                     className="w-full rounded-lg border px-3 py-2 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                   <p className="mt-1 text-[11px]" style={{ color: "#7C8CA2" }}>
                     Questo testo viene iniettato in ogni agente che produce contenuti. Includi cosa fate, cosa NON fate, e come vi posizionate.
@@ -471,7 +471,7 @@ export function Workspace() {
                       onChange={(e) => setNewWordToUse(e.target.value)}
                       placeholder="Aggiungi parola..."
                       className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && newWordToUse.trim()) {
                           setWordsToUse([...wordsToUse, newWordToUse.trim()])
@@ -523,7 +523,7 @@ export function Workspace() {
                       onChange={(e) => setNewExpressionToAvoid(e.target.value)}
                       placeholder="Aggiungi espressione..."
                       className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && newExpressionToAvoid.trim()) {
                           setExpressionsToAvoid([...expressionsToAvoid, newExpressionToAvoid.trim()])
@@ -578,7 +578,7 @@ export function Workspace() {
                   </label>
                   <div
                     className="flex h-32 flex-col items-center justify-center rounded-lg border-2 border-dashed"
-                    style={{ borderColor: "#E5E7EB", backgroundColor: "#FAFAFA" }}
+                    style={{ borderColor: "var(--color-border)", backgroundColor: "#FAFAFA" }}
                   >
                     <div
                       className="flex h-16 w-16 items-center justify-center rounded-lg text-[24px] font-bold"
@@ -597,7 +597,7 @@ export function Workspace() {
                   </label>
                   <div
                     className="flex h-32 flex-col items-center justify-center rounded-lg border-2 border-dashed"
-                    style={{ borderColor: "#E5E7EB", backgroundColor: "#FAFAFA" }}
+                    style={{ borderColor: "var(--color-border)", backgroundColor: "#FAFAFA" }}
                   >
                     <Upload className="h-8 w-8" style={{ color: "#D1D5DB" }} />
                     <span className="mt-2 text-[12px]" style={{ color: "#7C8CA2" }}>
@@ -655,7 +655,7 @@ export function Workspace() {
                     <div className="flex items-center gap-3">
                       <div
                         className="h-10 w-10 rounded-lg border"
-                        style={{ backgroundColor: projectData.brand.backgroundColor, borderColor: "#E5E7EB" }}
+                        style={{ backgroundColor: projectData.brand.backgroundColor, borderColor: "var(--color-border)" }}
                       />
                       <div>
                         <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
@@ -683,7 +683,7 @@ export function Workspace() {
                     type="text"
                     defaultValue={projectData.brand.primaryFont}
                     className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                 </div>
                 <div>
@@ -694,7 +694,7 @@ export function Workspace() {
                     type="text"
                     defaultValue={projectData.brand.secondaryFont}
                     className="w-full rounded-lg border px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                 </div>
               </div>
@@ -708,7 +708,7 @@ export function Workspace() {
                   rows={3}
                   defaultValue={projectData.brand.toneOfVoice}
                   className="w-full rounded-lg border px-3 py-2 text-[14px] leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 />
               </div>
 
@@ -718,7 +718,7 @@ export function Workspace() {
                   <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
                     Parole da usare
                   </label>
-                  <div className="flex flex-wrap gap-1.5 rounded-lg border p-2" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex flex-wrap gap-1.5 rounded-lg border p-2" style={{ borderColor: "var(--color-border)" }}>
                     {projectData.brand.wordsToUse.map((word, i) => (
                       <span
                         key={i}
@@ -741,7 +741,7 @@ export function Workspace() {
                   <label className="mb-1.5 block text-[12px] font-medium" style={{ color: "#1B2B4B" }}>
                     Parole da evitare
                   </label>
-                  <div className="flex flex-wrap gap-1.5 rounded-lg border p-2" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex flex-wrap gap-1.5 rounded-lg border p-2" style={{ borderColor: "var(--color-border)" }}>
                     {projectData.brand.wordsToAvoid.map((word, i) => (
                       <span
                         key={i}
@@ -804,7 +804,7 @@ export function Workspace() {
                     <div
                       key={i}
                       className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -849,7 +849,7 @@ export function Workspace() {
                     <div
                       key={i}
                       className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -910,7 +910,7 @@ export function Workspace() {
                         defaultValue={link.value}
                         placeholder="https://..."
                         className="w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style={{ borderColor: "#E5E7EB" }}
+                        style={{ borderColor: "var(--color-border)" }}
                       />
                     </div>
                   ))}
@@ -945,7 +945,7 @@ export function Workspace() {
                   <div
                     key={i}
                     className="rounded-lg border bg-white p-4 shadow-sm"
-                    style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+                    style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -1025,7 +1025,7 @@ export function Workspace() {
                   <div
                     key={i}
                     className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
-                    style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+                    style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -1067,7 +1067,7 @@ export function Workspace() {
 
               <div
                 className="flex items-center justify-center rounded-lg border-2 border-dashed p-8"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <div className="text-center">
                   <Upload className="mx-auto h-8 w-8" style={{ color: "#D1D5DB" }} />
@@ -1109,7 +1109,7 @@ export function Workspace() {
                     key={i}
                     className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
                     style={{
-                      borderColor: "#E5E7EB",
+                      borderColor: "var(--color-border)",
                       backgroundColor: rubrica.active ? "#FFFFFF" : "#FAFAFA",
                       opacity: rubrica.active ? 1 : 0.7,
                     }}
@@ -1177,7 +1177,7 @@ export function Workspace() {
                   <div
                     key={i}
                     className="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm"
-                    style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+                    style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
                   >
                     <div className="flex items-center gap-3">
                       <div

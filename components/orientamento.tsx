@@ -152,8 +152,8 @@ export function Orientamento() {
           {sliders.map((slider) => (
             <div
               key={slider.id}
-              className="rounded-xl border p-5"
-              style={{ borderColor: "#E5E7EB" }}
+              className="rounded-xl border bg-white p-5 shadow-sm"
+              style={{ borderColor: "var(--color-border)" }}
             >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-[15px] font-bold" style={{ color: "#1B2B4B" }}>

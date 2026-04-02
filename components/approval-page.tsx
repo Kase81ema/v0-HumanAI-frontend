@@ -320,10 +320,10 @@ export function ApprovalPage() {
       {/* Left Panel - List */}
       <div 
         className="w-[30%] flex flex-col border-r"
-        style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+        style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
       >
         {/* Header */}
-        <div className="p-4 border-b" style={{ borderColor: "#E5E7EB" }}>
+        <div className="p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
@@ -340,7 +340,7 @@ export function ApprovalPage() {
               <button
                 onClick={() => setShowSortMenu(!showSortMenu)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] font-medium border transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                style={{ borderColor: "var(--color-border)", color: "#6B7280" }}
               >
                 <ArrowUpDown size={14} />
                 {sortLabels[sortBy]}
@@ -348,7 +348,7 @@ export function ApprovalPage() {
               {showSortMenu && (
                 <div 
                   className="absolute right-0 top-full mt-1 w-40 rounded-lg border bg-white shadow-lg z-10"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   {(Object.keys(sortLabels) as SortOption[]).map(option => (
                     <button
@@ -398,7 +398,7 @@ export function ApprovalPage() {
         {selectedItems.length > 0 && (
           <div 
             className="p-3 border-b flex items-center justify-between"
-            style={{ borderColor: "#E5E7EB", backgroundColor: "#EFF6FF" }}
+            style={{ borderColor: "var(--color-border)", backgroundColor: "#EFF6FF" }}
           >
             <div className="flex items-center gap-2">
               <input
@@ -421,7 +421,7 @@ export function ApprovalPage() {
               </button>
               <button 
                 className="px-3 py-1.5 rounded-md text-[11px] font-medium border transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#6B7280" }}
+                style={{ borderColor: "var(--color-border)", color: "#6B7280" }}
                 onClick={() => setSelectedItems([])}
               >
                 Annulla
@@ -434,7 +434,7 @@ export function ApprovalPage() {
         {selectedItems.length === 0 && filteredItems.length > 0 && (
           <div 
             className="px-4 py-2 border-b flex items-center gap-2"
-            style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}
+            style={{ borderColor: "var(--color-border)", backgroundColor: "#F9FAFB" }}
           >
             <input
               type="checkbox"
@@ -451,7 +451,7 @@ export function ApprovalPage() {
         {/* Filters */}
         <div 
           className="flex border-b overflow-x-auto"
-          style={{ borderColor: "#E5E7EB" }}
+          style={{ borderColor: "var(--color-border)" }}
         >
           {filters.map(filter => (
             <button
@@ -478,7 +478,7 @@ export function ApprovalPage() {
                 animatingOut === item.id ? 'opacity-0 transform -translate-x-full' : ''
               }`}
               style={{
-                borderColor: "#E5E7EB",
+                borderColor: "var(--color-border)",
                 backgroundColor: selectedId === item.id ? "#EFF6FF" : "transparent",
                 borderLeft: selectedId === item.id ? "3px solid #2563EB" : "3px solid transparent"
               }}
@@ -547,7 +547,7 @@ export function ApprovalPage() {
             {/* Header */}
             <div 
               className="p-5 border-b flex items-start justify-between"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <div>
                 <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
@@ -574,7 +574,7 @@ export function ApprovalPage() {
               {selectedItem.context && (
                 <div 
                   className="mb-6 rounded-lg border"
-                  style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}
+                  style={{ borderColor: "var(--color-border)", backgroundColor: "#F9FAFB" }}
                 >
                   <button
                     onClick={() => setContextExpanded(!contextExpanded)}
@@ -613,8 +613,8 @@ export function ApprovalPage() {
 
               {/* Main Content */}
               <div 
-                className="bg-white rounded-lg border p-6 max-w-[640px]"
-                style={{ borderColor: "#E5E7EB" }}
+                className="bg-white rounded-lg border p-6 shadow-sm max-w-[640px]"
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <div 
                   className="text-[15px] leading-[1.8] whitespace-pre-wrap"
@@ -628,7 +628,7 @@ export function ApprovalPage() {
               {selectedItem.hasImage && (
                 <div 
                   className="mt-6 max-w-[640px] rounded-lg border overflow-hidden"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <div 
                     className="w-full h-[200px] flex items-center justify-center"
@@ -644,7 +644,7 @@ export function ApprovalPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="p-3 border-t" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="p-3 border-t" style={{ borderColor: "var(--color-border)" }}>
                     <button 
                       className="text-[12px] px-3 py-1.5 rounded border transition-colors hover:bg-gray-50"
                       style={{ borderColor: "#D1D5DB", color: "#6B7280" }}
@@ -659,7 +659,7 @@ export function ApprovalPage() {
             {/* Action Bar - Enhanced */}
             <div 
               className="border-t p-4 flex items-center justify-between"
-              style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+              style={{ borderColor: "var(--color-border)", backgroundColor: "#FFFFFF" }}
             >
               <div className="flex items-center gap-3">
                 <button

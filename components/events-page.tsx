@@ -144,10 +144,10 @@ export function EventsPage() {
       {/* Left Panel - Events List */}
       <div
         className="h-full w-[280px] shrink-0 overflow-y-auto border-r"
-        style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}
+        style={{ borderColor: "var(--color-border)", backgroundColor: "white" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "var(--color-border)" }}>
           <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
             Eventi
           </h2>
@@ -160,7 +160,7 @@ export function EventsPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-1 border-b p-2" style={{ borderColor: "#E5E7EB" }}>
+        <div className="flex gap-1 border-b p-2" style={{ borderColor: "var(--color-border)" }}>
           {[
             { id: "prossimi", label: "Prossimi (3)" },
             { id: "passati", label: "Passati (6)" },
@@ -293,14 +293,14 @@ export function EventsPage() {
               <button
                 onClick={() => setShowEventMenu(!showEventMenu)}
                 className="flex h-10 w-10 items-center justify-center rounded-lg border transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB" }}
+                style={{ borderColor: "var(--color-border)" }}
               >
                 <MoreHorizontal className="h-5 w-5" style={{ color: "#7C8CA2" }} />
               </button>
               {showEventMenu && (
                 <div
                   className="absolute right-0 top-full z-10 mt-1 w-56 rounded-lg border bg-white py-1 shadow-lg"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <button
                     className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
@@ -326,7 +326,7 @@ export function EventsPage() {
                     <Download className="h-4 w-4" />
                     Esporta report
                   </button>
-                  <div className="my-1 border-t" style={{ borderColor: "#E5E7EB" }} />
+                  <div className="my-1 border-t" style={{ borderColor: "var(--color-border)" }} />
                   <button
                     className="flex w-full items-center gap-2 px-4 py-2 text-[13px] transition-colors hover:bg-gray-50"
                     style={{ color: "#EF4444" }}
@@ -352,26 +352,26 @@ export function EventsPage() {
           <button
             onClick={() => setShowRegisterForm(true)}
             className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
           >
             Registra partecipante
           </button>
           <button
             className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
           >
             Morning briefing
           </button>
           <button
             className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
           >
             Modifica evento
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-1 border-b" style={{ borderColor: "#E5E7EB" }}>
+        <div className="mb-6 flex gap-1 border-b" style={{ borderColor: "var(--color-border)" }}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -395,7 +395,7 @@ export function EventsPage() {
             <div className="flex justify-end">
               <button
                 className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
               >
                 <ExternalLink className="h-4 w-4" />
                 Condividi report
@@ -494,14 +494,14 @@ export function EventsPage() {
                 </button>
                 <button
                   className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                 >
                   <Download className="h-4 w-4" />
                   Esporta CSV
                 </button>
                 <button
                   className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                 >
                   <Send className="h-4 w-4" />
                   Invia reminder
@@ -535,7 +535,7 @@ export function EventsPage() {
                 <div className="flex gap-2">
                   <button
                     className="rounded-lg border bg-white px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                   >
                     Invia email
                   </button>
@@ -561,13 +561,13 @@ export function EventsPage() {
                     type="text"
                     placeholder="Nome completo"
                     className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                   <input
                     type="email"
                     placeholder="Email"
                     className="flex-1 rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: "#E5E7EB" }}
+                    style={{ borderColor: "var(--color-border)" }}
                   />
                   <button
                     className="rounded-lg px-4 py-2 text-[13px] font-medium text-white"
@@ -578,7 +578,7 @@ export function EventsPage() {
                   <button
                     onClick={() => setShowRegisterForm(false)}
                     className="rounded-lg border px-4 py-2 text-[13px] font-medium"
-                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
+                    style={{ borderColor: "var(--color-border)", color: "#7C8CA2" }}
                   >
                     Annulla
                   </button>
@@ -587,11 +587,11 @@ export function EventsPage() {
             )}
 
             {/* Attendees List */}
-            <div className="rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
+            <div className="rounded-lg border" style={{ borderColor: "var(--color-border)" }}>
               {/* Table Header */}
               <div
                 className="grid items-center gap-4 border-b px-4 py-3"
-                style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px 1fr 120px 100px 100px 80px" }}
+                style={{ borderColor: "var(--color-border)", gridTemplateColumns: "32px 1fr 120px 100px 100px 80px" }}
               >
                 <span></span>
                 <span className="text-[12px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
@@ -751,8 +751,8 @@ export function EventsPage() {
                 ].map((email, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-lg border p-3"
-                    style={{ borderColor: "#E5E7EB" }}
+                    className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm"
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -797,8 +797,8 @@ export function EventsPage() {
                 ].map((post, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB" }}
+                    className="flex items-center justify-between rounded-lg border bg-white p-3 shadow-sm transition-colors hover:bg-gray-50"
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-[16px]">&#128221;</span>
@@ -855,8 +855,8 @@ export function EventsPage() {
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <button
-                  className="rounded-lg border p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
-                  style={{ borderColor: "#E5E7EB" }}
+                  className="rounded-lg border bg-white p-4 shadow-sm text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <span className="mb-2 block text-[20px]">&#128221;</span>
                   <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
@@ -867,8 +867,8 @@ export function EventsPage() {
                   </p>
                 </button>
                 <button
-                  className="rounded-lg border p-4 text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
-                  style={{ borderColor: "#E5E7EB" }}
+                  className="rounded-lg border bg-white p-4 shadow-sm text-left transition-colors hover:border-blue-300 hover:bg-blue-50"
+                  style={{ borderColor: "var(--color-border)" }}
                 >
                   <span className="mb-2 block text-[20px]">&#127897;</span>
                   <p className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
@@ -923,7 +923,7 @@ export function EventsPage() {
                       type="text"
                       placeholder="https://chat.whatsapp.com/..."
                       className="mt-1 w-full rounded-lg border px-3 py-2 text-[13px] focus:outline-none focus:ring-2 focus:ring-green-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                       defaultValue="https://chat.whatsapp.com/ABC123workshop"
                     />
                   </div>
@@ -938,7 +938,7 @@ export function EventsPage() {
                   </button>
                   <button
                     className="flex items-center gap-1.5 rounded-lg border px-3 py-2 text-[12px] font-medium transition-colors hover:bg-gray-50"
-                    style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                    style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                   >
                     <Copy className="h-3.5 w-3.5" />
                     Copia link
@@ -999,8 +999,8 @@ export function EventsPage() {
                 ].map((item, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-4 rounded-lg border p-3"
-                    style={{ borderColor: "#E5E7EB" }}
+                    className="flex items-center gap-4 rounded-lg border bg-white p-3 shadow-sm"
+                    style={{ borderColor: "var(--color-border)" }}
                   >
                     <span className="text-[13px] font-medium" style={{ color: "#2563EB" }}>
                       {item.time}
@@ -1042,7 +1042,7 @@ export function EventsPage() {
         {/* Progettazione Tab */}
         {activeTab === "progettazione" && (
           <div className="space-y-6">
-            <div className="rounded-lg border p-6" style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}>
+            <div className="rounded-lg border bg-white p-6 shadow-sm" style={{ borderColor: "var(--color-border)" }}>
               <h3 className="mb-4 text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
                 Modalità progettazione
               </h3>
@@ -1065,7 +1065,7 @@ export function EventsPage() {
                       placeholder={field.placeholder}
                       rows={2}
                       className="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style={{ borderColor: "#E5E7EB" }}
+                      style={{ borderColor: "var(--color-border)" }}
                     />
                   </div>
                 ))}
@@ -1080,7 +1080,7 @@ export function EventsPage() {
                 </button>
                 <button
                   className="px-4 py-2 rounded-lg border font-medium"
-                  style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                  style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
                 >
                   Salva bozza
                 </button>

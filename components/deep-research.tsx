@@ -84,7 +84,7 @@ export function DeepResearch() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-b px-6 py-4" style={{ borderColor: "#E5E7EB" }}>
+      <div className="border-b px-6 py-4" style={{ borderColor: "var(--color-border)" }}>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-[16px] font-semibold" style={{ color: "#1B2B4B" }}>
@@ -143,7 +143,7 @@ export function DeepResearch() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 />
               </div>
             </div>
@@ -187,7 +187,7 @@ export function DeepResearch() {
                     {topic.category}
                   </p>
 
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t" style={{ borderColor: "#E5E7EB" }}>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t" style={{ borderColor: "var(--color-border)" }}>
                     <span className="text-[11px]" style={{ color: "#9CA3AF" }}>
                       {topic.sources} fonti
                     </span>
@@ -201,14 +201,14 @@ export function DeepResearch() {
 
             {/* Selected Topic Details */}
             {selectedTopic && (
-              <div className="mt-8 border-t pt-8" style={{ borderColor: "#E5E7EB" }}>
+              <div className="mt-8 border-t pt-8" style={{ borderColor: "var(--color-border)" }}>
                 <h2 className="text-[15px] font-semibold mb-3" style={{ color: "#1B2B4B" }}>
                   {selectedTopic.title}
                 </h2>
 
                 <div className="space-y-3">
                   {mockSources.map((source) => (
-                    <div key={source.id} className="p-4 rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
+                    <div key={source.id} className="p-4 rounded-lg border" style={{ borderColor: "var(--color-border)" }}>
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <a
@@ -263,7 +263,7 @@ export function DeepResearch() {
                       <button
                         key={item}
                         className="p-4 rounded-lg border-2 hover:border-blue-500 transition-colors text-left"
-                        style={{ borderColor: "#E5E7EB", backgroundColor: "#F9FAFB" }}
+                        style={{ borderColor: "var(--color-border)", backgroundColor: "#F9FAFB" }}
                       >
                         <span className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
                           {item}
@@ -275,7 +275,7 @@ export function DeepResearch() {
               </div>
 
               {/* Start Research */}
-              <div className="border-t pt-6" style={{ borderColor: "#E5E7EB" }}>
+              <div className="border-t pt-6" style={{ borderColor: "var(--color-border)" }}>
                 <label className="block text-[14px] font-medium mb-2" style={{ color: "#1B2B4B" }}>
                   Argomento di ricerca
                 </label>
@@ -283,7 +283,7 @@ export function DeepResearch() {
                   placeholder="Descrivi l'argomento che vuoi investigare..."
                   rows={4}
                   className="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  style={{ borderColor: "#E5E7EB" }}
+                  style={{ borderColor: "var(--color-border)" }}
                 />
                 <button
                   className="mt-4 flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white"
@@ -317,12 +317,12 @@ export function DeepResearch() {
               value={newTopicTitle}
               onChange={(e) => setNewTopicTitle(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             />
 
             <select
               className="w-full px-3 py-2 rounded-lg border mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ borderColor: "#E5E7EB" }}
+              style={{ borderColor: "var(--color-border)" }}
             >
               <option>Mercato</option>
               <option>Tecnologia</option>
@@ -334,7 +334,7 @@ export function DeepResearch() {
               <button
                 onClick={() => setShowNewTopic(false)}
                 className="flex-1 px-4 py-2 rounded-lg border font-medium"
-                style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+                style={{ borderColor: "var(--color-border)", color: "#1B2B4B" }}
               >
                 Annulla
               </button>
