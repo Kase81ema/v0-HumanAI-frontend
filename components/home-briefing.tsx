@@ -206,66 +206,67 @@ interface HomeBriefingProps {
 
 export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
   return (
-    <div className="flex h-full gap-6 overflow-auto p-6">
+    <div className="flex h-full gap-8 overflow-auto p-8" style={{ backgroundColor: "var(--color-bg-primary)" }}>
       {/* Main Column - 70% */}
-      <div className="flex w-[70%] flex-col gap-6">
+      <div className="flex w-[70%] flex-col gap-8">
         {/* Section 1 - Greeting with Project Selector */}
         <div className="flex items-start justify-between">
           <div>
             <h1
-              className="text-[22px] font-bold"
-              style={{ color: "#1B2B4B" }}
+              className="text-6xl font-bold"
+              style={{ color: "var(--color-text-primary)" }}
             >
               Buongiorno Emanuele
             </h1>
-            <p className="text-[14px]" style={{ color: "#7C8CA2" }}>
+            <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
               Martedi 1 aprile - 3 azioni urgenti - 3 contenuti da approvare
             </p>
           </div>
           {/* Project Selector */}
           <button 
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border text-[13px] font-medium transition-colors hover:bg-gray-50"
-            style={{ borderColor: "#E5E7EB", color: "#1B2B4B" }}
+            className="flex items-center gap-2 px-4 py-3 rounded-lg border text-base font-medium transition-colors hover:bg-gray-100"
+            style={{ 
+              borderColor: "var(--color-border)",
+              color: "var(--color-text-primary)",
+              height: "var(--input-height)"
+            }}
           >
             Progetto: HumanAImpact
-            <ChevronDown className="h-4 w-4" style={{ color: "#7C8CA2" }} />
+            <ChevronDown className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
           </button>
         </div>
 
         {/* Section 2 - Alerts */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           {alerts.map((alert) => (
             <div
               key={alert.id}
-              className="flex items-center justify-between rounded-lg px-4 py-3"
+              className="flex items-center justify-between rounded-lg px-5 py-4 border-l-4"
               style={{
                 backgroundColor:
                   alert.type === "danger" ? "#FEF2F2" : "#FFFBEB",
-                border: `1px solid ${
-                  alert.type === "danger"
-                    ? "rgba(220, 38, 38, 0.2)"
-                    : "rgba(217, 119, 6, 0.2)"
-                }`,
+                borderColor: alert.type === "danger" ? "#DC2626" : "#D97706",
+                borderLeftWidth: "4px"
               }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4 flex-1">
                 <span
-                  className="h-2.5 w-2.5 rounded-full"
+                  className="h-3 w-3 rounded-full flex-shrink-0"
                   style={{
                     backgroundColor:
                       alert.type === "danger" ? "#DC2626" : "#D97706",
                   }}
                 />
-                <span className="text-[14px]" style={{ color: "#1B2B4B" }}>
+                <span className="text-base" style={{ color: "var(--color-text-primary)" }}>
                   {alert.text}
                 </span>
-                <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                   {alert.time}
                 </span>
               </div>
               <button
-                className="flex items-center gap-1 text-[14px] font-medium transition-opacity hover:opacity-80"
-                style={{ color: "#2563EB" }}
+                className="flex items-center gap-1 text-base font-medium transition-opacity hover:opacity-80 flex-shrink-0 whitespace-nowrap"
+                style={{ color: "var(--color-primary)" }}
               >
                 {alert.action}
                 <ArrowRight className="h-4 w-4" />
@@ -277,12 +278,12 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
         {/* Section 3 - KPIs */}
         <div>
           <h2
-            className="mb-4 text-[12px] font-semibold uppercase tracking-wider"
-            style={{ color: "#7C8CA2" }}
+            className="text-sm font-semibold uppercase tracking-wider mb-6"
+            style={{ color: "var(--color-text-secondary)" }}
           >
             Indicatori e soglie di crescita
           </h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-6">
             {kpis.map((kpi, index) => {
               const percentage = Math.round((kpi.current / kpi.target) * 100)
               const barColor =
@@ -295,49 +296,49 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
               return (
                 <div
                   key={index}
-                  className="rounded-lg bg-white p-4"
-                  style={{ border: "1px solid #E5E7EB" }}
+                  className="rounded-lg bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+                  style={{ border: "1px solid var(--color-border)" }}
                 >
-                  <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
+                  <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                     {kpi.label}
                   </p>
-                  <div className="mt-1 flex items-baseline gap-2">
+                  <div className="mt-3 flex items-baseline gap-3">
                     <span
-                      className="text-[24px] font-bold"
-                      style={{ color: "#1B2B4B" }}
+                      className="text-5xl font-bold"
+                      style={{ color: "var(--color-text-primary)" }}
                     >
                       {kpi.value}
                     </span>
                     <span
-                      className="text-[12px] font-medium"
+                      className="text-sm font-medium"
                       style={{ color: "#059669" }}
                     >
                       ^ {kpi.trend}
                     </span>
                   </div>
-                  <div className="mt-3 flex items-center gap-2">
+                  <div className="mt-4 flex items-center gap-3">
                     <div
-                      className="h-1.5 flex-1 rounded-full"
-                      style={{ backgroundColor: "#E5E7EB" }}
+                      className="h-2 flex-1 rounded-full"
+                      style={{ backgroundColor: "var(--color-border)" }}
                     >
                       <div
-                        className="h-full rounded-full transition-all"
+                        className="h-full rounded-full transition-all duration-300"
                         style={{
                           width: `${Math.min(percentage, 100)}%`,
                           backgroundColor: barColor,
                         }}
                       />
                     </div>
-                    <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                    <span className="text-xs font-medium" style={{ color: "var(--color-text-secondary)" }}>
                       {percentage}%
                     </span>
                   </div>
                   {kpi.threshold && (
                     <div
-                      className="mt-2 rounded px-2 py-1"
-                      style={{ backgroundColor: "#F3F4F6" }}
+                      className="mt-3 rounded px-3 py-2"
+                      style={{ backgroundColor: "var(--color-bg-secondary)" }}
                     >
-                      <span className="text-[10px]" style={{ color: "#7C8CA2" }}>
+                      <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
                         Soglia {kpi.threshold.value}: {kpi.threshold.label} (
                         {percentage}%)
                       </span>
@@ -351,56 +352,62 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Section 4 - Agent Work with destination indicators */}
         <div>
-          <div className="mb-4">
+          <div className="mb-6">
             <h2
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: "var(--color-text-secondary)" }}
             >
               Il tuo team AI ha lavorato stanotte
             </h2>
             {/* Mini avatars row */}
-            <div className="mt-2 flex items-center gap-1">
+            <div className="mt-3 flex items-center gap-2">
               {activeAgents.map((agent) => (
                 <div
                   key={agent.initials}
-                  className="flex h-[24px] w-[24px] items-center justify-center rounded-full text-[9px] font-bold text-white"
-                  style={{ backgroundColor: "#2563EB" }}
+                  className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-white"
+                  style={{ backgroundColor: "var(--color-primary)" }}
                   title={agent.name}
                 >
                   {agent.initials}
                 </div>
               ))}
-              <span className="ml-2 text-[11px]" style={{ color: "#7C8CA2" }}>
+              <span className="ml-3 text-sm" style={{ color: "var(--color-text-secondary)" }}>
                 6 agenti attivi
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             {agentWork.map((work) => (
               <button
                 key={work.id}
                 onClick={() => onNavigate(work.link)}
-                className="flex w-full items-center gap-3 rounded-lg bg-white px-4 py-3 text-left transition-colors hover:bg-gray-50"
-                style={{ border: "1px solid #E5E7EB" }}
+                className="flex w-full items-center gap-4 rounded-lg bg-white px-5 py-4 text-left transition-all hover:shadow-md hover:bg-gray-50"
+                style={{ 
+                  border: "1px solid var(--color-border)",
+                  minHeight: "var(--table-row-height)"
+                }}
               >
                 <div
-                  className="flex h-[30px] w-[30px] items-center justify-center rounded-full text-[11px] font-bold"
-                  style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold flex-shrink-0"
+                  style={{ 
+                    backgroundColor: "var(--color-primary-light)",
+                    color: "var(--color-primary)"
+                  }}
                 >
                   {work.initials}
                 </div>
-                <div className="flex-1">
-                  <span className="text-[13px]" style={{ color: "#1B2B4B" }}>
+                <div className="flex-1 min-w-0">
+                  <span className="text-base" style={{ color: "var(--color-text-primary)" }}>
                     <strong>{work.agent}:</strong> {work.output}
                   </span>
-                  <span className="ml-2 text-[11px]" style={{ color: "#2563EB" }}>
+                  <span className="ml-2 text-sm" style={{ color: "var(--color-primary)" }}>
                     → {work.destination}
                   </span>
                 </div>
-                <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                <span className="text-sm flex-shrink-0" style={{ color: "var(--color-text-secondary)" }}>
                   {work.time}
                 </span>
-                <ArrowRight className="h-4 w-4" style={{ color: "#7C8CA2" }} />
+                <ArrowRight className="h-5 w-5 flex-shrink-0" style={{ color: "var(--color-text-secondary)" }} />
               </button>
             ))}
           </div>
@@ -408,43 +415,45 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
       </div>
 
       {/* Right Column - 30% */}
-      <div className="flex w-[30%] flex-col gap-5">
+      <div className="flex w-[30%] flex-col gap-6">
         {/* Card 1 - Upcoming Events */}
         <div
-          className="rounded-lg bg-white p-4"
-          style={{ border: "1px solid #E5E7EB" }}
+          className="rounded-lg bg-white p-6 shadow-sm"
+          style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <h3
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: "var(--color-text-secondary)" }}
             >
               Eventi prossimi
             </h3>
             <button
               onClick={() => onNavigate("events")}
-              className="flex items-center gap-1 text-[12px] font-medium transition-opacity hover:opacity-80"
-              style={{ color: "#2563EB" }}
+              className="flex items-center gap-1 text-sm font-medium transition-opacity hover:opacity-80"
+              style={{ color: "var(--color-primary)" }}
             >
               Tutti
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {events.map((event) => (
               <div
                 key={event.id}
-                className="rounded-lg p-3"
+                className="rounded-lg p-4 border-l-4 transition-colors hover:bg-gray-50"
                 style={{
                   border: event.critical
                     ? "1px solid rgba(220, 38, 38, 0.3)"
-                    : "1px solid #E5E7EB",
+                    : "1px solid var(--color-border)",
+                  borderLeftColor: event.critical ? "#DC2626" : "transparent",
+                  borderLeftWidth: "4px",
                   backgroundColor: event.critical ? "#FEF2F2" : "white",
                 }}
               >
                 <div className="flex items-start justify-between">
                   <span
-                    className="rounded px-2 py-0.5 text-[10px] font-medium"
+                    className="rounded px-3 py-1 text-xs font-medium"
                     style={{
                       backgroundColor:
                         event.type === "Workshop" ? "#EDE9FE" : "#DBEAFE",
@@ -453,26 +462,26 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                   >
                     {event.type}
                   </span>
-                  <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                  <span className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
                     {event.countdown}
                   </span>
                 </div>
                 <h4
-                  className="mt-2 text-[13px] font-semibold"
-                  style={{ color: "#1B2B4B" }}
+                  className="mt-3 text-base font-semibold"
+                  style={{ color: "var(--color-text-primary)" }}
                 >
                   {event.name}
                 </h4>
-                <p className="mt-1 text-[12px]" style={{ color: "#7C8CA2" }}>
+                <p className="mt-1 text-sm" style={{ color: "var(--color-text-secondary)" }}>
                   {event.date} - {event.enrolled}/{event.target} iscritti
                 </p>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-3 flex items-center gap-3">
                   <div
-                    className="h-1.5 flex-1 rounded-full"
-                    style={{ backgroundColor: "#E5E7EB" }}
+                    className="h-2 flex-1 rounded-full"
+                    style={{ backgroundColor: "var(--color-border)" }}
                   >
                     <div
-                      className="h-full rounded-full"
+                      className="h-full rounded-full transition-all"
                       style={{
                         width: `${event.fillRate}%`,
                         backgroundColor:
@@ -484,7 +493,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                       }}
                     />
                   </div>
-                  <span className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                  <span className="text-xs font-medium" style={{ color: "var(--color-text-secondary)" }}>
                     {event.fillRate}%
                   </span>
                 </div>
@@ -495,26 +504,26 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Card 2 - Hot Contacts */}
         <div
-          className="rounded-lg bg-white p-4"
-          style={{ border: "1px solid #E5E7EB" }}
+          className="rounded-lg bg-white p-6 shadow-sm"
+          style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <h3
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: "var(--color-text-secondary)" }}
             >
               Contatti caldi
             </h3>
             <button
               onClick={() => onNavigate("crm")}
-              className="flex items-center gap-1 text-[12px] font-medium transition-opacity hover:opacity-80"
-              style={{ color: "#2563EB" }}
+              className="flex items-center gap-1 text-sm font-medium transition-opacity hover:opacity-80"
+              style={{ color: "var(--color-primary)" }}
             >
               CRM
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {hotContacts.map((contact) => (
               <div
                 key={contact.id}
@@ -522,18 +531,18 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
               >
                 <div>
                   <p
-                    className="text-[13px] font-semibold"
-                    style={{ color: "#1B2B4B" }}
+                    className="text-base font-semibold"
+                    style={{ color: "var(--color-text-primary)" }}
                   >
                     {contact.name}
                   </p>
-                  <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
+                  <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                     {contact.company}
                   </p>
                 </div>
-                <div className="flex flex-col items-end gap-1">
+                <div className="flex flex-col items-end gap-2">
                   <span
-                    className="rounded px-2 py-0.5 text-[10px] font-medium"
+                    className="rounded px-3 py-1 text-xs font-medium"
                     style={{
                       backgroundColor:
                         contact.stage === "S4" ? "#DBEAFE" : "#E0F2FE",
@@ -542,7 +551,7 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                   >
                     {contact.stage}
                   </span>
-                  <span className="text-[11px]" style={{ color: "#2563EB" }}>
+                  <span className="text-sm font-medium" style={{ color: "var(--color-primary)" }}>
                     {contact.action}
                   </span>
                 </div>
@@ -553,39 +562,42 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
 
         {/* Card 3 - Content to Approve (moved from main column) */}
         <div
-          className="rounded-lg bg-white p-4"
-          style={{ border: "1px solid #E5E7EB" }}
+          className="rounded-lg bg-white p-6 shadow-sm"
+          style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <h3
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: "var(--color-text-secondary)" }}
             >
               Da approvare
             </h3>
             <span 
-              className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+              className="rounded-full px-3 py-1 text-xs font-bold"
               style={{ backgroundColor: "#FEE2E2", color: "#DC2626" }}
             >
               3
             </span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             {contentToApprove.map((content) => (
               <button
                 key={content.id}
                 onClick={() => onNavigate("approval")}
-                className="flex items-center justify-between rounded-lg p-2 text-left transition-colors hover:bg-gray-50"
-                style={{ backgroundColor: "#F9FAFB" }}
+                className="flex items-center justify-between rounded-lg p-3 text-left transition-all hover:bg-gray-50 hover:shadow-sm"
+                style={{ 
+                  backgroundColor: "var(--color-bg-secondary)",
+                  border: "1px solid var(--color-border-light)"
+                }}
               >
                 <span 
-                  className="text-[12px] font-medium truncate flex-1"
-                  style={{ color: "#1B2B4B" }}
+                  className="text-base font-medium truncate flex-1"
+                  style={{ color: "var(--color-text-primary)" }}
                 >
                   {content.title}
                 </span>
                 <span 
-                  className="ml-2 text-[10px] px-2 py-0.5 rounded"
+                  className="ml-3 text-xs px-3 py-1 rounded font-medium flex-shrink-0"
                   style={{ backgroundColor: "#DBEAFE", color: "#2563EB" }}
                 >
                   {content.channel}
@@ -595,46 +607,46 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
           </div>
           <button
             onClick={() => onNavigate("approval")}
-            className="mt-3 flex w-full items-center justify-center gap-1 text-[12px] font-medium transition-opacity hover:opacity-80"
-            style={{ color: "#2563EB" }}
+            className="mt-4 flex w-full items-center justify-center gap-1 text-base font-semibold transition-opacity hover:opacity-80 py-2"
+            style={{ color: "var(--color-primary)" }}
           >
             Approva tutti
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-4 w-4" />
           </button>
         </div>
 
         {/* Card 4 - Active Processes */}
         <div
-          className="rounded-lg bg-white p-4"
-          style={{ border: "1px solid #E5E7EB" }}
+          className="rounded-lg bg-white p-6 shadow-sm"
+          style={{ border: "1px solid var(--color-border)" }}
         >
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-5 flex items-center justify-between">
             <h3
-              className="text-[12px] font-semibold uppercase tracking-wider"
-              style={{ color: "#7C8CA2" }}
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ color: "var(--color-text-secondary)" }}
             >
               Processi attivi
             </h3>
             <button
               onClick={() => onNavigate("board")}
-              className="flex items-center gap-1 text-[12px] font-medium transition-opacity hover:opacity-80"
-              style={{ color: "#2563EB" }}
+              className="flex items-center gap-1 text-sm font-medium transition-opacity hover:opacity-80"
+              style={{ color: "var(--color-primary)" }}
             >
               Board
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5">
             {processes.map((process) => (
-              <div key={process.id} className="flex items-center gap-3">
+              <div key={process.id} className="flex items-center gap-4">
                 {/* Circular Progress */}
-                <div className="relative h-[32px] w-[32px]">
+                <div className="relative h-10 w-10 flex-shrink-0">
                   <svg className="h-full w-full -rotate-90">
                     <circle
-                      cx="16"
-                      cy="16"
-                      r="14"
-                      stroke="#E5E7EB"
+                      cx="20"
+                      cy="20"
+                      r="18"
+                      stroke="var(--color-border)"
                       strokeWidth="3"
                       fill="none"
                     />
@@ -650,21 +662,21 @@ export function HomeBriefing({ onNavigate }: HomeBriefingProps) {
                     />
                   </svg>
                   <span
-                    className="absolute inset-0 flex items-center justify-center text-[9px] font-semibold"
-                    style={{ color: "#1B2B4B" }}
+                    className="absolute inset-0 flex items-center justify-center text-xs font-bold"
+                    style={{ color: "var(--color-text-primary)" }}
                   >
                     {process.progress}%
                   </span>
                 </div>
                 <div className="flex-1">
                   <p
-                    className="text-[12px] font-semibold"
-                    style={{ color: "#1B2B4B" }}
+                    className="text-base font-semibold"
+                    style={{ color: "var(--color-text-primary)" }}
                   >
                     {process.title}
                   </p>
                   {process.status === "paused" && (
-                    <p className="text-[10px]" style={{ color: "#7C3AED" }}>
+                    <p className="text-xs font-medium" style={{ color: "#7C3AED" }}>
                       In attesa
                     </p>
                   )}
