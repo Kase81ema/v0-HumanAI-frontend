@@ -1,285 +1,275 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronLeft, ChevronRight, Plus, GripVertical, Trash2, Eye } from "lucide-react"
-import { FloatingAgentAvatar } from "./floating-agent-avatar"
+import { ChevronLeft, ChevronRight, Plus, Calendar, Mail, Zap } from "lucide-react"
 
-interface PlannedContent {
+interface SequenceStep {
   id: string
-  title: string
+  trigger: string
+  delay: string
+  subject: string
+  openRate: number
+}
+
+interface Sequence {
+  id: string
+  name: string
   channel: string
-  time?: string
-  status: "planned" | "draft" | "scheduled" | "published"
-  agent: string
+  status: "active" | "paused" | "draft"
+  subscribers: number
+  steps: SequenceStep[]
+  createdDate: string
 }
 
-interface DaySchedule {
-  date: string
-  dayName: string
-  items: PlannedContent[]
-}
-
-const mockSchedule: DaySchedule[] = [
-  {
-    date: "Lun 8/4",
-    dayName: "Lunedì",
-    items: [
-      { id: "1", title: "Post: AI e coaching", channel: "LinkedIn", time: "9:00", status: "published", agent: "CW" },
-      { id: "2", title: "Email: Workshop reminder", channel: "Email", time: "14:00", status: "scheduled", agent: "FN" },
-    ],
-  },
-  {
-    date: "Mar 9/4",
-    dayName: "Martedì",
-    items: [
-      { id: "3", title: "Newsletter #47", channel: "Newsletter", time: "8:00", status: "draft", agent: "CW" },
-      { id: "4", title: "Post: Case study", channel: "LinkedIn", status: "planned", agent: "CW" },
-    ],
-  },
-  {
-    date: "Mer 10/4",
-    dayName: "Mercoledì",
-    items: [
-      { id: "5", title: "Instagram story", channel: "Instagram", status: "planned", agent: "CW" },
-    ],
-  },
-  {
-    date: "Gio 11/4",
-    dayName: "Giovedì",
-    items: [
-      { id: "6", title: "Post: Blog announcement", channel: "LinkedIn", status: "draft", agent: "CW" },
-    ],
-  },
-  {
-    date: "Ven 12/4",
-    dayName: "Venerdì",
-    items: [
-      { id: "7", title: "Weekly digest", channel: "Newsletter", status: "planned", agent: "CW" },
-    ],
-  },
-]
-
-const channels = ["Tutti", "LinkedIn pers.", "LinkedIn az.", "Newsletter", "Instagram", "Email"]
-
-const statusConfig = {
-  planned: { bg: "#F3F4F6", text: "#6B7280", label: "Pianificato" },
-  draft: { bg: "#FEF3C7", text: "#B45309", label: "Bozza" },
-  scheduled: { bg: "#DBEAFE", text: "#1E40AF", label: "Programmato" },
-  published: { bg: "#D1FAE5", text: "#047857", label: "Pubblicato" },
-}
+const mockSequences: Sequence[] = []
 
 export function Planner() {
-  const [activeTab, setActiveTab] = useState<"week" | "sequences">("week")
-  const [selectedChannel, setSelectedChannel] = useState("Tutti")
-  const [currentWeek, setCurrentWeek] = useState(0)
+  const [activeTab, setActiveTab] = useState<"sequences" | "calendar">("sequences")
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [newSequenceName, setNewSequenceName] = useState("")
 
-  const channelEmojis: Record<string, string> = {
-    "LinkedIn": "💼",
-    "Newsletter": "📧",
-    "Instagram": "📷",
-    "Email": "💌",
-  }
+  const channels = ["Email", "LinkedIn", "SMS"]
+  const statuses = ["Tutte", "Attive", "In pausa", "Bozza"]
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col overflow-hidden" style={{ backgroundColor: "var(--color-bg-primary)" }}>
       {/* Header */}
-      <div className="border-b px-6 py-4" style={{ borderColor: "#E5E7EB" }}>
-        <div className="flex items-center justify-between mb-4">
+      <div className="border-b px-8 py-6" style={{ borderColor: "var(--color-border)" }}>
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-[22px] font-bold" style={{ color: "#1B2B4B" }}>
+            <h1 className="text-6xl font-bold" style={{ color: "var(--color-text-primary)" }}>
               Planner
             </h1>
-            <p className="text-[13px]" style={{ color: "#7C8CA2" }}>
-              Pianifica e visualizza i tuoi contenuti per la settimana
+            <p className="text-base mt-2" style={{ color: "var(--color-text-secondary)" }}>
+              Sequenze email e comunicazioni programmate
             </p>
           </div>
           <button
-            className="flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-white"
-            style={{ backgroundColor: "#2563EB" }}
-          >
-            <Plus className="h-4 w-4" />
-            Aggiungi contenuto
-          </button>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-4 mb-4">
-          <button
-            onClick={() => setActiveTab("week")}
-            className="pb-2 text-[14px] font-medium border-b-2 transition-colors"
-            style={{
-              borderColor: activeTab === "week" ? "#2563EB" : "transparent",
-              color: activeTab === "week" ? "#2563EB" : "#7C8CA2",
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+            style={{ 
+              backgroundColor: "var(--color-primary)",
+              boxShadow: "var(--shadow-md)"
             }}
           >
-            Calendario settimanale
-          </button>
-          <button
-            onClick={() => setActiveTab("sequences")}
-            className="pb-2 text-[14px] font-medium border-b-2 transition-colors"
-            style={{
-              borderColor: activeTab === "sequences" ? "#2563EB" : "transparent",
-              color: activeTab === "sequences" ? "#2563EB" : "#7C8CA2",
-            }}
-          >
-            Sequenze
+            <Plus className="h-5 w-5" />
+            Nuova sequenza
           </button>
         </div>
+      </div>
 
-        {/* Channel Filter */}
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {channels.map((ch) => (
+      {/* Tabs */}
+      <div className="border-b px-8" style={{ borderColor: "var(--color-border)" }}>
+        <div className="flex gap-8">
+          {[
+            { id: "sequences", label: "Sequenze" },
+            { id: "calendar", label: "Calendario invii" },
+          ].map((tab) => (
             <button
-              key={ch}
-              onClick={() => setSelectedChannel(ch)}
-              className="rounded-full px-3 py-1.5 text-[12px] font-medium whitespace-nowrap transition-colors"
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as "sequences" | "calendar")}
+              className="border-b-2 px-1 py-4 text-base font-medium transition-colors"
               style={{
-                backgroundColor: selectedChannel === ch ? "#2563EB" : "#F3F4F6",
-                color: selectedChannel === ch ? "#FFFFFF" : "#6B7280",
+                borderBottomColor: activeTab === tab.id ? "var(--color-primary)" : "transparent",
+                color: activeTab === tab.id ? "var(--color-primary)" : "var(--color-text-secondary)",
               }}
             >
-              {ch}
+              {tab.label}
             </button>
           ))}
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        {activeTab === "week" ? (
-          <div className="p-6">
-            {/* Week Navigation */}
-            <div className="flex items-center justify-between mb-6">
-              <button
-                onClick={() => setCurrentWeek(Math.max(0, currentWeek - 1))}
-                className="p-2 hover:bg-gray-100 rounded"
-              >
-                <ChevronLeft className="h-5 w-5" style={{ color: "#9CA3AF" }} />
-              </button>
-              <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
-                Settimana 8-12 Aprile
-              </h2>
-              <button
-                onClick={() => setCurrentWeek(currentWeek + 1)}
-                className="p-2 hover:bg-gray-100 rounded"
-              >
-                <ChevronRight className="h-5 w-5" style={{ color: "#9CA3AF" }} />
-              </button>
-            </div>
-
-            {/* Weekly Grid */}
-            <div className="grid grid-cols-5 gap-4">
-              {mockSchedule.map((day) => (
+      <div className="flex-1 overflow-auto p-8">
+        {activeTab === "sequences" && (
+          <>
+            {mockSequences.length === 0 ? (
+              /* Empty State with Guided Onboarding */
+              <div className="flex h-full flex-col items-center justify-center py-24 text-center">
                 <div
-                  key={day.date}
-                  className="rounded-lg border p-4"
-                  style={{ borderColor: "#E5E7EB", backgroundColor: "#FFFFFF" }}
+                  className="mb-8 flex h-24 w-24 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: "var(--color-primary-light)" }}
                 >
-                  <h3 className="font-semibold text-[13px] mb-3" style={{ color: "#1B2B4B" }}>
-                    <div>{day.dayName}</div>
-                    <div style={{ color: "#9CA3AF" }}>{day.date}</div>
-                  </h3>
-
-                  <div className="space-y-2 min-h-[300px]">
-                    {day.items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-2 rounded-lg border cursor-move group hover:shadow-sm transition-shadow"
-                        style={{
-                          backgroundColor: statusConfig[item.status].bg,
-                          borderColor: "#E5E7EB",
-                        }}
-                      >
-                        <div className="flex items-start gap-1.5">
-                          <GripVertical className="h-3 w-3 mt-0.5 opacity-0 group-hover:opacity-100" style={{ color: "#9CA3AF" }} />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[11px] font-medium truncate" style={{ color: statusConfig[item.status].text }}>
-                              {item.title}
-                            </p>
-                            <div className="flex items-center justify-between gap-1 mt-1">
-                              <span className="text-[10px]" style={{ color: "#9CA3AF" }}>
-                                {item.channel}
-                              </span>
-                              {item.time && (
-                                <span className="text-[10px] font-medium" style={{ color: "#2563EB" }}>
-                                  {item.time}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    className="w-full mt-4 py-2 rounded-lg border-2 border-dashed text-[12px] font-medium transition-colors"
-                    style={{ borderColor: "#E5E7EB", color: "#7C8CA2" }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#2563EB"
-                      e.currentTarget.style.color = "#2563EB"
-                      e.currentTarget.style.backgroundColor = "#EFF6FF"
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "#E5E7EB"
-                      e.currentTarget.style.color = "#7C8CA2"
-                      e.currentTarget.style.backgroundColor = "transparent"
-                    }}
-                  >
-                    + Aggiungi
-                  </button>
+                  <Mail className="h-12 w-12" style={{ color: "var(--color-primary)" }} />
                 </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          /* Sequences Tab */
-          <div className="p-6 max-w-4xl">
-            <h2 className="text-[18px] font-bold mb-4" style={{ color: "#1B2B4B" }}>
-              Sequenze attive
-            </h2>
 
-            <div className="space-y-3">
-              {[
-                { name: "Welcome sequence", status: "active", sends: "245/500 inviate" },
-                { name: "Post-evento follow-up", status: "active", sends: "18/25 inviate" },
-                { name: "Newsletter automation", status: "paused", sends: "Sospesa" },
-              ].map((seq) => (
-                <div key={seq.name} className="p-4 rounded-lg border" style={{ borderColor: "#E5E7EB" }}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-[13px]" style={{ color: "#1B2B4B" }}>
-                        {seq.name}
-                      </p>
-                      <p className="text-[11px]" style={{ color: "#7C8CA2" }}>
-                        {seq.sends}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        className="p-2 hover:bg-gray-100 rounded"
+                <h2 className="text-4xl font-bold mb-3" style={{ color: "var(--color-text-primary)" }}>
+                  Nessuna sequenza ancora
+                </h2>
+
+                <p className="text-lg mb-8 max-w-xl" style={{ color: "var(--color-text-secondary)" }}>
+                  Crea la tua prima sequenza email automatica. Guida i tuoi contatti attraverso un percorso personalizzato con trigger intelligenti.
+                </p>
+
+                {/* Feature Cards */}
+                <div className="mb-12 grid grid-cols-3 gap-6 w-full max-w-2xl">
+                  {[
+                    {
+                      icon: Zap,
+                      title: "Trigger intelligenti",
+                      desc: "Attiva email basate su azioni utente",
+                    },
+                    {
+                      icon: Calendar,
+                      title: "Timing perfetto",
+                      desc: "Pianifica invii con ritardi automatici",
+                    },
+                    {
+                      icon: Mail,
+                      title: "Analytics integrata",
+                      desc: "Traccia open rate e click rate",
+                    },
+                  ].map((feature, idx) => {
+                    const Icon = feature.icon
+                    return (
+                      <div
+                        key={idx}
+                        className="rounded-lg bg-white p-6 text-left shadow-sm hover:shadow-md transition-shadow"
+                        style={{ border: "1px solid var(--color-border)" }}
                       >
-                        <Eye className="h-4 w-4" style={{ color: "#2563EB" }} />
-                      </button>
+                        <div
+                          className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg"
+                          style={{ backgroundColor: "var(--color-primary-light)" }}
+                        >
+                          <Icon className="h-6 w-6" style={{ color: "var(--color-primary)" }} />
+                        </div>
+                        <h3 className="text-base font-semibold mb-1" style={{ color: "var(--color-text-primary)" }}>
+                          {feature.title}
+                        </h3>
+                        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                          {feature.desc}
+                        </p>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* CTA */}
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="flex items-center gap-2 rounded-lg px-8 py-4 text-lg font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+                  style={{ 
+                    backgroundColor: "var(--color-primary)",
+                    boxShadow: "var(--shadow-lg)"
+                  }}
+                >
+                  <Plus className="h-6 w-6" />
+                  Crea la tua prima sequenza
+                </button>
+              </div>
+            ) : (
+              /* Sequences List */
+              <div className="grid gap-6">
+                {mockSequences.map((seq) => (
+                  <div
+                    key={seq.id}
+                    className="rounded-lg bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+                    style={{ border: "1px solid var(--color-border)" }}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold" style={{ color: "var(--color-text-primary)" }}>
+                          {seq.name}
+                        </h3>
+                        <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+                          {seq.steps.length} step • {seq.subscribers} iscritti
+                        </p>
+                      </div>
                       <span
-                        className="rounded-full px-2 py-0.5 text-[10px] font-medium"
+                        className="rounded-full px-4 py-2 text-sm font-medium"
                         style={{
-                          backgroundColor: seq.status === "active" ? "#D1FAE5" : "#FEE2E2",
-                          color: seq.status === "active" ? "#059669" : "#DC2626",
+                          backgroundColor: seq.status === "active" ? "#D1FAE5" : seq.status === "paused" ? "#FEE2E2" : "#F3F4F6",
+                          color: seq.status === "active" ? "#059669" : seq.status === "paused" ? "#DC2626" : "#6B7280",
                         }}
                       >
-                        {seq.status === "active" ? "Attiva" : "Sospesa"}
+                        {seq.status === "active" ? "Attiva" : seq.status === "paused" ? "In pausa" : "Bozza"}
                       </span>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === "calendar" && (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <Calendar className="mb-6 h-16 w-16" style={{ color: "var(--color-text-secondary)" }} />
+            <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-primary)" }}>
+              Calendario invii
+            </h2>
+            <p className="text-base" style={{ color: "var(--color-text-secondary)" }}>
+              Crea una sequenza per visualizzare qui il calendario dei tuoi invii programmati
+            </p>
           </div>
         )}
       </div>
 
-      <FloatingAgentAvatar initials="CW" agentName="Copywriter" />
+      {/* Create Sequence Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="rounded-lg bg-white p-8 max-w-md w-full shadow-lg">
+            <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--color-text-primary)" }}>
+              Nuova sequenza
+            </h2>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2" style={{ color: "var(--color-text-primary)" }}>
+                Nome sequenza
+              </label>
+              <input
+                type="text"
+                placeholder="Es: Welcome series, Nurturing 30gg, Re-engagement"
+                value={newSequenceName}
+                onChange={(e) => setNewSequenceName(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{ borderColor: "var(--color-border)" }}
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-3" style={{ color: "var(--color-text-primary)" }}>
+                Canale
+              </label>
+              <div className="flex gap-3">
+                {channels.map((ch) => (
+                  <button
+                    key={ch}
+                    className="flex-1 rounded-lg px-4 py-3 text-sm font-medium transition-all border"
+                    style={{
+                      backgroundColor: "var(--color-bg-secondary)",
+                      borderColor: "var(--color-border)",
+                      color: "var(--color-text-primary)",
+                    }}
+                  >
+                    {ch}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="flex-1 rounded-lg px-4 py-3 text-base font-medium transition-colors border"
+                style={{
+                  borderColor: "var(--color-border)",
+                  color: "var(--color-text-primary)",
+                }}
+              >
+                Annulla
+              </button>
+              <button
+                className="flex-1 rounded-lg px-4 py-3 text-base font-semibold text-white transition-all hover:opacity-90"
+                style={{ backgroundColor: "var(--color-primary)" }}
+              >
+                Continua
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

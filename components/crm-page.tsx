@@ -1210,27 +1210,31 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
       )}
 
       {/* Search and Filters */}
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 flex flex-col gap-4 px-6 py-4" style={{ backgroundColor: "var(--color-bg-primary)" }}>
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "#9CA3AF" }} />
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2" style={{ color: "var(--color-text-secondary)" }} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cerca per nome o azienda..."
-            className="w-full rounded-lg border py-2.5 pl-10 pr-4 text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{ borderColor: "#E5E7EB" }}
+            className="w-full rounded-lg border py-3 pl-12 pr-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{ 
+              borderColor: "var(--color-border)",
+              height: "var(--input-height)"
+            }}
           />
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {stages.map((stage) => (
             <button
               key={stage}
               onClick={() => setStageFilter(stage)}
-              className="rounded-lg px-3 py-2 text-[13px] font-medium transition-colors"
+              className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
               style={{
-                backgroundColor: stageFilter === stage ? "#EFF6FF" : "transparent",
-                color: stageFilter === stage ? "#2563EB" : "#7C8CA2",
+                backgroundColor: stageFilter === stage ? "var(--color-primary-light)" : "white",
+                color: stageFilter === stage ? "var(--color-primary)" : "var(--color-text-secondary)",
+                border: `1px solid ${stageFilter === stage ? "var(--color-primary)" : "var(--color-border)"}`,
               }}
             >
               {stage} ({stageCounts[stage as keyof typeof stageCounts]})
@@ -1270,40 +1274,38 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
       <div className="rounded-lg border" style={{ borderColor: "#E5E7EB", backgroundColor: "white" }}>
         {/* Table Header */}
         <div
-          className="grid items-center gap-3 border-b px-4 py-3"
-          style={{ borderColor: "#E5E7EB", gridTemplateColumns: "32px minmax(180px, 1fr) minmax(140px, 160px) minmax(100px, 120px) 100px 80px 50px 90px" }}
+          className="grid items-center gap-4 border-b px-6 py-3"
+          style={{ 
+            borderColor: "var(--color-border)", 
+            gridTemplateColumns: "40px minmax(200px, 1.5fr) minmax(180px, 1.2fr) minmax(120px, 1fr) 100px 80px",
+            height: "var(--table-row-height)"
+          }}
         >
           <button
             onClick={selectAllContacts}
-            className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded border transition-colors"
             style={{
-              borderColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "#2563EB" : "#E5E7EB",
-              backgroundColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "#2563EB" : "transparent",
+              borderColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "var(--color-primary)" : "var(--color-border)",
+              backgroundColor: selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 ? "var(--color-primary)" : "transparent",
             }}
           >
             {selectedContacts.length === filteredContacts.length && selectedContacts.length > 0 && (
-              <Check className="h-3 w-3 text-white" />
+              <Check className="h-4 w-4 text-white" />
             )}
           </button>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-secondary)" }}>
             Contatto
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-secondary)" }}>
             Email
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-            Tag
-          </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-secondary)" }}>
             Ultimo contatto
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-secondary)" }}>
             Stage
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
-            Score
-          </span>
-          <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "#7C8CA2" }}>
+          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-secondary)" }}>
             Azione
           </span>
         </div>
@@ -1312,10 +1314,11 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
         {filteredContacts.map((contact, index) => (
           <div
             key={contact.id}
-            className="relative grid items-center gap-3 border-b px-4 py-3 transition-colors hover:bg-gray-50"
+            className="relative grid items-center gap-4 border-b px-6 py-0 transition-colors hover:bg-gray-50 cursor-pointer"
             style={{
-              borderColor: index === filteredContacts.length - 1 ? "transparent" : "#E5E7EB",
-              gridTemplateColumns: "32px minmax(180px, 1fr) minmax(140px, 160px) minmax(100px, 120px) 100px 80px 50px 90px",
+              borderColor: index === filteredContacts.length - 1 ? "transparent" : "var(--color-border)",
+              gridTemplateColumns: "40px minmax(200px, 1.5fr) minmax(180px, 1.2fr) minmax(120px, 1fr) 100px 80px",
+              height: "var(--table-row-height)"
             }}
             onMouseEnter={() => setHoveredContact(contact.id)}
             onMouseLeave={() => setHoveredContact(null)}
@@ -1323,99 +1326,73 @@ Usa {nome}, {azienda}, {evento} per personalizzare."
             {/* Selection Checkbox */}
             <button
               onClick={() => toggleContactSelection(contact.id)}
-              className="flex h-5 w-5 items-center justify-center rounded border transition-colors"
+              className="flex h-6 w-6 items-center justify-center rounded border transition-colors"
               style={{
-                borderColor: selectedContacts.includes(contact.id) ? "#2563EB" : "#E5E7EB",
-                backgroundColor: selectedContacts.includes(contact.id) ? "#2563EB" : "transparent",
+                borderColor: selectedContacts.includes(contact.id) ? "var(--color-primary)" : "var(--color-border)",
+                backgroundColor: selectedContacts.includes(contact.id) ? "var(--color-primary)" : "transparent",
               }}
             >
               {selectedContacts.includes(contact.id) && (
-                <Check className="h-3 w-3 text-white" />
+                <Check className="h-4 w-4 text-white" />
               )}
             </button>
 
             {/* Contact Name & Company */}
-            <div className="flex items-center gap-3 min-w-0">
+            <button
+              onClick={() => openProfile(contact)}
+              className="flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity text-left"
+            >
               <div
-                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
-                style={{ backgroundColor: "#93C5FD" }}
+                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
+                style={{ backgroundColor: "var(--color-primary-light)", color: "var(--color-primary)" }}
               >
                 {contact.initials}
               </div>
               <div className="min-w-0">
-                <button
-                  onClick={() => openProfile(contact)}
-                  className="text-[13px] font-medium hover:underline truncate block"
-                  style={{ color: "#1B2B4B" }}
+                <p
+                  className="text-base font-semibold truncate"
+                  style={{ color: "var(--color-text-primary)" }}
                 >
                   {contact.name}
-                </button>
-                <p className="text-[11px] truncate" style={{ color: "#7C8CA2" }}>
+                </p>
+                <p className="text-sm truncate" style={{ color: "var(--color-text-secondary)" }}>
                   {contact.company}
                 </p>
               </div>
-            </div>
+            </button>
 
             {/* Email */}
             <span 
-              className="text-[12px] truncate" 
-              style={{ color: "#9CA3AF" }}
+              className="text-base truncate" 
+              style={{ color: "var(--color-text-secondary)" }}
               title={contact.email}
             >
               {contact.email}
             </span>
 
-            {/* Tags */}
-            <div className="flex items-center gap-1 overflow-hidden">
-              {contact.tags.slice(0, 2).map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full px-2 py-0.5 text-[10px] font-medium truncate"
-                  style={{ 
-                    backgroundColor: tag === "newsletter" ? "#ECFDF5" : tag === "AI" ? "#EFF6FF" : "#F3F4F6",
-                    color: tag === "newsletter" ? "#059669" : tag === "AI" ? "#2563EB" : "#6B7280"
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-              {contact.tags.length > 2 && (
-                <span className="text-[10px] font-medium" style={{ color: "#9CA3AF" }}>
-                  +{contact.tags.length - 2}
-                </span>
-              )}
-            </div>
-
             {/* Last Contact */}
-            <span className="text-[12px]" style={{ color: "#7C8CA2" }}>
+            <span className="text-base" style={{ color: "var(--color-text-secondary)" }}>
               {contact.lastContact}
             </span>
 
             {/* Stage */}
             <span
-              className="w-fit rounded-full px-2 py-0.5 text-[10px] font-medium"
+              className="w-fit rounded-full px-3 py-1 text-sm font-medium"
               style={{
-                backgroundColor: stageColors[contact.stage].bg,
-                color: stageColors[contact.stage].text,
+                backgroundColor: contact.stage === "Opportunità" ? "#DBEAFE" : contact.stage === "Qualificato" ? "#FEF3C7" : "#F3F4F6",
+                color: contact.stage === "Opportunità" ? "#2563EB" : contact.stage === "Qualificato" ? "#92400E" : "#6B7280",
               }}
             >
               {contact.stage}
             </span>
 
-            {/* Score */}
-            <span
-              className="text-[13px] font-bold"
-              style={{
-                color: contact.score >= 15 ? "#059669" : contact.score >= 10 ? "#F59E0B" : "#7C8CA2",
-              }}
+            {/* Action - Click to expand */}
+            <button
+              onClick={() => openProfile(contact)}
+              className="flex items-center justify-center h-10 w-10 rounded-lg transition-all hover:bg-gray-100"
             >
-              {contact.score}
-            </span>
-
-            {/* Action */}
-            <span className="text-[11px]" style={{ color: "#2563EB" }}>
-              {contact.action}
-            </span>
+              <ChevronRight className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
+            </button>
 
             {/* Hover Card */}
             {hoveredContact === contact.id && (
