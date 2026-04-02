@@ -257,36 +257,36 @@ export function BoardOperativa() {
     <div className="flex h-full">
       {/* Lista processi */}
       <div
-        className="flex h-full w-[320px] flex-col border-r"
-        style={{ borderColor: "#E5E7EB" }}
+        className="flex h-full w-[360px] flex-col border-r"
+        style={{ borderColor: "var(--color-border)" }}
       >
-        <div className="p-4">
-          <div className="mb-1 flex items-center justify-between">
-            <h2 className="text-[16px] font-bold" style={{ color: "#1B2B4B" }}>
-              Board operativa
+        <div className="p-6 border-b" style={{ borderColor: "var(--color-border)" }}>
+          <div className="mb-3">
+            <h2 className="text-2xl font-bold" style={{ color: "var(--color-text-primary)" }}>
+              Board Operativa
             </h2>
-            <button
-              className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-white"
-              style={{ backgroundColor: "#2563EB" }}
-            >
-              + Nuova situazione
-            </button>
+            <p className="text-sm mt-1" style={{ color: "var(--color-text-secondary)" }}>
+              4 processi · 1 in attesa
+            </p>
           </div>
-          <p className="text-[12px]" style={{ color: "#7C8CA2" }}>
-            4 processi &middot; 1 in attesa
-          </p>
+          <button
+            className="w-full py-3 rounded-lg text-base font-semibold text-white transition-all hover:opacity-90"
+            style={{ backgroundColor: "var(--color-primary)" }}
+          >
+            + Nuova situazione
+          </button>
         </div>
 
         {/* Filtri */}
-        <div className="flex gap-2 overflow-x-auto px-4 pb-3">
+        <div className="flex gap-2 overflow-x-auto px-6 py-4 border-b" style={{ borderColor: "var(--color-border)" }}>
           {filters.map((f) => (
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className="whitespace-nowrap rounded-full px-3 py-1 text-[12px] font-medium transition-colors"
+              className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors"
               style={{
-                backgroundColor: filter === f.id ? "#2563EB" : "#F3F4F6",
-                color: filter === f.id ? "#FFFFFF" : "#6B7280",
+                backgroundColor: filter === f.id ? "var(--color-primary)" : "var(--color-bg-secondary)",
+                color: filter === f.id ? "white" : "var(--color-text-secondary)",
               }}
             >
               {f.label} ({f.count})
@@ -305,62 +305,62 @@ export function BoardOperativa() {
               <button
                 key={process.id}
                 onClick={() => setSelectedProcess(process)}
-                className="flex w-full items-start gap-3 border-l-[3px] px-4 py-3 text-left transition-colors"
+                className="flex w-full items-start gap-4 border-l-4 px-6 py-4 text-left transition-colors hover:bg-gray-50"
                 style={{
-                  borderLeftColor: isSelected ? "#2563EB" : "transparent",
-                  backgroundColor: isSelected ? "rgba(37, 99, 235, 0.06)" : "transparent",
+                  borderLeftColor: isSelected ? "var(--color-primary)" : "transparent",
+                  backgroundColor: isSelected ? "var(--color-primary-light)" : "transparent",
                 }}
               >
                 {/* Progress circle */}
                 <div
-                  className="relative flex h-[36px] w-[36px] flex-shrink-0 items-center justify-center rounded-full"
+                  className="relative flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full flex-shrink-0"
                   style={{
-                    background: `conic-gradient(${config.color} ${pct}%, #E5E7EB ${pct}%)`,
+                    background: `conic-gradient(${config.color} ${pct}%, var(--color-border) ${pct}%)`,
                   }}
                 >
                   <div
-                    className="flex h-[28px] w-[28px] items-center justify-center rounded-full bg-white text-[10px] font-bold"
-                    style={{ color: config.color }}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold"
+                    style={{ backgroundColor: "white", color: config.color }}
                   >
                     {Math.round(pct)}%
                   </div>
                 </div>
 
-                <div className="flex-1">
-                  <div className="mb-1 flex items-center gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="mb-2 flex items-center gap-2">
                     <span
-                      className="text-[13px] font-semibold"
-                      style={{ color: "#1B2B4B" }}
+                      className="text-base font-semibold"
+                      style={{ color: "var(--color-text-primary)" }}
                     >
                       {process.title}
                     </span>
                     {process.urgent && (
                       <span
-                        className="rounded px-1.5 py-0.5 text-[9px] font-bold text-white"
+                        className="rounded px-2 py-1 text-xs font-bold text-white"
                         style={{ backgroundColor: "#DC2626" }}
                       >
                         Urgente
                       </span>
                     )}
                   </div>
-                  <div className="mb-1 flex items-center gap-2">
+                  <div className="mb-2 flex items-center gap-2">
                     <span
-                      className="rounded px-1.5 py-0.5 text-[10px] font-medium"
-                      style={{ backgroundColor: "#F3F4F6", color: "#6B7280" }}
+                      className="rounded px-2 py-1 text-xs font-medium"
+                      style={{ backgroundColor: "var(--color-bg-secondary)", color: "var(--color-text-secondary)" }}
                     >
                       {process.type === "processo" ? "Processo" : "Situazione"}
                     </span>
                     <span
-                      className="rounded px-1.5 py-0.5 text-[10px] font-medium"
+                      className="rounded px-2 py-1 text-xs font-medium"
                       style={{ backgroundColor: config.bgColor, color: config.color }}
                     >
                       {config.label}
                     </span>
                   </div>
-                  <p className="text-[11px]" style={{ color: "#9CA3AF" }}>
+                  <p className="text-sm" style={{ color: "var(--color-text-tertiary)" }}>
                     {process.progress}/{process.totalSteps} step
                     {process.waitingSteps > 0 && (
-                      <> &middot; <Pause className="mb-0.5 inline h-3 w-3" /> {process.waitingSteps} in attesa</>
+                      <> · <Pause className="inline h-3 w-3 mb-0.5" /> {process.waitingSteps} in attesa</>
                     )}
                   </p>
                 </div>
@@ -371,16 +371,16 @@ export function BoardOperativa() {
       </div>
 
       {/* Dettaglio processo */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden" style={{ backgroundColor: "var(--color-bg-primary)" }}>
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-4" style={{ borderColor: "#E5E7EB" }}>
+        <div className="flex items-center justify-between border-b px-8 py-6" style={{ borderColor: "var(--color-border)" }}>
           <div>
-            <div className="mb-1 flex items-center gap-2">
-              <h1 className="text-[18px] font-bold" style={{ color: "#1B2B4B" }}>
+            <div className="mb-3 flex items-center gap-3">
+              <h1 className="text-3xl font-bold" style={{ color: "var(--color-text-primary)" }}>
                 {selectedProcess.title}
               </h1>
               <span
-                className="rounded px-2 py-0.5 text-[11px] font-medium"
+                className="rounded px-3 py-1 text-sm font-medium"
                 style={{
                   backgroundColor: statusConfig[selectedProcess.status].bgColor,
                   color: statusConfig[selectedProcess.status].color,
@@ -390,7 +390,7 @@ export function BoardOperativa() {
               </span>
               {selectedProcess.urgent && (
                 <span
-                  className="rounded px-2 py-0.5 text-[11px] font-bold text-white"
+                  className="rounded px-3 py-1 text-sm font-bold text-white"
                   style={{ backgroundColor: "#DC2626" }}
                 >
                   Priorita alta
@@ -398,8 +398,8 @@ export function BoardOperativa() {
               )}
             </div>
             {/* Progress bar */}
-            <div className="flex items-center gap-3">
-              <div className="h-2 w-[200px] overflow-hidden rounded-full" style={{ backgroundColor: "#E5E7EB" }}>
+            <div className="flex items-center gap-4">
+              <div className="h-3 w-64 overflow-hidden rounded-full" style={{ backgroundColor: "var(--color-border)" }}>
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
@@ -408,44 +408,44 @@ export function BoardOperativa() {
                   }}
                 />
               </div>
-              <span className="text-[12px]" style={{ color: "#6B7280" }}>
+              <span className="text-base" style={{ color: "var(--color-text-secondary)" }}>
                 {selectedProcess.progress} di {selectedProcess.totalSteps} step completati
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {selectedProcess.status === "draft" && (
               <button
-                className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
-                style={{ backgroundColor: "#2563EB" }}
+                className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white"
+                style={{ backgroundColor: "var(--color-primary)" }}
               >
-                <Play className="h-4 w-4" /> Avvia
+                <Play className="h-5 w-5" /> Avvia
               </button>
             )}
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="rounded-lg border p-2 transition-colors hover:bg-gray-50"
-                style={{ borderColor: "#E5E7EB" }}
+                className="rounded-lg border p-3 transition-colors hover:bg-gray-100"
+                style={{ borderColor: "var(--color-border)" }}
               >
-                <MoreHorizontal className="h-4 w-4" style={{ color: "#6B7280" }} />
+                <MoreHorizontal className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
               </button>
               {showMenu && (
                 <div
-                  className="absolute right-0 top-full z-10 mt-1 w-[200px] rounded-lg border bg-white py-1 shadow-lg"
-                  style={{ borderColor: "#E5E7EB" }}
+                  className="absolute right-0 top-full z-10 mt-2 w-64 rounded-lg border bg-white py-1 shadow-lg"
+                  style={{ borderColor: "var(--color-border)" }}
                 >
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] hover:bg-gray-50">
-                    <Copy className="h-4 w-4" style={{ color: "#6B7280" }} />
+                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base hover:bg-gray-50">
+                    <Copy className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
                     Duplica processo
                   </button>
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] hover:bg-gray-50">
-                    <Bookmark className="h-4 w-4" style={{ color: "#6B7280" }} />
+                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base hover:bg-gray-50">
+                    <Bookmark className="h-5 w-5" style={{ color: "var(--color-text-secondary)" }} />
                     Salva come template
                   </button>
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] text-red-600 hover:bg-red-50">
-                    <Trash2 className="h-4 w-4" />
+                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left text-base text-red-600 hover:bg-red-50">
+                    <Trash2 className="h-5 w-5" />
                     Annulla processo
                   </button>
                 </div>
@@ -455,12 +455,12 @@ export function BoardOperativa() {
         </div>
 
         {/* Timeline degli step */}
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="relative pl-8">
+        <div className="flex-1 overflow-y-auto p-8">
+          <div className="relative pl-10">
             {/* Vertical line */}
             <div
-              className="absolute bottom-0 left-[15px] top-0 w-[2px]"
-              style={{ backgroundColor: "#E5E7EB" }}
+              className="absolute bottom-0 left-3 top-0 w-1"
+              style={{ backgroundColor: "var(--color-border)" }}
             />
 
             {selectedProcess.steps.map((step, index) => {
@@ -468,12 +468,12 @@ export function BoardOperativa() {
               const isWaiting = step.status === "waiting"
 
               return (
-                <div key={step.id} className="relative mb-4 last:mb-0">
+                <div key={step.id} className="relative mb-6 last:mb-0">
                   {/* Dot */}
                   <div
-                    className="absolute -left-8 top-4 flex h-[30px] w-[30px] items-center justify-center rounded-full border-2"
+                    className="absolute -left-7 top-5 flex h-8 w-8 items-center justify-center rounded-full border-2"
                     style={{
-                      backgroundColor: step.status === "completed" ? "#16A34A" : "#FFFFFF",
+                      backgroundColor: step.status === "completed" ? "#059669" : "white",
                       borderColor: stepConfig.color,
                     }}
                   >
@@ -482,7 +482,7 @@ export function BoardOperativa() {
                     ) : step.status === "waiting" ? (
                       <Clock className="h-4 w-4" style={{ color: stepConfig.color }} />
                     ) : (
-                      <span className="text-[10px] font-bold" style={{ color: stepConfig.color }}>
+                      <span className="text-xs font-bold" style={{ color: stepConfig.color }}>
                         {index + 1}
                       </span>
                     )}
@@ -490,32 +490,32 @@ export function BoardOperativa() {
 
                   {/* Step card */}
                   <div
-                    className="rounded-lg border p-4"
+                    className="rounded-lg border p-6"
                     style={{
                       backgroundColor: stepConfig.bgColor,
-                      borderColor: isWaiting ? stepConfig.border : "#E5E7EB",
+                      borderColor: isWaiting ? stepConfig.border : "var(--color-border)",
                       borderWidth: isWaiting ? "2px" : "1px",
                     }}
                   >
-                    <div className="mb-2 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
                         <div
-                          className="flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold text-white"
+                          className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
                           style={{
                             backgroundColor:
-                              step.agentIcon === "👤" ? "#6B7280" : "#2563EB",
+                              step.agentIcon === "👤" ? "var(--color-text-secondary)" : "var(--color-primary)",
                           }}
                         >
                           {step.agentIcon === "👤" || step.agentIcon === "📤"
                             ? step.agentIcon
                             : step.agentIcon}
                         </div>
-                        <span className="text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
+                        <span className="text-base font-semibold" style={{ color: "var(--color-text-primary)" }}>
                           {step.agent}: {step.title}
                         </span>
                       </div>
                       {step.timestamp && (
-                        <span className="text-[11px]" style={{ color: "#9CA3AF" }}>
+                        <span className="text-sm" style={{ color: "var(--color-text-tertiary)" }}>
                           {step.timestamp}
                         </span>
                       )}
@@ -523,19 +523,19 @@ export function BoardOperativa() {
 
                     {/* Output */}
                     {step.output && (
-                      <div className="mb-3">
+                      <div className="mb-4">
                         {step.status === "waiting" && step.output.includes("\n") ? (
                           <p
-                            className="whitespace-pre-wrap text-[14px] leading-relaxed"
-                            style={{ color: "#374151" }}
+                            className="whitespace-pre-wrap text-base leading-relaxed"
+                            style={{ color: "var(--color-text-primary)" }}
                           >
                             {step.output.length > 300
                               ? step.output.slice(0, 300) + "..."
                               : step.output}
                             {step.output.length > 300 && (
                               <button
-                                className="ml-1 text-[13px] font-medium"
-                                style={{ color: "#2563EB" }}
+                                className="ml-1 text-base font-semibold"
+                                style={{ color: "var(--color-primary)" }}
                               >
                                 Leggi tutto
                               </button>
@@ -543,11 +543,11 @@ export function BoardOperativa() {
                           </p>
                         ) : (
                           <button
-                            className="flex items-center gap-1 text-[13px] hover:underline"
-                            style={{ color: step.outputLink ? "#2563EB" : "#374151" }}
+                            className="flex items-center gap-2 text-base hover:underline"
+                            style={{ color: step.outputLink ? "var(--color-primary)" : "var(--color-text-primary)" }}
                           >
                             {step.output}
-                            {step.outputLink && <ChevronRight className="h-3 w-3" />}
+                            {step.outputLink && <ChevronRight className="h-4 w-4" />}
                           </button>
                         )}
                       </div>
@@ -555,83 +555,48 @@ export function BoardOperativa() {
 
                     {/* Action area for waiting steps */}
                     {isWaiting && (
-                      <div
-                        className="mt-3 rounded-lg border p-3"
-                        style={{ backgroundColor: "#FFFFFF", borderColor: "#E5E7EB" }}
-                      >
-                        <div className="mb-2 flex items-center gap-1">
-                          <span
-                            className="rounded px-2 py-0.5 text-[11px] font-medium"
-                            style={{ backgroundColor: "rgba(124, 58, 237, 0.1)", color: "#7C3AED" }}
+                      <div className="space-y-3">
+                        {step.note && (
+                          <div
+                            className="rounded-lg p-4"
+                            style={{ backgroundColor: "white", border: `1px solid var(--color-border-light)` }}
                           >
-                            Serve il tuo intervento
-                          </span>
-                        </div>
-                        <div className="mb-3 flex gap-2">
-                          <button
-                            className="flex items-center gap-1 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
-                            style={{ backgroundColor: "#16A34A" }}
-                          >
-                            <Check className="h-4 w-4" /> Approva
-                          </button>
-                          <button
-                            className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-gray-50"
-                            style={{ borderColor: "#E5E7EB", color: "#374151" }}
-                          >
-                            Modifica
-                          </button>
-                          <button
-                            className="rounded-lg border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-red-50"
-                            style={{ borderColor: "#FCA5A5", color: "#DC2626" }}
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                        <input
-                          type="text"
-                          placeholder="Nota (opzionale)"
+                            <p className="text-sm font-semibold" style={{ color: "var(--color-text-primary)" }}>
+                              Nota per questa step
+                            </p>
+                            <p className="mt-2 text-base" style={{ color: "var(--color-text-secondary)" }}>
+                              {step.note}
+                            </p>
+                          </div>
+                        )}
+                        <textarea
+                          placeholder="Aggiungi un'azione o nota..."
                           value={actionNote}
                           onChange={(e) => setActionNote(e.target.value)}
-                          className="w-full rounded-lg border px-3 py-2 text-[13px]"
-                          style={{ borderColor: "#E5E7EB" }}
+                          className="w-full rounded-lg border px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          style={{ borderColor: "var(--color-border)" }}
+                          rows={3}
                         />
+                        <div className="flex gap-2">
+                          <button
+                            className="flex-1 rounded-lg px-4 py-3 text-base font-semibold text-white transition-all hover:opacity-90"
+                            style={{ backgroundColor: "var(--color-primary)" }}
+                          >
+                            Continua
+                          </button>
+                          <button
+                            className="flex-1 rounded-lg px-4 py-3 text-base font-semibold border transition-colors hover:bg-gray-100"
+                            style={{ borderColor: "var(--color-border)", color: "var(--color-text-primary)" }}
+                          >
+                            Rimanda
+                          </button>
+                        </div>
                       </div>
-                    )}
-
-                    {/* Pending state message */}
-                    {step.status === "pending" && (
-                      <p className="text-[12px] italic" style={{ color: "#9CA3AF" }}>
-                        In attesa che lo step precedente venga completato
-                      </p>
                     )}
                   </div>
                 </div>
               )
             })}
-          </div>
-
-          {/* New situation card */}
-          <div
-            className="mt-6 rounded-lg border p-4"
-            style={{ backgroundColor: "#FFFFFF", borderColor: "#E5E7EB" }}
-          >
-            <p className="mb-2 text-[13px] font-medium" style={{ color: "#1B2B4B" }}>
-              Nuova situazione
-            </p>
-            <textarea
-              placeholder="Descrivi cosa devi fare..."
-              value={newSituation}
-              onChange={(e) => setNewSituation(e.target.value)}
-              className="mb-3 w-full resize-none rounded-lg border px-3 py-2 text-[13px]"
-              style={{ borderColor: "#E5E7EB" }}
-              rows={2}
-            />
-            <button
-              className="flex items-center gap-1 rounded-lg px-4 py-2 text-[13px] font-medium text-white"
-              style={{ backgroundColor: "#2563EB" }}
-            >
-              Analizza con Operator <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
       </div>
