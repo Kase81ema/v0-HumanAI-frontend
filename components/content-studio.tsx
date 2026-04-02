@@ -173,17 +173,17 @@ export function ContentStudio() {
         <div className="flex-1">
           {/* STEP 1: Choose Topic */}
           {wizardStep === 1 && (
-            <div className="space-y-6">
+            <div className="space-y-5 max-w-2xl">
               <div>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-primary)" }}>
+                <h2 className="text-base font-semibold mb-1" style={{ color: "var(--color-text-primary)" }}>
                   Scegli un argomento
                 </h2>
-                <p className="text-base" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                   Seleziona uno dei topic suggeriti o crea un nuovo contenuto partendo da zero.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-3">
                 {suggestedTopics.map((topic) => (
                   <button
                     key={topic.id}
@@ -225,12 +225,12 @@ export function ContentStudio() {
 
           {/* STEP 2: Customize */}
           {wizardStep === 2 && selectedTopic && (
-            <div className="space-y-6 max-w-2xl">
+            <div className="space-y-5 max-w-2xl">
               <div>
-                <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--color-text-primary)" }}>
+                <h2 className="text-base font-semibold mb-1" style={{ color: "var(--color-text-primary)" }}>
                   Personalizza il contenuto
                 </h2>
-                <p className="text-base" style={{ color: "var(--color-text-secondary)" }}>
+                <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
                   Ajusta i parametri per adattare il contenuto alle tue esigenze.
                 </p>
               </div>
